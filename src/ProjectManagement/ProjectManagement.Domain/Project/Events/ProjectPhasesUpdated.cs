@@ -1,6 +1,7 @@
 using Library.Models;
 using ProjectManagement.Domain.Project.Entities;
+using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Domain.Project.Events;
 
-public record ProjectPhasesUpdated(ICollection<Phase> Phases) : IDomainEvent;
+public record ProjectPhasesUpdated(ProjectId ProjectId, ICollection<Phase> Phases) : IDomainEvent;

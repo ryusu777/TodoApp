@@ -23,7 +23,6 @@ public sealed class Project : AggregateRoot<ProjectId>
         ProjectMembers = projectMembers;
         ProjectPhases = projectPhases;
         Status = status;
-        RaiseDomainEvent(new ProjectCreated(this));
     }
 
     public static Project Create(
@@ -34,7 +33,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         ICollection<Phase> projectPhases,
         ProjectStatus status = ProjectStatus.Planning
 	) {
-        return new Project(
+        var result = new Project(
             ProjectId.Create(code),
             name,
             description,
@@ -42,6 +41,9 @@ public sealed class Project : AggregateRoot<ProjectId>
             projectPhases,
             status
         );
+        result.RaiseDomainEvent(new ProjectCreated(result));
+
+        return result;
     }
 
     public string Name { get; private set; }
@@ -52,62 +54,26 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public void Delete()
     {
+        // TODO: do validations
         RaiseDomainEvent(new ProjectDeleted(this));
     }
     public Result UpdateProjectMembers(ICollection<UserId> userIds)
     {
         ProjectMembers = userIds;
 
-        RaiseDomainEvent(new ProjectTeamsUpdated(ProjectMembers));
+        RaiseDomainEvent(new ProjectMembersUpdated(Id, ProjectMembers));
 
         return Result.Success();
     }
 
-    public Result AddProjectPhase(Phase phase)
+    public Result UpdateProjectPhases(ICollection<Phase> phases)
     {
-        if (ProjectPhases.Any(e => e.Id == phase.Id))
-        {
-            return ProjectDomainErrors.PhaseAlreadyExists;
-        }
+        ProjectPhases = phases;
 
-        ProjectPhases.Add(phase);
-
-        RaiseDomainEvent(new ProjectPhasesUpdated(ProjectPhases));
+        RaiseDomainEvent(new ProjectPhasesUpdated(Id, ProjectPhases));
 
         return Result.Success();
     }
-    public Result UpdateProjectPhase(PhaseName name, DateOnly start, DateOnly end)
-    {
-        if (!ProjectPhases.Any(p => p.Id == name))
-        {
-            return ProjectDomainErrors.PhaseNotFound;
-        }
-
-        Phase foundPhase = ProjectPhases.First(p => p.Id == name);
-
-        foundPhase.StartDate = start;
-        foundPhase.EndDate = end;
-
-        RaiseDomainEvent(new ProjectPhasesUpdated(ProjectPhases));
-
-        return Result.Success();
-    }
-    public Result DeleteProjectPhase(PhaseName name) 
-    {
-        if (!ProjectPhases.Any(p => p.Id == name))
-        {
-            return ProjectDomainErrors.PhaseNotFound;
-        }
-
-        Phase foundPhase = ProjectPhases.First(p => p.Id == name);
-
-        ProjectPhases.Remove(foundPhase);
-
-        RaiseDomainEvent(new ProjectPhasesUpdated(ProjectPhases));
-
-        return Result.Success();
-    }
-
     public Result UpdateProject(string name, string description, ProjectStatus status)
     {
         Name = name;
