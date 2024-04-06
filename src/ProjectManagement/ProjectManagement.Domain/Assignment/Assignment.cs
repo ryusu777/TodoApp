@@ -18,8 +18,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         Title = title;
         Description = description;
         ProjectId = projectId;
-        Status = AssignmentStatus.New;
-        RaiseDomainEvent(new AssignmentCreated(this));
+        Status = new AssignmentStatus(AssignmentStatusEnum.New);
     }
 
     public string Title { get; set; }
@@ -34,12 +33,14 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         string description, 
         ProjectId projectId)
     {
-        return new Assignment(
+        var result = new Assignment(
             AssignmentId.CreateUnique(),
             title,
             description,
             projectId
 		);
+        result.RaiseDomainEvent(new AssignmentCreated(result));
+        return result;
     }
 
     public Result Assign(UserId userId)
@@ -62,17 +63,17 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
         Assignees.Remove(assignee);
 
-        RaiseDomainEvent(new AssignmentRemoved(Id, userId));
+        RaiseDomainEvent(new AssigneeRemoved(Id, userId));
 
         return Result.Success();
     }
 
     public Result WorkOn()
     {
-        if (Status != AssignmentStatus.New || Status != AssignmentStatus.WaitingReview)
+        if (Status.Value != AssignmentStatusEnum.New || Status.Value != AssignmentStatusEnum.WaitingReview)
             return AssignmentDomainErrors.AssignmentIsNotAvailableToWorkOn;
 
-        Status = AssignmentStatus.OnProgress;
+        Status = new AssignmentStatus(AssignmentStatusEnum.OnProgress);
         RaiseDomainEvent(new AssignmentWorkedOn(Id));
 
         return Result.Success();
@@ -80,10 +81,10 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result RequestReview()
     {
-        if (Status == AssignmentStatus.Completed)
+        if (Status.Value == AssignmentStatusEnum.Completed)
             return AssignmentDomainErrors.CannotRequestReviewOnCompleted;
 
-        Status = AssignmentStatus.WaitingReview;
+        Status = new AssignmentStatus(AssignmentStatusEnum.WaitingReview);
         RaiseDomainEvent(new AssignmentReviewRequested(Id));
 
         return Result.Success();
@@ -91,7 +92,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result Complete()
     {
-        Status = AssignmentStatus.Completed;
+        Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
         RaiseDomainEvent(new AssignmentCompleted(Id));
 
         return Result.Success();
@@ -99,7 +100,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result Renew()
     {
-        Status = AssignmentStatus.New;
+        Status = new AssignmentStatus(AssignmentStatusEnum.New);
         RaiseDomainEvent(new AssignmentRenewed(Id));
 
         return Result.Success();

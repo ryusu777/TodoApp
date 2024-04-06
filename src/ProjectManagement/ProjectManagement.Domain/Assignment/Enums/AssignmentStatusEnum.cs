@@ -1,6 +1,6 @@
 ﻿namespace ProjectManagement.Domain.Assignment.Enums;
 
-public enum AssignmentStatus
+public enum AssignmentStatusEnum
 {
 	New,
 	OnProgress,
