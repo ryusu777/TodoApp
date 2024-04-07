@@ -1,8 +1,7 @@
 ﻿using Library.Models;
-using MediatR;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
-using ProjectManagement.Domain.Project;
+using ProjectManagement.Application.Project.Events;
 
 namespace ProjectManagement.Application.Project.Commands.CreateProject;
 
@@ -22,6 +21,6 @@ public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectC
             request.ProjectMembers,
             request.ProjectPhases);
 
-        return await _unitOfWork.SaveChangesAsync(created.DomainEvents, cancellationToken);
+        return await _unitOfWork.SaveChangesAsync(new ProjectCreated(created), cancellationToken);
 	}
 }

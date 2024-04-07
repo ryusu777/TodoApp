@@ -41,7 +41,6 @@ public sealed class Project : AggregateRoot<ProjectId>
             projectPhases,
             status
         );
-        result.RaiseDomainEvent(new ProjectCreated(result));
 
         return result;
     }
@@ -52,11 +51,6 @@ public sealed class Project : AggregateRoot<ProjectId>
     public ICollection<Phase> ProjectPhases { get; private set; }
     public ICollection<UserId> ProjectMembers { get; private set; }
 
-    public void Delete()
-    {
-        // TODO: do validations
-        RaiseDomainEvent(new ProjectDeleted(this));
-    }
     public Result UpdateProjectMembers(ICollection<UserId> userIds)
     {
         ProjectMembers = userIds;
