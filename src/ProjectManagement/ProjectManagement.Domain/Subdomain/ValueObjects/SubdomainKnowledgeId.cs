@@ -9,10 +9,8 @@ public sealed class SubdomainKnowledgeId : ValueObject
     {
         Value = value;
     }
-    public static SubdomainKnowledgeId CreateUnique() 
-    {
-        return new(Guid.NewGuid());
-    }
+    public static SubdomainKnowledgeId Create(Guid value) => new(value);
+    public static SubdomainKnowledgeId CreateUnique() => new(Guid.NewGuid());
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

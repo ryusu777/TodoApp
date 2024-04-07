@@ -13,6 +13,10 @@ public sealed class SubdomainId : ValueObject
     {
         return new(Guid.NewGuid());
     }
+    public static SubdomainId Create(Guid Value) 
+    {
+        return new(Value);
+    }
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

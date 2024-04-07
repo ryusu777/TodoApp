@@ -19,22 +19,23 @@ public sealed class Subdomain : AggregateRoot<SubdomainId>
         ProjectId = projectId;
         Knowledges = knowledges;
         Title = title;
-        RaiseDomainEvent(new SubdomainCreated(this));
     }
 
     public static Subdomain Create(
         string description,
         string title,
         ProjectId projectId,
-        ICollection<SubdomainKnowledge>? knowledges
+        ICollection<SubdomainKnowledge>? knowledges = null
     ) {
-        return new Subdomain(
+        var result = new Subdomain(
             SubdomainId.CreateUnique(),
             description,
             title,
             projectId,
             knowledges ?? new List<SubdomainKnowledge>()
         );
+
+        return result;
     }
 
     public string Title { get; private set; }
@@ -42,10 +43,6 @@ public sealed class Subdomain : AggregateRoot<SubdomainId>
     public ProjectId ProjectId { get; private set; }
     public ICollection<SubdomainKnowledge> Knowledges { get; private set; }
 
-    public void Delete()
-    {
-        RaiseDomainEvent(new SubdomainDeleted(this));
-    }
     public void Update(string title, string description)
     {
         Title = title;
@@ -61,25 +58,28 @@ public sealed class Subdomain : AggregateRoot<SubdomainId>
         RaiseDomainEvent(new SubdomainKnowledgeCreated(knowledge));
     }
 
-    public Result UpdateKnowledge(SubdomainKnowledge knowledge)
+    public Result UpdateKnowledge(
+        SubdomainKnowledgeId knowledgeId, 
+        string title,
+        string content)
     {
-        SubdomainKnowledge? found = Knowledges.FirstOrDefault(k => k == knowledge);
+        SubdomainKnowledge? found = Knowledges.FirstOrDefault(k => k.Id == knowledgeId);
 
         if (found is null)
         {
             return SubdomainDomainErrors.SubdomainKnowledgeNotFound;
         }
 
-        found.Update(knowledge.Title, knowledge.Content);
+        found.Update(title, content);
 
         RaiseDomainEvent(new SubdomainKnowledgeUpdated(found));
 
         return Result.Success();
     }
 
-    public Result DeleteKnowledge(SubdomainKnowledge knowledge)
+    public Result DeleteKnowledge(SubdomainKnowledgeId id)
     {
-        SubdomainKnowledge? found = Knowledges.FirstOrDefault(k => k == knowledge);
+        SubdomainKnowledge? found = Knowledges.FirstOrDefault(k => k.Id == id);
 
         if (found is null)
         {

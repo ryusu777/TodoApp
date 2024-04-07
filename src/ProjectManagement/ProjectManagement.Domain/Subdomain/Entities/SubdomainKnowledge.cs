@@ -8,26 +8,31 @@ public sealed class SubdomainKnowledge : Entity<SubdomainKnowledgeId>
     private SubdomainKnowledge(
         SubdomainKnowledgeId id,
         string title,
-        string content
+        string content,
+        SubdomainId subdomainId
     ) : base(id)
     {
         Title = title;
         Content = content;
+        SubdomainId = subdomainId;
     }
 
     public static SubdomainKnowledge Create(
         string title,
-        string content
+        string content,
+        SubdomainId subdomainId
     ) {
         return new SubdomainKnowledge(
             SubdomainKnowledgeId.CreateUnique(),
             title,
-            content
+            content,
+            subdomainId
         );
     }
     
     public string Title { get; private set; }
     public string Content { get; private set; }
+    public SubdomainId SubdomainId { get; private set; }
 
     public void Update(string title, string content)
     {
