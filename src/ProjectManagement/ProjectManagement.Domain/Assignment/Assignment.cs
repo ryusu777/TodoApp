@@ -39,7 +39,6 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
             description,
             projectId
 		);
-        result.RaiseDomainEvent(new AssignmentCreated(result));
         return result;
     }
 
@@ -114,10 +113,5 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         RaiseDomainEvent(new AssignmentUpdated(this));
 
         return Result.Success();
-    }
-
-    public void Delete()
-    {
-        RaiseDomainEvent(new AssignmentDeleted(Id));
     }
 }

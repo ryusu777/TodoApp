@@ -1,6 +1,7 @@
 using Library.Models;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
+using ProjectManagement.Application.Assignment.Events;
 using ProjectManagement.Domain.Assignment.ValueObjects;
 
 namespace ProjectManagement.Application.Assignment.Commands.DeleteAssignment;
@@ -28,9 +29,7 @@ public class DeleteAssignmentCommandHandler : ICommandHandler<DeleteAssignmentCo
             return result;
         }
 
-        result.Value.Delete();
-
         return await _unitOfWork
-            .SaveChangesAsync(result.Value.DomainEvents, cancellationToken);
+            .SaveChangesAsync(new AssignmentDeleted(result.Value.Id), cancellationToken);
     }
 }

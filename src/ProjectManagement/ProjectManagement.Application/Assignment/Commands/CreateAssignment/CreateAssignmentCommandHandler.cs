@@ -1,6 +1,7 @@
 ﻿using Library.Models;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
+using ProjectManagement.Application.Assignment.Events;
 using ProjectManagement.Application.Project;
 using ProjectManagement.Domain.Project.ValueObjects;
 
@@ -34,6 +35,7 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
 			request.Description,
 			ProjectId.Create(request.ProjectId));
 
-		return await _unitOfWork.SaveChangesAsync(createdAssignment.DomainEvents, cancellationToken);
+		return await _unitOfWork
+            .SaveChangesAsync(new AssignmentCreated(createdAssignment), cancellationToken);
 	}
 }
