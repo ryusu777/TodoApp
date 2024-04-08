@@ -2,6 +2,8 @@
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Application.Project.Events;
+using ProjectManagement.Domain.Common.ValueObjects;
+using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Application.Project.Commands.CreateProject;
 
@@ -18,8 +20,9 @@ public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectC
             request.Code,
             request.Name,
             request.Description,
-            request.ProjectMembers,
-            request.ProjectPhases);
+            request.ProjectMembers.Select(e => UserId.Create(e)).ToList(),
+            request.ProjectPhases
+                .Select(e => e.ToDomain()).ToList());
 
         return await _unitOfWork.SaveChangesAsync(new ProjectCreated(created), cancellationToken);
 	}

@@ -1,5 +1,5 @@
 ﻿using ProjectManagement.Application.Abstractions.Messaging;
-using ProjectManagement.Domain.Project.Entities;
+using ProjectManagement.Application.Project.Dtos;
 
 namespace ProjectManagement.Application.Project.Commands.UpdateProjectPhases;
 

@@ -25,7 +25,10 @@ public class UpdateProjectPhasesCommandHandler : ICommandHandler<UpdateProjectPh
             return result;
         }
 
-        result.Value.UpdateProjectPhases(request.Phases);
+        result.Value
+            .UpdateProjectPhases(request
+                .Phases
+                .Select(e => e.ToDomain()).ToList());
 
         return await _unitOfWork.SaveChangesAsync(result.Value.DomainEvents, cancellationToken);
     }
