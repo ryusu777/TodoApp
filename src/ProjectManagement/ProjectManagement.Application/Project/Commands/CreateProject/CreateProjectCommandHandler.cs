@@ -3,7 +3,6 @@ using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Application.Project.Events;
 using ProjectManagement.Domain.Common.ValueObjects;
-using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Application.Project.Commands.CreateProject;
 
