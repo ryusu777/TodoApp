@@ -2,14 +2,18 @@ using Library.Models;
 
 namespace ProjectManagement.Domain.Project.ValueObjects;
 
-public sealed class PhaseName : ValueObject
+public sealed class PhaseId : ValueObject
 {
     public Guid Value { get; init; }
-    private PhaseName(Guid value) 
+    private PhaseId(Guid value) 
     {
         Value = value;
     }
-    public static PhaseName CreateUnique() 
+    public static PhaseId Create(Guid value)
+    {
+        return new(value);
+    }
+    public static PhaseId CreateUnique() 
     {
         return new(Guid.NewGuid());
     }
