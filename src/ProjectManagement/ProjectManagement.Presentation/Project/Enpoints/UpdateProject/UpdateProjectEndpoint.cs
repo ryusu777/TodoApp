@@ -1,0 +1,39 @@
+using FastEndpoints;
+using MediatR;
+
+namespace ProjectManagement.Presentation.Project.Endpoints.UpdateProject;
+
+public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjectResponse>
+{
+    public ISender _sender;
+
+    public UpdateProjectEndpoint(ISender sender)
+    {
+        _sender = sender;
+    }
+
+    public override void Configure()
+    {
+        Put(ProjectEndpointRoutes.ProjectDetail);
+    }
+
+    public override async Task HandleAsync(UpdateProjectRequest req, CancellationToken ct)
+    {
+        if (req.id != req.ProjectId) 
+        {
+            await SendResultAsync(TypedResults.BadRequest());
+            return;
+        }
+
+        var result = await _sender.Send(req);
+
+        if (result.IsFailure) 
+        {
+            await SendResultAsync(TypedResults.BadRequest(
+                new UpdateProjectResponse(result.Error.Description)));
+            return;
+        }
+
+        await SendNoContentAsync();
+    }
+}
