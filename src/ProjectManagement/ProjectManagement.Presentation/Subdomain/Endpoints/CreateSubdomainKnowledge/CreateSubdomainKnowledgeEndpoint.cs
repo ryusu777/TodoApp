@@ -1,0 +1,39 @@
+using FastEndpoints;
+using MediatR;
+
+namespace ProjectManagement.Presentation.Subdomain.Endpoints.CreateSubdomainKnowledge;
+
+public class CreateSubdomainKnowledgeEndpoint : Endpoint<CreateSubdomainKnowledgeRequest, CreateSubdomainKnowledgeResponse>
+{
+    public ISender _sender;
+
+    public CreateSubdomainKnowledgeEndpoint(ISender sender)
+    {
+        _sender = sender;
+    }
+
+    public override void Configure()
+    {
+        Post(SubdomainEndpointRoutes.SubdomainDetail);
+    }
+
+    public override async Task HandleAsync(CreateSubdomainKnowledgeRequest req, CancellationToken ct)
+    {
+        if (req.subdomain_id != req.SubdomainId)
+        {
+            await SendResultAsync(TypedResults.BadRequest());
+            return;
+        }
+
+        var result = await _sender.Send(req);
+
+        if (result.IsFailure) 
+        {
+            await SendResultAsync(TypedResults.BadRequest(
+                new CreateSubdomainKnowledgeResponse(result.Error.Description)));
+            return;
+        }
+
+        await SendNoContentAsync();
+    }
+}
