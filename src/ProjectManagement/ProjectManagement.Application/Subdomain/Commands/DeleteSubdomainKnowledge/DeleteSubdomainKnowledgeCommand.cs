@@ -2,4 +2,4 @@ namespace ProjectManagement.Application.Subdomain.Commands.DeleteSubdomainKnowle
 
 using ProjectManagement.Application.Abstractions.Messaging;
 
-public record DeleteSubdomainKnowledgeCommand(Guid SubdomainId, Guid KnowledgeId) : ICommand;
+public record DeleteSubdomainKnowledgeCommand(Guid SubdomainId, Guid SubdomainKnowledgeId) : ICommand;

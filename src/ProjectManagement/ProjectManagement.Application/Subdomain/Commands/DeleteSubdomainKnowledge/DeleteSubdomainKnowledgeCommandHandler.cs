@@ -27,7 +27,7 @@ public class DeleteSubdomainKnowledgeCommandHandler
         if (result.Value is null)
             return result;
 
-        result.Value.DeleteKnowledge(SubdomainKnowledgeId.Create(request.KnowledgeId));
+        result.Value.DeleteKnowledge(SubdomainKnowledgeId.Create(request.SubdomainKnowledgeId));
 
         return await _unitOfWork
             .SaveChangesAsync(result.Value.DomainEvents, cancellationToken);
