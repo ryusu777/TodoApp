@@ -1,6 +1,5 @@
 using FastEndpoints;
 using MediatR;
-using ProjectManagement.Application.Project.Commands.CreateProject;
 
 namespace ProjectManagement.Presentation.Project.Endpoints.CreateProject;
 
