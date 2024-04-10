@@ -27,7 +27,10 @@ public class UpdateProjectMembersEndpoint : Endpoint<UpdateProjectMembersRequest
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender.Send(new UpdateProjectMembersCommand(
+            req.ProjectId, 
+            req.MemberUsernames
+        ));
 
         if (result.IsFailure) 
         {

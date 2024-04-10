@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands.CreateAssignment;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.CreateAssignment;
 
@@ -25,7 +26,12 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new CreateAssignmentCommand(
+                req.Title, 
+                req.Description, 
+                req.ProjectId
+            ));
 
         if (result.IsFailure) 
         {

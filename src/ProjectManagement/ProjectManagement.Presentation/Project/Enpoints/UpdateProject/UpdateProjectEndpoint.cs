@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Project.Commands.UpdateProjectDetails;
 
 namespace ProjectManagement.Presentation.Project.Endpoints.UpdateProject;
 
@@ -26,7 +27,13 @@ public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjec
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new UpdateProjectDetailsCommand(
+                req.ProjectId,
+                req.Name, 
+                req.Description, 
+                req.Status
+            ));
 
         if (result.IsFailure) 
         {

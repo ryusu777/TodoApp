@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.DeleteSubdomainKnowledge;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.DeleteSubdomainKnowledge;
 
@@ -19,7 +20,10 @@ public class DeleteSubdomainKnowledgeEndpoint : Endpoint<DeleteSubdomainKnowledg
 
     public override async Task HandleAsync(DeleteSubdomainKnowledgeRequest req, CancellationToken ct)
     {
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new DeleteSubdomainKnowledgeCommand(
+                req.SubdomainId, 
+                req.SubdomainKnowledgeId));
 
         if (result.IsFailure) 
         {

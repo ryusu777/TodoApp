@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.UpdateSubdomainKnowledge;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.UpdateSubdomainKnowledge;
 
@@ -25,7 +26,13 @@ public class UpdateSubdomainKnowledgeEndpoint : Endpoint<UpdateSubdomainKnowledg
             return;
         }
         
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new UpdateSubdomainKnowledgeCommand(
+                req.SubdomainKnowledgeId,
+                req.Title,
+                req.Content,
+                req.SubdomainId
+            ));
 
         if (result.IsFailure) 
         {

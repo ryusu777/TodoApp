@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.RemoveAssignee;
 
@@ -25,7 +26,11 @@ public class RemoveAssigneeEndpoint : Endpoint<RemoveAssigneeRequest, RemoveAssi
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new RemoveAssigneeCommand(
+                req.AssignmentId, 
+                req.AssigneeUsername
+            ));
 
         if (result.IsFailure) 
         {

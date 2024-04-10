@@ -27,7 +27,8 @@ public class UpdateProjectPhasesEndpoint : Endpoint<UpdateProjectPhasesRequest, 
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new UpdateProjectPhasesCommand(req.ProjectId, req.Phases));
 
         if (result.IsFailure) 
         {

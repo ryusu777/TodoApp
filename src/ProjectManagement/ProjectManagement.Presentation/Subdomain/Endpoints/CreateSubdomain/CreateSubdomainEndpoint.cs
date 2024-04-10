@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.CreateSubdomain;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.CreateSubdomain;
 
@@ -25,7 +26,11 @@ public class CreateSubdomainEndpoint : Endpoint<CreateSubdomainRequest, CreateSu
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new CreateSubdomainCommand(
+                req.Title, 
+                req.Description,
+                req.ProjectId));
 
         if (result.IsFailure) 
         {

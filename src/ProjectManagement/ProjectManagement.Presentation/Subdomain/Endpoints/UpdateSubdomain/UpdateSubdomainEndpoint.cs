@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.UpdateSubdomain;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.UpdateSubdomain;
 
@@ -25,7 +26,12 @@ public class UpdateSubdomainEndpoint : Endpoint<UpdateSubdomainRequest, UpdateSu
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new UpdateSubdomainCommand(
+                req.SubdomainId, 
+                req.Title,
+                req.Description
+            ));
 
         if (result.IsFailure) 
         {

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands.Assigning;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.Assigning;
 
@@ -25,7 +26,10 @@ public class AssigningEndpoint : Endpoint<AssigningRequest, AssigningResponse>
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new AssigningCommand(
+                req.AssignmentId, req.AssigneeUsername
+            ));
 
         if (result.IsFailure) 
         {

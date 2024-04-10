@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands.UpdateAssignments;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.UpdateAssignment;
 
@@ -25,7 +26,12 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new UpdateAssignmentCommand(
+                req.AssignmentId, 
+                req.Title, 
+                req.Description
+            ));
 
         if (result.IsFailure) 
         {

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.DeleteSubdomain;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.DeleteSubdomain;
 
@@ -25,7 +26,10 @@ public class DeleteSubdomainEndpoint : Endpoint<DeleteSubdomainRequest, DeleteSu
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new DeleteSubdomainCommand(
+                req.SubdomainId
+            ));
 
         if (result.IsFailure) 
         {

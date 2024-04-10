@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands.DeleteAssignment;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.DeleteAssignment;
 
@@ -19,7 +20,10 @@ public class DeleteAssignmentEndpoint : Endpoint<DeleteAssignmentRequest, Delete
 
     public override async Task HandleAsync(DeleteAssignmentRequest req, CancellationToken ct)
     {
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new DeleteAssignmentCommand(
+                req.AssignmentId
+            ));
 
         if (result.IsFailure) 
         {

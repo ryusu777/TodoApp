@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Assignment.Commands.ChangeAssignmentStatus;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.ChangeAssignmentStatus;
 
@@ -25,7 +26,11 @@ public class ChangeAssignmentStatusEndpoint : Endpoint<ChangeAssignmentStatusReq
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new ChangeAssignmentStatusCommand(
+                req.AssignmentId,
+                req.AssignmentStatus
+            ));
 
         if (result.IsFailure) 
         {

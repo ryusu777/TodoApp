@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Subdomain.Commands.CreateSubdomainKnowledge;
 
 namespace ProjectManagement.Presentation.Subdomain.Endpoints.CreateSubdomainKnowledge;
 
@@ -25,7 +26,12 @@ public class CreateSubdomainKnowledgeEndpoint : Endpoint<CreateSubdomainKnowledg
             return;
         }
 
-        var result = await _sender.Send(req);
+        var result = await _sender
+            .Send(new CreateSubdomainKnowledgeCommand(
+                req.Title,
+                req.Content,
+                req.SubdomainId
+            ));
 
         if (result.IsFailure) 
         {
