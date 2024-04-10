@@ -36,7 +36,13 @@ public class UnitOfWork : IUnitOfWork
     {
         foreach (var domainEvent in _populatedDomainEvents)
         {
-            await _persistPublisher.Publish(domainEvent, _dbContext, cancellationToken);
+            Task task = (Task)_persistPublisher
+                .GetType()
+                .GetMethod(nameof(PersistPublisher.Publish))!
+                .MakeGenericMethod(domainEvent.GetType())
+                .Invoke(_persistPublisher, [domainEvent, _dbContext, cancellationToken])!;
+
+            await task.ConfigureAwait(false);
         }
 
         try
