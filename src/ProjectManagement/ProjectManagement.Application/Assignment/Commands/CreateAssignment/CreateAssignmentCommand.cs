@@ -5,4 +5,5 @@ namespace ProjectManagement.Application.Assignment.Commands.CreateAssignment;
 public record CreateAssignmentCommand(
 	string Title, 
 	string Description, 
-	string ProjectId) : ICommand;
+	string ProjectId
+) : ICommand;
