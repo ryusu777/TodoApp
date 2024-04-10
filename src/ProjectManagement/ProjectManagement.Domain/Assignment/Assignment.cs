@@ -9,7 +9,10 @@ namespace ProjectManagement.Domain.Assignment;
 
 public sealed class Assignment : AggregateRoot<AssignmentId>
 {
-    private Assignment(
+#pragma warning disable CS8618
+	private Assignment() { }
+#pragma warning restore CS8618
+	private Assignment(
         AssignmentId id, 
         string title, 
         string description, 
@@ -21,12 +24,12 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         Status = new AssignmentStatus(AssignmentStatusEnum.New);
     }
 
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public ProjectId ProjectId { get; set; }
-    public AssignmentStatus Status { get; set; }
-    public ICollection<SubdomainId> SubdomainIds { get; set; } = new List<SubdomainId>();
-    public ICollection<UserId> Assignees { get; set; } = new List<UserId>();
+    public string Title { get; private set; }
+    public string? Description { get; private set; }
+    public ProjectId ProjectId { get; private set; }
+    public AssignmentStatus Status { get; private set; }
+    public ICollection<SubdomainId> SubdomainIds { get; private set; } = new List<SubdomainId>();
+    public ICollection<UserId> Assignees { get; private set; } = new List<UserId>();
 
     public static Assignment Create(
         string title, 

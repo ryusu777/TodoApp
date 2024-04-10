@@ -6,6 +6,9 @@ public class ProjectEndpointGroup : Group
 {
     public ProjectEndpointGroup()
     {
-        Configure(GlobalEndpointRoutes.ApiPrefix, ep => { }); 
+        Configure(GlobalEndpointRoutes.ApiPrefix, ep => 
+        {
+            ep.AllowAnonymous();
+        }); 
     }
 }

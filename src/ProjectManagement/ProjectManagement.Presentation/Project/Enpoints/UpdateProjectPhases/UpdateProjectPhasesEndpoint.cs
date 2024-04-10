@@ -16,6 +16,7 @@ public class UpdateProjectPhasesEndpoint : Endpoint<UpdateProjectPhasesRequest, 
     public override void Configure()
     {
         Put(ProjectEndpointRoutes.Phases);
+        Group<ProjectEndpointGroup>();
     }
 
     public override async Task HandleAsync(UpdateProjectPhasesRequest req, CancellationToken ct)

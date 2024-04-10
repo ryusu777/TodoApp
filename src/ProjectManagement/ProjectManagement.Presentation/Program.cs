@@ -1,6 +1,8 @@
 using FastEndpoints;
+using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using ProjectManagement.Application;
+using ProjectManagement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +16,14 @@ builder.Services.SwaggerDocument(opt =>
     };
 });
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddAuthenticationJwtBearer(e => e.SigningKey = "Secrets");
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseFastEndpoints();
 
 if (app.Environment.IsDevelopment())

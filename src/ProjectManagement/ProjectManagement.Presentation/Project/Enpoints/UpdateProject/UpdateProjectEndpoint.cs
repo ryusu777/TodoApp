@@ -15,6 +15,7 @@ public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjec
     public override void Configure()
     {
         Put(ProjectEndpointRoutes.ProjectDetail);
+        Group<ProjectEndpointGroup>();
     }
 
     public override async Task HandleAsync(UpdateProjectRequest req, CancellationToken ct)

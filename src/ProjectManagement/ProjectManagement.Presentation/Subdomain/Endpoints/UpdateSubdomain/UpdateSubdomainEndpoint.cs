@@ -14,7 +14,7 @@ public class UpdateSubdomainEndpoint : Endpoint<UpdateSubdomainRequest, UpdateSu
 
     public override void Configure()
     {
-        Post(SubdomainEndpointRoutes.SubdomainDetail);
+        Put(SubdomainEndpointRoutes.SubdomainDetail);
     }
 
     public override async Task HandleAsync(UpdateSubdomainRequest req, CancellationToken ct)

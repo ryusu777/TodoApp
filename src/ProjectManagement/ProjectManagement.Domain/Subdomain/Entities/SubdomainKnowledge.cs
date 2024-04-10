@@ -5,7 +5,10 @@ namespace ProjectManagement.Domain.Subdomain.Entities;
 
 public sealed class SubdomainKnowledge : Entity<SubdomainKnowledgeId>
 {
-    private SubdomainKnowledge(
+#pragma warning disable CS8618
+	private SubdomainKnowledge() { }
+#pragma warning restore CS8618
+	private SubdomainKnowledge(
         SubdomainKnowledgeId id,
         string title,
         string content,

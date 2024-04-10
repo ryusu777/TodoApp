@@ -6,9 +6,9 @@ namespace ProjectManagement.Domain.Common.ValueObjects
 	{
         public string Value { get; init; }
 
-		private UserId(string username)
+		private UserId(string value)
 		{
-			Value = username;
+			Value = value;
 		}
         public override IEnumerable<object> GetEqualityComponents()
 		{

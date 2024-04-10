@@ -1,5 +1,5 @@
 ﻿using ProjectManagement.Application.Abstractions.Messaging;
-using ProjectManagement.Application.Project.Dtos;
+using ProjectManagement.Application.Project.Commands.CreateProjectPhase;
 
 namespace ProjectManagement.Application.Project.Commands.CreateProject;
 
@@ -8,5 +8,5 @@ public record CreateProjectCommand(
 	string Name,
 	string Description,
 	ICollection<string> ProjectMembers,
-	ICollection<Phase> ProjectPhases
+	ICollection<CreateProjectPhaseCommand> ProjectPhases
 ) : ICommand;

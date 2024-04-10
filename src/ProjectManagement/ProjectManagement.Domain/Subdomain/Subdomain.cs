@@ -7,7 +7,10 @@ namespace ProjectManagement.Domain.Subdomain;
 
 public sealed class Subdomain : AggregateRoot<SubdomainId>
 {
-    private Subdomain(
+#pragma warning disable CS8618
+	private Subdomain() { }
+#pragma warning restore CS8618
+	private Subdomain(
         SubdomainId id,
         string description,
         string title,

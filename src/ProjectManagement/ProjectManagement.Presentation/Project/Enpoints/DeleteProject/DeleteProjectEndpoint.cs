@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using ProjectManagement.Application.Project.Commands.DeleteProject;
 
 namespace ProjectManagement.Presentation.Project.Endpoints.DeleteProject;
 
@@ -15,17 +16,12 @@ public class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest, DeleteProjec
     public override void Configure()
     {
         Delete(ProjectEndpointRoutes.ProjectDetail);
+        Group<ProjectEndpointGroup>();
     }
 
     public override async Task HandleAsync(DeleteProjectRequest req, CancellationToken ct)
     {
-        if (req.id != req.ProjectId) 
-        {
-            await SendResultAsync(TypedResults.BadRequest());
-            return;
-        }
-
-        var result = await _sender.Send(req);
+        var result = await _sender.Send(new DeleteProjectCommand(req.id));
         if (result.IsFailure) 
         {
             await SendResultAsync(TypedResults.BadRequest(

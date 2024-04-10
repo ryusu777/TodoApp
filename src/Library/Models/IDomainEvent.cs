@@ -1,5 +1,7 @@
+using MediatR;
+
 namespace Library.Models;
 
-public interface IDomainEvent 
+public interface IDomainEvent : INotification
 {
 }

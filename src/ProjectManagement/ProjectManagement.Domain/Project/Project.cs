@@ -9,7 +9,11 @@ namespace ProjectManagement.Domain.Project;
 
 public sealed class Project : AggregateRoot<ProjectId>
 {
-    private Project(
+#pragma warning disable CS8618
+	private Project() { }
+#pragma warning restore CS8618
+
+	private Project(
         ProjectId code,
         string name,
         string description,

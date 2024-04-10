@@ -14,7 +14,7 @@ public class DeleteSubdomainEndpoint : Endpoint<DeleteSubdomainRequest, DeleteSu
 
     public override void Configure()
     {
-        Post(SubdomainEndpointRoutes.SubdomainDetail);
+        Delete(SubdomainEndpointRoutes.SubdomainDetail);
     }
 
     public override async Task HandleAsync(DeleteSubdomainRequest req, CancellationToken ct)

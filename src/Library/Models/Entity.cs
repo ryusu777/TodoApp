@@ -19,7 +19,11 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
         Id = id;
     }
 
-    public override bool Equals(object? obj)
+#pragma warning disable CS8618
+	protected Entity() { }
+#pragma warning restore CS8618
+
+	public override bool Equals(object? obj)
     {
         return obj is Entity<TId> entity && Id.Equals(entity.Id);
     }

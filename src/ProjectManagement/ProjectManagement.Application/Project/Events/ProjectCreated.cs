@@ -1,4 +1,5 @@
 using Library.Models;
+using MediatR;
 
 namespace ProjectManagement.Application.Project.Events;
 

@@ -5,6 +5,7 @@ namespace ProjectManagement.Domain.Project.Entities;
 
 public sealed class Phase : Entity<PhaseId>
 {
+	public Phase() { }
     public Phase(PhaseId id) : base(id)
     {
     }
