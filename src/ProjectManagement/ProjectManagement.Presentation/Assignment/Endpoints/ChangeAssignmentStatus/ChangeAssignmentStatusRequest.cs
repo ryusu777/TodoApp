@@ -4,7 +4,6 @@ namespace ProjectManagement.Presentation.Assignment.Endpoints.ChangeAssignmentSt
 
 public record ChangeAssignmentStatusRequest : ChangeAssignmentStatusCommand
 {
-    public required Guid assignment_id { get; set; }
     public ChangeAssignmentStatusRequest(Guid AssignmentId, string AssignmentStatus) : base(AssignmentId, AssignmentStatus)
     {
     }

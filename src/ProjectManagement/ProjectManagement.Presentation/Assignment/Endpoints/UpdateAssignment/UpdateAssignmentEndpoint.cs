@@ -16,11 +16,12 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
     public override void Configure()
     {
         Put(AssignmentEndpointRoutes.AssignmentDetail);
+        Group<AssignmentEndpointGroup>();
     }
 
     public override async Task HandleAsync(UpdateAssignmentRequest req, CancellationToken ct)
     {
-        if (req.assignment_id != req.AssignmentId) 
+        if (Route<Guid>("assignment_id") != req.AssignmentId) 
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

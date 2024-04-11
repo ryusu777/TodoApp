@@ -16,11 +16,12 @@ public class RemoveAssigneeEndpoint : Endpoint<RemoveAssigneeRequest, RemoveAssi
     public override void Configure()
     {
         Post(AssignmentEndpointRoutes.RemoveAssignee);
+        Group<AssignmentEndpointGroup>();
     }
 
     public override async Task HandleAsync(RemoveAssigneeRequest req, CancellationToken ct)
     {
-        if (req.assignment_id != req.AssignmentId)
+        if (Route<Guid>("assignment_id") != req.AssignmentId)
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

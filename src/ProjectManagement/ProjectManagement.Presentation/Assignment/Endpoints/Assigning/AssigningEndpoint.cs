@@ -16,11 +16,12 @@ public class AssigningEndpoint : Endpoint<AssigningRequest, AssigningResponse>
     public override void Configure()
     {
         Post(AssignmentEndpointRoutes.Assigning);
+        Group<AssignmentEndpointGroup>();
     }
 
     public override async Task HandleAsync(AssigningRequest req, CancellationToken ct)
     {
-        if (req.assignment_id != req.AssignmentId)
+        if (Route<Guid>("assignment_id") != req.AssignmentId)
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

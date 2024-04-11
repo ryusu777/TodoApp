@@ -16,6 +16,7 @@ public class DeleteAssignmentEndpoint : Endpoint<DeleteAssignmentRequest, Delete
     public override void Configure()
     {
         Delete(AssignmentEndpointRoutes.DeleteAssignment);
+        Group<AssignmentEndpointGroup>();
     }
 
     public override async Task HandleAsync(DeleteAssignmentRequest req, CancellationToken ct)
