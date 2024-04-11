@@ -16,11 +16,12 @@ public class DeleteSubdomainEndpoint : Endpoint<DeleteSubdomainRequest, DeleteSu
     public override void Configure()
     {
         Delete(SubdomainEndpointRoutes.SubdomainDetail);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(DeleteSubdomainRequest req, CancellationToken ct)
     {
-        if (req.subdomain_id != req.SubdomainId)
+        if (Route<Guid>("subdomain_id") != req.SubdomainId)
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

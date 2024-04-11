@@ -16,11 +16,12 @@ public class UpdateSubdomainEndpoint : Endpoint<UpdateSubdomainRequest, UpdateSu
     public override void Configure()
     {
         Put(SubdomainEndpointRoutes.SubdomainDetail);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(UpdateSubdomainRequest req, CancellationToken ct)
     {
-        if (req.SubdomainId != req.subdomain_id)
+        if (req.SubdomainId != Route<Guid>("subdomain_id"))
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

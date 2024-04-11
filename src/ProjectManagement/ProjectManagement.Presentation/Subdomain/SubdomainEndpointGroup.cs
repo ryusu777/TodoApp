@@ -6,6 +6,9 @@ public class SubdomainEndpointGroup : Group
 {
     public SubdomainEndpointGroup()
     {
-        Configure(GlobalEndpointRoutes.ApiPrefix, ep => { }); 
+        Configure(GlobalEndpointRoutes.ApiPrefix, ep => 
+        { 
+            ep.AllowAnonymous();
+        }); 
     }
 }

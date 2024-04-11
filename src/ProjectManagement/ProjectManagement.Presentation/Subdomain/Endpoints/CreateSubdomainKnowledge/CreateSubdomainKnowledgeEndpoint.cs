@@ -16,11 +16,12 @@ public class CreateSubdomainKnowledgeEndpoint : Endpoint<CreateSubdomainKnowledg
     public override void Configure()
     {
         Post(SubdomainEndpointRoutes.SubdomainDetail);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(CreateSubdomainKnowledgeRequest req, CancellationToken ct)
     {
-        if (req.subdomain_id != req.SubdomainId)
+        if (Route<Guid>("subdomain_id") != req.SubdomainId)
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

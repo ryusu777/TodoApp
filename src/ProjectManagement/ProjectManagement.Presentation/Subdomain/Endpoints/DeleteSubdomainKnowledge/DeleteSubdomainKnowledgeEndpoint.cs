@@ -16,6 +16,7 @@ public class DeleteSubdomainKnowledgeEndpoint : Endpoint<DeleteSubdomainKnowledg
     public override void Configure()
     {
         Delete(SubdomainEndpointRoutes.DeleteSubdomainKnowledge);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(DeleteSubdomainKnowledgeRequest req, CancellationToken ct)

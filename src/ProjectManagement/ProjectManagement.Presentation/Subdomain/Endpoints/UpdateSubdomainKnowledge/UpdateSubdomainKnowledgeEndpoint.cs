@@ -16,11 +16,12 @@ public class UpdateSubdomainKnowledgeEndpoint : Endpoint<UpdateSubdomainKnowledg
     public override void Configure()
     {
         Put(SubdomainEndpointRoutes.SubdomainKnowledgeDetail);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(UpdateSubdomainKnowledgeRequest req, CancellationToken ct)
     {
-        if (req.knowledge_id != req.SubdomainKnowledgeId)
+        if (Route<Guid>("knowledge_id") != req.SubdomainKnowledgeId)
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;

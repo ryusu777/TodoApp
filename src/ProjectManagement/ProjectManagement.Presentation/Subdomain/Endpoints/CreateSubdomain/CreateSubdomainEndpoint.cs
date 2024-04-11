@@ -16,11 +16,12 @@ public class CreateSubdomainEndpoint : Endpoint<CreateSubdomainRequest, CreateSu
     public override void Configure()
     {
         Post(SubdomainEndpointRoutes.Subdomain);
+        Group<SubdomainEndpointGroup>();
     }
 
     public override async Task HandleAsync(CreateSubdomainRequest req, CancellationToken ct)
     {
-        if (req.project_id != req.ProjectId) 
+        if (Route<string>("project_id") != req.ProjectId) 
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;
