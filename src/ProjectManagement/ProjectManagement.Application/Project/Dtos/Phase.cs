@@ -3,7 +3,7 @@ using ProjectManagement.Domain.Project.ValueObjects;
 namespace ProjectManagement.Application.Project.Dtos;
 
 public record Phase(
-    Guid Id,
+    Guid? Id,
     string Name,
     DateOnly StartDate,
     DateOnly EndDate,
@@ -12,7 +12,9 @@ public record Phase(
 {
     public Domain.Project.Entities.Phase ToDomain()
     {
-        return new Domain.Project.Entities.Phase(PhaseId.Create(Id))
+        return new Domain.Project.Entities.Phase(Id is not null 
+            ? PhaseId.Create(Id.Value)
+            : PhaseId.CreateUnique())
         {
             Name = Name,
             StartDate = StartDate,

@@ -1,4 +1,5 @@
 ﻿using ProjectManagement.Application.Project.Events;
+using ProjectManagement.Domain.Project.Events;
 using ProjectManagement.Infrastructure.Persistence;
 using ProjectManagement.Infrastructure.Persistence.Data;
 
@@ -6,7 +7,10 @@ namespace ProjectManagement.Infrastructure.Project;
 
 public class ProjectPersistHandler :
 	IPersistEventHandler<ProjectCreated>,
-	IPersistEventHandler<ProjectDeleted>
+	IPersistEventHandler<ProjectDeleted>,
+    IPersistEventHandler<ProjectDetailsUpdated>,
+    IPersistEventHandler<ProjectMembersUpdated>,
+    IPersistEventHandler<ProjectPhasesUpdated>
 {
 	public Task Handle(ProjectCreated notification, AppDbContext dbContext, CancellationToken cancellationToken)
 	{
@@ -19,4 +23,20 @@ public class ProjectPersistHandler :
 		dbContext.Projects.Remove(notification.Project);
 		return Task.CompletedTask;
 	}
+
+    public Task Handle(ProjectDetailsUpdated notification, AppDbContext dbContext, CancellationToken cancellationToken)
+    {
+        dbContext.Projects.Update(notification.Project);
+        return Task.CompletedTask;
+    }
+
+    public Task Handle(ProjectMembersUpdated notification, AppDbContext dbContext, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task Handle(ProjectPhasesUpdated notification, AppDbContext dbContext, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 }

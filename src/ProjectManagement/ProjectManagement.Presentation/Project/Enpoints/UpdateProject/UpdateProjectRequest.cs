@@ -5,8 +5,6 @@ namespace ProjectManagement.Presentation.Project.Endpoints.UpdateProject;
 
 public record UpdateProjectRequest : UpdateProjectDetailsCommand
 {
-    public required string id { get; set; }
-
     public UpdateProjectRequest(
         string ProjectId, 
         string Name, 

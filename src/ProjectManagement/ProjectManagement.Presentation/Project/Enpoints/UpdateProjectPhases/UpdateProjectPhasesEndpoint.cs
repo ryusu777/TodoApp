@@ -21,7 +21,7 @@ public class UpdateProjectPhasesEndpoint : Endpoint<UpdateProjectPhasesRequest, 
 
     public override async Task HandleAsync(UpdateProjectPhasesRequest req, CancellationToken ct)
     {
-        if (req.id != req.ProjectId) 
+        if (Route<string>("id") != req.ProjectId) 
         {
             await SendResultAsync(TypedResults.BadRequest());
             return;
