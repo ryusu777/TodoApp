@@ -1,0 +1,10 @@
+using ProjectManagement.Presentation.Test.Abstraction;
+
+namespace ProjectManagement.Presentation.Test.Project;
+
+public class CreateProjectTests : BaseFunctionalTest
+{
+	public CreateProjectTests(WebAppFactory factory) : base(factory)
+	{
+	}
+}

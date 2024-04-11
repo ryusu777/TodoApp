@@ -30,3 +30,5 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerGen();
 
 app.Run();
+
+public partial class Program;
