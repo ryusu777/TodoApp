@@ -23,7 +23,7 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
 	public async Task<Result> Handle(CreateAssignmentCommand request, CancellationToken cancellationToken)
 	{
 		var projectResult = await _projectRepository
-			.GetProjectById(ProjectId.Create(request.ProjectId));
+			.GetProjectById(ProjectId.Create(request.ProjectId), cancellationToken);
 
 		if (projectResult.Value is null)
 		{

@@ -22,7 +22,7 @@ public class CreateProjectEndpoint : Endpoint<CreateProjectRequest, CreateProjec
     public override async Task HandleAsync(CreateProjectRequest req, CancellationToken ct)
     {
         CreateProjectCommand command = new CreateProjectCommand(req.Code, req.Name, req.Description, req.ProjectMembers, req.ProjectPhases); ;
-        var result = await _sender.Send(command);
+        var result = await _sender.Send(command, ct);
 
         if (result.IsFailure) 
         {

@@ -21,7 +21,7 @@ public class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest, DeleteProjec
 
     public override async Task HandleAsync(DeleteProjectRequest req, CancellationToken ct)
     {
-        var result = await _sender.Send(new DeleteProjectCommand(req.ProjectId));
+        var result = await _sender.Send(new DeleteProjectCommand(req.ProjectId), ct);
         if (result.IsFailure) 
         {
             await SendResultAsync(TypedResults.BadRequest(

@@ -17,7 +17,7 @@ public sealed class UpdateProjectDetailsCommandHandler : ICommandHandler<UpdateP
     }
     public async Task<Result> Handle(UpdateProjectDetailsCommand request, CancellationToken cancellationToken)
 	{
-		var result = await _projectRepo.GetProjectById(ProjectId.Create(request.ProjectId));
+		var result = await _projectRepo.GetProjectById(ProjectId.Create(request.ProjectId), cancellationToken);
 
         if (result.Value is null)
         {

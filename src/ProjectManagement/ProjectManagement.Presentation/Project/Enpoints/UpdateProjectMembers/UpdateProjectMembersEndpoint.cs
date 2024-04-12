@@ -30,7 +30,7 @@ public class UpdateProjectMembersEndpoint : Endpoint<UpdateProjectMembersRequest
         var result = await _sender.Send(new UpdateProjectMembersCommand(
             req.ProjectId, 
             req.MemberUsernames
-        ));
+        ), ct);
 
         if (result.IsFailure) 
         {

@@ -17,7 +17,7 @@ public sealed class DeleteProjectCommandHandler : ICommandHandler<DeleteProjectC
     }
     public async Task<Result> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
 	{
-        var result = await _projectRepository.GetProjectById(ProjectId.Create(request.ProjectId));
+        var result = await _projectRepository.GetProjectById(ProjectId.Create(request.ProjectId), cancellationToken);
 
         if (result.Value is null)
         {

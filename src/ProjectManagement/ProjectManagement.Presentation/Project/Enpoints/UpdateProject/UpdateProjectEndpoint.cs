@@ -33,7 +33,7 @@ public class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, UpdateProjec
                 req.Name, 
                 req.Description, 
                 req.Status
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

@@ -18,7 +18,7 @@ public class UpdateProjectPhasesCommandHandler : ICommandHandler<UpdateProjectPh
     }
     public async Task<Result> Handle(UpdateProjectPhasesCommand request, CancellationToken cancellationToken)
 	{
-		var result = await _projectRepository.GetProjectById(ProjectId.Create(request.ProjectId));
+		var result = await _projectRepository.GetProjectById(ProjectId.Create(request.ProjectId), cancellationToken);
 
         if (result.Value is null)
         {

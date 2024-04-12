@@ -22,4 +22,15 @@ public record Phase(
             Description = Description
         };
     }
+
+    public static Phase FromDomain(Domain.Project.Entities.Phase phase)
+    {
+        return new Phase(
+            phase.Id.Value,
+            phase.Name,
+            phase.StartDate,
+            phase.EndDate,
+            phase.Description
+        );
+    }
 };
