@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'default'
+  name: 'Home',
+  icon: 'i-heroicons-home'
 })
 </script>
 

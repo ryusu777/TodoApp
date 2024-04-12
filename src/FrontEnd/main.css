@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl tracking-wide;
+  }
+
+  @font-face {
+    font-family: 'San Fransisco';
+    font-style: normal;
+    font-weight: 400;
+    src: url(/fonts/SFPRODISPLAYMEDIUM.OTF) format('opentype');
+  }
+
+  @font-face {
+    font-family: 'San Fransisco';
+    font-style: normal;
+    font-weight: 600;
+    src: url(/fonts/SFPRODISPLAYBOLD.OTF) format('opentype');
+  }
+}
