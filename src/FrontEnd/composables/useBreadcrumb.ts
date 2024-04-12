@@ -20,8 +20,6 @@ export const useBreadcrumb = (router: Router) => {
 
     let path = '';
 
-    console.log(fullRoutePath, params);
-
     params.filter(e => e.length > 0).forEach((param, index) => {
       path = `${path}/${param}`;
       const match = router.resolve(path)

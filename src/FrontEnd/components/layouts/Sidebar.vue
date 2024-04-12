@@ -1,5 +1,16 @@
 <script setup lang="ts">
-const links = [
+import { GetProjectPages } from '~/domain/project/api/projectApi';
+
+const projectPages = await GetProjectPages();
+
+const pagesLink = computed(() => projectPages.data.value?.data?.map(e => {
+    return {
+      label: e.name,
+      to: '/project/' + e.id
+    }
+  }));
+
+const links = computed(() => [
   [{
     label: 'Profile',
     avatar: {
@@ -11,14 +22,8 @@ const links = [
     badge: '1',
     to: '/project'
   }],
-  [{
-    label: 'Todo App',
-    to: '/project/TodoApp'
-  },{
-    label: 'Project B',
-    to: '/project/ProjectB'
-  }]
-];
+  [...pagesLink.value || []]
+]);
 </script>
 
 <template>
