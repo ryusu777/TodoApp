@@ -1,4 +1,4 @@
 export default defineNuxtRouteMiddleware(to => {
-  const breadcrumb = useBreadcrumb(useRouter());
+  const breadcrumb = useBreadcrumb();
   breadcrumb.updateRoute(to.fullPath);
 })

@@ -19,44 +19,48 @@ export const useApi = () => {
    * Sends request on server side before hydration
    */
   function get<T>(endpoint: string) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint);
+    return useFetch<IApiResponse<T>>(API_URL + endpoint, {server: true});
   }
 
   /**
    * Sends request on client side
    */
-  function $post<T>(endpoint: string) {
+  function $post<T>(endpoint: string, payload: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
       server: false,
-      method: 'POST'
+      method: 'POST',
+      body: payload
     });
   }
 
   /**
    * Sends request on server side before hydration
    */
-  function post<T>(endpoint: string) {
+  function post<T>(endpoint: string, payload: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      method: 'POST'
+      method: 'POST',
+      body: payload
     });
   }
 
   /**
    * Sends request on client side
    */
-  function $put<T>(endpoint: string) {
+  function $put<T>(endpoint: string, payload: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
       server: false,
-      method: 'PUT'
+      method: 'PUT',
+      body: payload
     });
   }
 
   /**
    * Sends request on server side before hydration
    */
-  function put<T>(endpoint: string) {
+  function put<T>(endpoint: string, payload: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      method: 'PUT'
+      method: 'PUT',
+      body: payload
     });
   }
 

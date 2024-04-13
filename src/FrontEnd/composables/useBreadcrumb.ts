@@ -6,17 +6,42 @@ type Link = {
   to?: string;
 };
 
-const links = ref<Link[]>([]);
+export const useBreadcrumb = defineStore('useBreadcrumb', () => {
+  const converter: {
+    key: string,
+    label: ComputedRef<RouteRecordName | undefined>
+  }[] = [];
 
-export const useBreadcrumb = (router: Router) => {
+  function setConverter(key: string, labelCallback: ComputedRef<string | undefined>) {
+    const foundConverter = converter.find(e => e.key === key);
+    if (foundConverter) {
+      foundConverter.label = labelCallback;
+      return;
+    }
+
+    converter.push({
+      key,
+      label: labelCallback
+    });
+  }
+
+  const links = ref<Link[]>([
+    {
+      label: 'Home',
+      icon: 'i-heroicons-home',
+      to: '/'
+    }
+  ]);
+  const router = useRouter();
+  const crumb = ref<Link[]>([]);
+  const computedLinks = computed(() => links.value.concat(crumb.value));
+
   function updateRoute(fullRoutePath: string) {
-    links.value = [];
-
     const params = fullRoutePath.startsWith('/')
       ? fullRoutePath.substring(1).split('/')
       : fullRoutePath.split('/');
 
-    const crumbs = [] as Link[];
+    crumb.value = [];
 
     let path = '';
 
@@ -25,28 +50,22 @@ export const useBreadcrumb = (router: Router) => {
       const match = router.resolve(path)
 
       if (match.name !== null) {
-        crumbs.push({
-          label: match.name,
+        const foundConverter = converter.find(e => e.key === match.name);
+
+        crumb.value.push({
+          label: foundConverter ? foundConverter.label.value : match.name as RouteRecordName,
           to: match.path,
           icon: match.meta.icon as string || "",
         });
       }
-    })
-
-    links.value = [
-      {
-        label: 'Home',
-        icon: 'i-heroicons-home',
-        to: '/'
-      },
-      ...crumbs
-    ];
+    });
   }
 
   updateRoute(router.currentRoute.value.fullPath);
 
   return {
-    links,
-    updateRoute
+    links: computedLinks,
+    updateRoute,
+    setConverter
   }
-}
+})

@@ -1,9 +1,9 @@
 <script setup>
 import Sidebar from '~/components/layouts/Sidebar.vue';
 import Navbar from '~/components/layouts/Navbar.vue';
-import { useBreadcrumb } from '~/composables/useBreadcrumb';
 
-const breadcrumb = useBreadcrumb(useRouter());
+const breadcrumb = useBreadcrumb();
+
 </script>
 
 <template>
@@ -14,8 +14,9 @@ const breadcrumb = useBreadcrumb(useRouter());
     <div class="flex flex-row h-full w-full">
       <Sidebar />
       <div class="p-5 h-full w-full">
-        <UBreadcrumb 
-          :links="breadcrumb.links.value"
+        <UBreadcrumb
+          class="mb-2"
+          :links="breadcrumb.links"
         />
         <slot />
       </div>
