@@ -5,5 +5,8 @@ export default defineNuxtConfig({
     typeCheck: true
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
-  css: ['~/main.css']
-})
+  css: ['~/main.css'],
+  ui: {
+    icons: {}
+  }
+});

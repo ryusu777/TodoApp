@@ -17,7 +17,11 @@ const breadcrumb = useBreadcrumb();
         <UBreadcrumb
           class="mb-2"
           :links="breadcrumb.links"
-        />
+        >
+          <template #divider>
+            <UIcon name="heroicons:chevron-right-20-solid" />
+          </template>
+        </UBreadcrumb>
         <slot />
       </div>
     </div>

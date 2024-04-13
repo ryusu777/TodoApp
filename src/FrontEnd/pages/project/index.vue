@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   name: 'Projects',
-  icon: 'i-heroicons-document-duplicate-20-solid'
+  icon: 'heroicons:document-duplicate-20-solid'
 })
 </script>
 
