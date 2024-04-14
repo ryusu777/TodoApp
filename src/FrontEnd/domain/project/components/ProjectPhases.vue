@@ -100,8 +100,8 @@ function remove(phase: Phase) {
         }"
       />
     </div>
-    <div class="flex flex-row gap-3 mt-3">
-      <div v-for="phase in form.phases.value" style="width: 20%; min-height: max-content;">
+    <div class="flex flex-row flex-wrap gap-3 mt-3">
+      <div v-for="phase in form.phases.value" style="min-width: 250px; min-height: max-content;">
         <PhaseVue 
           :phase="phase" 
           :editable="editable"

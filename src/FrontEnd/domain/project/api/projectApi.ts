@@ -15,6 +15,10 @@ export interface Phase {
   description: string;
 }
 
+export interface Member {
+  username: string;
+}
+
 export interface Project {
   id: string;
   name: string;
