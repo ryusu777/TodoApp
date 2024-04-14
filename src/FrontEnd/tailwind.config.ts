@@ -14,5 +14,12 @@ export default <Partial<Config>> {
         'sans': ['"San Fransisco"', ...defaultTheme.fontFamily.sans],
       }
     }
-  }
+  },
+  content: [
+    './components/**/*.{vue,ts}',
+    './domain/**/*.{vue,ts}',
+    './pages/**/*.{vue,ts}',
+    './app.vue',
+    './error.vue'
+  ]
 }

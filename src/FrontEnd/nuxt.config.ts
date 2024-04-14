@@ -10,7 +10,13 @@ export default defineNuxtConfig({
     }
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
-  css: ['~/main.css'],
+  css: ['~/public/css/main.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  },
   ui: {
     icons: {}
   }
