@@ -4,18 +4,23 @@ import { UpdateProjectPhases, type Phase } from "../api/projectApi";
 export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   const show = ref(false);
 
-  const phases = ref<Phase[]>(initialPhases.map(e => {
+  let original = initialPhases;
+
+  const phases = ref<Phase[]>(original.map(e => {
     return {
       ...e
     }
   }));
 
+  const currentEditIndex = ref(-1);
+
   function refresh(newPhases: Phase[]) {
     phases.value = [...newPhases];
+    original = newPhases;
   }
 
   function revert() {
-    phases.value = [...initialPhases];
+    phases.value = [...original];
   }
 
   const model = reactive({
@@ -27,9 +32,18 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
 
   const schema = object({
     name: string().required('Name is required').test(
-      'name-unique',
+      'unique-name',
       'Phase name is already used',
-      (value) => phases.value.some(e => e.name === value)
+      (value) => {
+        const foundIndex = phases.value.findIndex(e => e.name === value);
+        if (foundIndex === -1)
+          return true;
+
+        if (foundIndex === currentEditIndex.value)
+          return true;
+
+        return false;
+      }
     ),
     startDate: string().required('Start date is required'),
     endDate: string().required('End date is required'),
@@ -37,6 +51,7 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   });
 
   function setModel(newModel: Phase) {
+    currentEditIndex.value = phases.value.findIndex(e => e.name === newModel.name);
     model.name = newModel.name;
     model.startDate = newModel.startDate;
     model.endDate = newModel.endDate;
@@ -50,6 +65,13 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   }
 
   function onSubmit() {
+    if (currentEditIndex.value === -1) {
+      phases.value.push({
+        ...model
+      });
+      show.value = false;
+      return;
+    }
     const foundPhase = phases.value.find(e => e.name === model.name);
 
     if (!foundPhase)
@@ -89,8 +111,15 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
       phases: phases.value
     });
 
+    original = phases.value.map(e => {
+      return {
+        ...e
+      };
+    });
+
     return result;
   }
+
   return {
     show,
     model,

@@ -24,6 +24,11 @@ function update(phase: Phase) {
   form.showForm();
 }
 
+function add() {
+  form.setModel({} as Phase);
+  form.showForm();
+}
+
 const editable = ref(false);
 
 function edit() {
@@ -103,12 +108,28 @@ function remove(phase: Phase) {
           class="h-full" 
           @update="update(phase)" 
           @delete="remove(phase)"
-        /> 
+        />
+      </div>
+      <div class="flex items-center">
+        <UButton 
+          size="xl"
+          icon="heroicons:plus"
+          @click="add"
+          v-if="editable === true"
+          color="gray"
+          :ui="{
+            rounded: 'rounded-xl'
+          }"
+        />
       </div>
     </div>
   </div>
 
-  <UModal :model-value="form.show.value" @update:model-value="form.closeForm()">
+  <UModal 
+    :model-value="form.show.value" 
+    @update:model-value="form.closeForm()"
+    prevent-close
+  >
     <PhaseForm :form="form" />
   </UModal>
 </template>

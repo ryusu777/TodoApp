@@ -6,7 +6,7 @@ const props = defineProps<{
   form: ReturnType<typeof usePhaseForm>
 }>();
 
-const { schema, model: state, onSubmit } = props.form;
+const { schema, model: state, onSubmit, closeForm } = props.form;
 </script>
 
 <template>
@@ -29,8 +29,18 @@ const { schema, model: state, onSubmit } = props.form;
       </UFormGroup>
     </div>
 
-    <div class="flex justify-end">
-      <UButton type="submit" label="Save" icon="heroicons:paper-airplane-16-solid" />
+    <div class="flex justify-end gap-3">
+      <UButton 
+        @click="closeForm" 
+        label="Cancel" 
+        icon="heroicons:x-circle-16-solid" 
+        color = "red" 
+      />
+      <UButton 
+        type="submit" 
+        label="Save" 
+        icon="heroicons:paper-airplane-16-solid" 
+      />
     </div>
   </UForm>
 </template>
