@@ -3,11 +3,14 @@ import { useDateFormat } from '@vueuse/core';
 import DatePicker from './DatePicker.vue';
 
 const props = defineProps<{
-  modelValue: string;
+  modelValue?: string;
 }>();
 
 const emit = defineEmits(['update:modelValue']);
-const formatted = computed(() => useDateFormat(props.modelValue, 'DD MMM, YYYY'));
+const formatted = computed(() => {
+  return props.modelValue !== undefined ? useDateFormat(props.modelValue, 'DD MMM, YYYY').value : 'dd-mm-yyyy';
+});
+    
 
 function update(value: Date) {
   const valueFormatted = useDateFormat(value, 'YYYY-MM-DD');
@@ -20,12 +23,12 @@ function update(value: Date) {
     <UButton 
       color="white"
       icon="i-heroicons-calendar-days-20-solid" 
-      :label="formatted.value" 
+      :label="formatted" 
     />
 
     <template #panel="{ close }">
       <DatePicker 
-        :model-value="modelValue" 
+        :model-value="modelValue || ''" 
         @update:model-value="update" 
         @close="close" 
       />
