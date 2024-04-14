@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library", "..\Library\Library.csproj", "{DB5633F1-C5DB-49BD-9D1F-D0A2B526D049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.FunctionalTest", "Presentation.FunctionalTest\Presentation.FunctionalTest.csproj", "{022459A5-629E-4587-AD7E-6B152602039D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Presentation.Test", "ProjectManagement.Presentation.Test\ProjectManagement.Presentation.Test.csproj", "{8624E37C-3FCD-40B2-A0A9-C71D5FDFD9D6}"
 EndProject
 Global
