@@ -19,9 +19,15 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAuthenticationJwtBearer(e => e.SigningKey = "Secrets");
 builder.Services.AddAuthorization();
+builder.Services.AddCors(opt => {
+    opt.AddDefaultPolicy(policy => {
+        policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+    });
+});
 
 var app = builder.Build();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints();
