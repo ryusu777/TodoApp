@@ -3,7 +3,7 @@ export interface IApiResponse<T=void> {
   data?: T;
 }
 
-const API_URL = "http://localhost:5168/api";
+const API_URL = "/api";
 
 export const useApi = () => {
   /**
@@ -11,7 +11,8 @@ export const useApi = () => {
    */
   function $get<T>(endpoint: string) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      server: false
+      server: false,
+      mode: 'no-cors'
     });
   }
 
@@ -19,7 +20,10 @@ export const useApi = () => {
    * Sends request on server side before hydration
    */
   function get<T>(endpoint: string) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint, {server: true});
+    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
+      mode: 'no-cors',
+      server: true
+    });
   }
 
   /**
@@ -29,7 +33,8 @@ export const useApi = () => {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
       server: false,
       method: 'POST',
-      body: payload
+      body: payload,
+      mode: 'no-cors'
     });
   }
 
@@ -39,7 +44,8 @@ export const useApi = () => {
   function post<T>(endpoint: string, payload: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
       method: 'POST',
-      body: payload
+      body: payload,
+      mode: 'no-cors'
     });
   }
 
@@ -47,18 +53,7 @@ export const useApi = () => {
    * Sends request on client side
    */
   function $put<T>(endpoint: string, payload: any) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      server: false,
-      method: 'PUT',
-      body: payload
-    });
-  }
-
-  /**
-   * Sends request on server side before hydration
-   */
-  function put<T>(endpoint: string, payload: any) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
+    return $fetch<IApiResponse<T>>(API_URL + endpoint, {
       method: 'PUT',
       body: payload
     });
@@ -70,7 +65,8 @@ export const useApi = () => {
   function $delete<T>(endpoint: string) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
       server: false,
-      method: 'DELETE'
+      method: 'DELETE',
+      mode: 'no-cors'
     });
   }
 
@@ -79,7 +75,8 @@ export const useApi = () => {
    */
   function deleteFun<T>(endpoint: string) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      method: 'DELETE'
+      method: 'DELETE',
+      mode: 'no-cors'
     });
   }
 
@@ -89,7 +86,6 @@ export const useApi = () => {
     $post,
     post,
     $put,
-    put,
     $delete,
     delete: deleteFun
   }

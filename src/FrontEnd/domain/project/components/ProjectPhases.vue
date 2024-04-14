@@ -6,9 +6,13 @@ import PhaseForm from './PhaseForm.vue';
 
 const props = defineProps<{
   phases: Phase[];
+  projectId: string;
+  pending: boolean;
 }>();
 
-const form = usePhaseForm(props.phases);
+const emit = defineEmits(['refresh']);
+
+const form = usePhaseForm(props.phases, props.projectId);
 
 function update(phase: Phase) {
   form.setModel(phase);
@@ -20,20 +24,43 @@ const editable = ref(false);
 function edit() {
   editable.value = true;
 }
+
+const toast = useToast();
+
+async function persist() {
+  const result = await form.persist();
+
+  if (result?.errorDescription) {
+    toast.add({ title: 'Error', description: result?.errorDescription });
+    return;
+  }
+
+  editable.value = false;
+  toast.add({ title: 'Success', description: 'Successfully updated phases' });
+}
 </script>
 
 <template>
   <div class="py-5">
     <div class="flex flex-row gap-3"> 
       <span class="text-lg font-bold">Project phase</span>
-      <UButton 
-        icon="heroicons:pencil"
-        size="xs"
-        color="white"
-        variant="ghost"
-        @click="edit"
-        v-if="editable === false"
-      />
+      <div v-if="!editable">
+        <UButton 
+          icon="heroicons:pencil"
+          size="xs"
+          color="white"
+          variant="ghost"
+          @click="edit"
+        />
+        <UButton 
+          icon="heroicons:arrow-path-rounded-square"
+          size="xs"
+          color="white"
+          variant="ghost"
+          @click="emit('refresh')"
+          :loading="pending"
+        />
+      </div>
       <UButton 
         size="xs"
         color="red"
@@ -47,7 +74,7 @@ function edit() {
       <UButton 
         size="xs"
         label="Save Changes"
-        @click="editable = false"
+        @click="persist"
         v-if="editable === true"
         :ui="{
           font: 'font-bold'
@@ -55,12 +82,13 @@ function edit() {
       />
     </div>
     <div class="flex flex-row gap-3 mt-3">
-      <div v-for="phase in phases" style="width: 20%; min-height: max-content;">
+      <div v-for="phase in form.phases.value" style="width: 20%; min-height: max-content;">
         <PhaseVue 
           :phase="phase" 
           :editable="editable"
           class="h-full" 
           @update="update(phase)" 
+          @delete="form.remove(phase)"
         /> 
       </div>
     </div>

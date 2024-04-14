@@ -10,7 +10,7 @@ const props = defineProps<{
 const startDate = computed(() => useDateFormat(props.phase.startDate, 'Do MMM').value);
 const endDate = computed(() => useDateFormat(props.phase.endDate, 'Do MMM').value);
 
-const emit = defineEmits(['update']);
+const emit = defineEmits(['update', 'delete']);
 
 </script>
 
@@ -28,24 +28,30 @@ const emit = defineEmits(['update']);
     }"
   >
     <template #header>
-      <div class="flex flex-row justify-between">
-        <div>
+      <div class="flex flex-col">
+        <div class="flex flex-row justify-between">
           <p class="text-bold text-xl">{{ props.phase.name }}</p>
-          <p class="text-sm ">{{ startDate }} - {{ endDate }}</p>
+          <div class="flex gap-1">
+            <UButton 
+              variant="solid" 
+              size="xs"
+              square
+              color="red"
+              v-if="editable"
+              @click="emit('delete')"
+              icon="heroicons:trash"
+            />
+            <UButton 
+              variant="solid" 
+              size="xs"
+              square
+              v-if="editable"
+              @click="emit('update')"
+              icon="heroicons:pencil"
+            />
+          </div>
         </div>
-        <div>
-          <UButton 
-            variant="solid" 
-            size="sm"
-            color="gray" 
-            square
-            v-if="editable"
-            v-auto-animate
-            @click="emit('update')"
-          >
-            <UIcon name="heroicons:pencil" dynamic />
-          </UButton>
-        </div>
+        <p class="text-sm ">{{ startDate }} - {{ endDate }}</p>
       </div>
     </template>
 

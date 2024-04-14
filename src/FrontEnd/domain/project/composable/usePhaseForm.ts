@@ -1,7 +1,7 @@
 import { object, string } from "yup";
-import type { Phase } from "../api/projectApi";
+import { UpdateProjectPhases, type Phase } from "../api/projectApi";
 
-export function usePhaseForm(initialPhases: Phase[]) {
+export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   const show = ref(false);
 
   const phases = ref<Phase[]>(initialPhases);
@@ -27,8 +27,24 @@ export function usePhaseForm(initialPhases: Phase[]) {
     model.description = newModel.description;
   }
 
+  function remove(phase: Phase) {
+    const index = phases.value.findIndex(e => e.name === phase.name);
+    if (index > -1)
+      phases.value.splice(index, 1);
+  }
+
   function onSubmit() {
-    closeForm();
+    const foundPhase = phases.value.find(e => e.name === model.name);
+
+    if (!foundPhase)
+      return;
+
+    foundPhase.name = model.name;
+    foundPhase.startDate = model.startDate;
+    foundPhase.endDate = model.endDate;
+    foundPhase.description = model.description;
+
+    show.value = false;
     return;
   }
 
@@ -40,6 +56,16 @@ export function usePhaseForm(initialPhases: Phase[]) {
     show.value = true;
   }
 
+  const isSubmitting = ref(false);
+
+  async function persist() {
+    const result = await UpdateProjectPhases({
+      projectId: projectId,
+      phases: phases.value
+    });
+
+    return result;
+  }
   return {
     show,
     model,
@@ -47,6 +73,9 @@ export function usePhaseForm(initialPhases: Phase[]) {
     onSubmit,
     setModel,
     showForm,
-    closeForm
+    closeForm,
+    phases,
+    persist,
+    remove
   }
 }

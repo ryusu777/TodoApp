@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true
   },
+  routeRules: {
+    '/api/**': {
+      proxy: { to: 'http://localhost:5168/api/**' }
+    }
+  },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
   css: ['~/main.css'],
   ui: {
