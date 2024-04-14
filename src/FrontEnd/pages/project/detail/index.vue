@@ -10,8 +10,14 @@ definePageMeta({
 const route = useRoute();
 const projectCode = route.params.id.toString();
 const { data: response, refresh, pending } = await GetProjectById(projectCode, true);
-const projectDetail = response.value?.data;
+const projectDetail = computed(() => response.value?.data);
 const projectName = computed(() => response?.value?.data?.name);
+
+async function onRefresh() {
+  await refresh();
+}
+
+const phases = computed(() => response.value?.data?.projectPhases || []);
 
 </script>
 
@@ -22,10 +28,10 @@ const projectName = computed(() => response?.value?.data?.name);
   </div>
   <div>
     <ProjectPhases 
-      :phases="projectDetail?.projectPhases || []" 
+      :phases="phases" 
       :project-id="projectDetail?.id || ''"
       :pending="pending"
-      @refresh="refresh"
+      :refresh="onRefresh"
     />
   </div>
 </template>

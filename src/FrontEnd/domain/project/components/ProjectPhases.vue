@@ -8,11 +8,16 @@ const props = defineProps<{
   phases: Phase[];
   projectId: string;
   pending: boolean;
+  refresh: () => Promise<void>;
 }>();
 
-const emit = defineEmits(['refresh']);
-
 const form = usePhaseForm(props.phases, props.projectId);
+
+async function onRefresh() {
+  await props.refresh();
+
+  form.refresh(props.phases);
+}
 
 function update(phase: Phase) {
   form.setModel(phase);
@@ -38,6 +43,15 @@ async function persist() {
   editable.value = false;
   toast.add({ title: 'Success', description: 'Successfully updated phases' });
 }
+
+function cancel() {
+  form.revert();
+  editable.value = false;
+}
+
+function remove(phase: Phase) {
+  form.remove(phase);
+}
 </script>
 
 <template>
@@ -57,7 +71,7 @@ async function persist() {
           size="xs"
           color="white"
           variant="ghost"
-          @click="emit('refresh')"
+          @click="onRefresh"
           :loading="pending"
         />
       </div>
@@ -65,7 +79,7 @@ async function persist() {
         size="xs"
         color="red"
         label="Cancel"
-        @click="editable = false"
+        @click="cancel"
         v-if="editable === true"
         :ui="{
           font: 'font-bold'
@@ -88,7 +102,7 @@ async function persist() {
           :editable="editable"
           class="h-full" 
           @update="update(phase)" 
-          @delete="form.remove(phase)"
+          @delete="remove(phase)"
         /> 
       </div>
     </div>

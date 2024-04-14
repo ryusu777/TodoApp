@@ -4,7 +4,19 @@ import { UpdateProjectPhases, type Phase } from "../api/projectApi";
 export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   const show = ref(false);
 
-  const phases = ref<Phase[]>(initialPhases);
+  const phases = ref<Phase[]>(initialPhases.map(e => {
+    return {
+      ...e
+    }
+  }));
+
+  function refresh(newPhases: Phase[]) {
+    phases.value = [...newPhases];
+  }
+
+  function revert() {
+    phases.value = [...initialPhases];
+  }
 
   const model = reactive({
     name: '',
@@ -14,7 +26,11 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
   });
 
   const schema = object({
-    name: string().required('Name is required'),
+    name: string().required('Name is required').test(
+      'name-unique',
+      'Phase name is already used',
+      (value) => phases.value.some(e => e.name === value)
+    ),
     startDate: string().required('Start date is required'),
     endDate: string().required('End date is required'),
     description: string().required('End date is required'),
@@ -47,6 +63,15 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
     show.value = false;
     return;
   }
+  
+  function onCreate() {
+    phases.value.push({
+      id: undefined,
+      ...model
+    });
+
+    show.value = false;
+  }
 
   function closeForm() {
     show.value = false;
@@ -76,6 +101,8 @@ export function usePhaseForm(initialPhases: Phase[], projectId: string) {
     closeForm,
     phases,
     persist,
-    remove
+    remove,
+    refresh,
+    revert
   }
 }
