@@ -16,31 +16,40 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         AssignmentId id, 
         string title, 
         string description, 
-        ProjectId projectId) : base(id)
+        ProjectId projectId,
+        SubdomainId subdomainId,
+        PhaseId phaseId) : base(id)
     {
         Title = title;
         Description = description;
         ProjectId = projectId;
         Status = new AssignmentStatus(AssignmentStatusEnum.New);
+        SubdomainId = subdomainId;
+        PhaseId = phaseId;
     }
 
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public ProjectId ProjectId { get; private set; }
     public AssignmentStatus Status { get; private set; }
-    public ICollection<SubdomainId> SubdomainIds { get; private set; } = new List<SubdomainId>();
+    public SubdomainId SubdomainId { get; private set; }
+    public PhaseId PhaseId { get; private set; }
     public ICollection<UserId> Assignees { get; private set; } = new List<UserId>();
 
     public static Assignment Create(
         string title, 
         string description, 
-        ProjectId projectId)
+        ProjectId projectId,
+        SubdomainId subdomainId,
+        PhaseId phaseId)
     {
         var result = new Assignment(
             AssignmentId.CreateUnique(),
             title,
             description,
-            projectId
+            projectId,
+            subdomainId,
+            phaseId
 		);
         return result;
     }
@@ -108,7 +117,10 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
-    public Result Update(string title, string description)
+    public Result Update(
+        string title, 
+        string description
+    )
     {
         Title = title;
         Description = description;

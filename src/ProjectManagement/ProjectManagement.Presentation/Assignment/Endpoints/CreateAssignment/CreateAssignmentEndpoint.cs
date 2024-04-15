@@ -31,7 +31,9 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
             .Send(new CreateAssignmentCommand(
                 req.Title, 
                 req.Description, 
-                req.ProjectId
+                req.ProjectId,
+                req.SubdomainId,
+                req.PhaseId
             ));
 
         if (result.IsFailure) 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Assignment.ValueObjects;
-using ProjectManagement.Domain.Common.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Infrastructure.Assignment;
@@ -11,7 +10,6 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 	public void Configure(EntityTypeBuilder<Domain.Assignment.Assignment> builder)
 	{
 		ConfigureAssignmentTable(builder);
-		ConfigureAssignmentSubdomainTable(builder);
 		ConfigureAssignmentAsigneeTable(builder);
 	}
 
@@ -51,27 +49,26 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 				value => ProjectId.Create(value)
 			);
 
+		builder.Property(e => e.SubdomainId)
+			.ValueGeneratedNever()
+			.HasConversion(
+				id => id.Value,
+				value => SubdomainId.Create(value)
+			);
+
+		builder.Property(e => e.PhaseId)
+			.ValueGeneratedNever()
+			.HasConversion(
+				id => id.Value,
+				value => PhaseId.Create(value)
+			);
+
 		builder.HasOne<Domain.Project.Project>()
 			.WithMany()
 			.HasForeignKey(e => e.ProjectId)
 			.IsRequired();
 	}
 
-	private void ConfigureAssignmentSubdomainTable(EntityTypeBuilder<Domain.Assignment.Assignment> builder)
-	{
-		builder.OwnsMany(e => e.SubdomainIds, sb =>
-		{
-			sb.ToTable("AssignmentSubdomain");
-
-			sb.WithOwner().HasForeignKey("AssignmentId");
-
-			sb.Property(e => e.Value)
-				.HasColumnName("SubdomainId")
-				.ValueGeneratedNever();
-
-			sb.HasKey("AssignmentId", "Value");
-		});
-	}
 	private void ConfigureAssignmentAsigneeTable(EntityTypeBuilder<Domain.Assignment.Assignment> builder)
 	{
 		builder.OwnsMany(e => e.Assignees, sb =>

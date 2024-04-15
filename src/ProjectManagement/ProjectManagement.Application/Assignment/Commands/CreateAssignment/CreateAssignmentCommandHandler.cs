@@ -33,7 +33,9 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
 		var createdAssignment = Domain.Assignment.Assignment.Create(
 			request.Title,
 			request.Description,
-			ProjectId.Create(request.ProjectId));
+			ProjectId.Create(request.ProjectId),
+            SubdomainId.Create(request.SubdomainId),
+            PhaseId.Create(request.PhaseId));
 
 		return await _unitOfWork
             .SaveChangesAsync(new AssignmentCreated(createdAssignment), cancellationToken);
