@@ -23,8 +23,8 @@ public class DeleteSubdomainKnowledgeEndpoint : Endpoint<DeleteSubdomainKnowledg
     {
         var result = await _sender
             .Send(new DeleteSubdomainKnowledgeCommand(
-                req.SubdomainId, 
-                req.SubdomainKnowledgeId));
+                req.subdomain_id, 
+                req.knowledge_id));
 
         if (result.IsFailure) 
         {

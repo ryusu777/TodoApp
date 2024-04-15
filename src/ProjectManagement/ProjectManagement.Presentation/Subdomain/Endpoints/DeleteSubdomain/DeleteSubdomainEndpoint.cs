@@ -21,15 +21,9 @@ public class DeleteSubdomainEndpoint : Endpoint<DeleteSubdomainRequest, DeleteSu
 
     public override async Task HandleAsync(DeleteSubdomainRequest req, CancellationToken ct)
     {
-        if (Route<Guid>("subdomain_id") != req.SubdomainId)
-        {
-            await SendResultAsync(TypedResults.BadRequest());
-            return;
-        }
-
         var result = await _sender
             .Send(new DeleteSubdomainCommand(
-                req.SubdomainId
+                req.subdomain_id
             ));
 
         if (result.IsFailure) 

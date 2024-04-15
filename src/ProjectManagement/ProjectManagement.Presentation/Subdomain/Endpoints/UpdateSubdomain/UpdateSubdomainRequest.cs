@@ -4,7 +4,10 @@ namespace ProjectManagement.Presentation.Subdomain.Endpoints.UpdateSubdomain;
 
 public record UpdateSubdomainRequest : UpdateSubdomainCommand
 {
-    public UpdateSubdomainRequest(Guid SubdomainId, string Title, string Description) : base(SubdomainId, Title, Description)
+    public UpdateSubdomainRequest(
+        Guid SubdomainId, 
+        string Title, 
+        string Description) : base(SubdomainId, Title, Description)
     {
     }
 }

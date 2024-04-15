@@ -4,7 +4,11 @@ namespace ProjectManagement.Presentation.Subdomain.Endpoints.UpdateSubdomainKnow
 
 public record UpdateSubdomainKnowledgeRequest : UpdateSubdomainKnowledgeCommand
 {
-    public UpdateSubdomainKnowledgeRequest(Guid SubdomainKnowledgeId, string Title, string Content, Guid SubdomainId) : base(SubdomainKnowledgeId, Title, Content, SubdomainId)
+    public UpdateSubdomainKnowledgeRequest(
+        Guid SubdomainKnowledgeId, 
+        string Title, 
+        string Content, 
+        Guid SubdomainId) : base(SubdomainKnowledgeId, Title, Content, SubdomainId)
     {
     }
 }
