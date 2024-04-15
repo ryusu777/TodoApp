@@ -25,7 +25,7 @@ public class DeleteSubdomainCommandHandler : ICommandHandler<DeleteSubdomainComm
             return result;
 
         return await _unitOfWork
-            .SaveChangesAsync(new SubdomainDeleted(result.Value.Id), cancellationToken);
+            .SaveChangesAsync(new SubdomainDeleted(result.Value), cancellationToken);
     }
 }
 
