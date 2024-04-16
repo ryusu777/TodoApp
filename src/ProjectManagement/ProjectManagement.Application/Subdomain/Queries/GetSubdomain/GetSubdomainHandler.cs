@@ -18,7 +18,7 @@ public class GetSubdomainHandler : IQueryHandler<GetSubdomainQuery, GetSubdomain
         var result = await _subdomainRepo
             .GetSubdomainById(SubdomainId.Create(request.SubdomainId), cancellationToken);
 
-        if (result.Error is not null)
+        if (result.Error != Error.None)
         {
             return Result.Failure<GetSubdomainResult>(result.Error);
         }
