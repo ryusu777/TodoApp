@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SubdomainForm from './SubdomainForm.vue';
+import SubdomainDetail from './SubdomainDetail.vue';
 import { useSubdomainForm } from '../composable/useSubdomainForm';
 import { useSubdomainTabs } from '../composable/useSubdomainTabs';
 import type { Subdomain } from '../api/subdomainApi';
@@ -11,6 +12,7 @@ const props = defineProps<{
 const tabs = useSubdomainTabs(props.projectId);
 
 await tabs.fetch();
+await tabs.fetchCurrentSubdomain();
 
 const form = useSubdomainForm(props.projectId);
 
@@ -104,6 +106,12 @@ async function submit() {
           }"
         />
       </div>
+    </div>
+    <div>
+      <SubdomainDetail 
+        :subdomain="tabs.currentSubdomain.value" 
+        :loading="tabs.isFetchingSubdomainDetail.value"
+      />
     </div>
   </div>
 

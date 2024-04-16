@@ -10,7 +10,7 @@ export interface Subdomain {
   description: string;
   title: string;
   projectId: string;
-  knowledges: SubdomainKnowledge[];
+  knowledges?: SubdomainKnowledge[] | null;
 }
 
 export interface SubdomainKnowledge {
@@ -116,7 +116,7 @@ export type GetSubdomainRequest = {
 
 type GetSubdomainResponse = Subdomain;
 
-export function GetSubdomain(projectId: string) {
+export function GetSubdomain(subdomainId: string) {
   const api = useApi();
-  return api.get<GetSubdomainResponse>(SubdomainApiRoute.Subdomain(projectId));
+  return api.get<GetSubdomainResponse>(SubdomainApiRoute.SubdomainDetail(subdomainId));
 }
