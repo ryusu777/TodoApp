@@ -41,7 +41,7 @@ async function persist() {
   const result = await form.persist();
 
   if (result?.errorDescription) {
-    toast.add({ title: 'Error', description: result?.errorDescription });
+    toast.add({ title: 'Error', description: result?.errorDescription, color: 'red' });
     return;
   }
 
