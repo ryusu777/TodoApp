@@ -15,16 +15,26 @@ public class SubdomainRepository : ISubdomainRepository
 		_dbContext = dbContext;
 	}
 
-	public async Task<Result<Domain.Subdomain.Subdomain>> GetSubdomainById(SubdomainId id)
+	public async Task<Result<Domain.Subdomain.Subdomain>> GetSubdomainById(SubdomainId id, CancellationToken ct)
 	{
 		var result = await _dbContext
 			.Subdomains
 			.Include(e => e.Knowledges)
-			.FirstOrDefaultAsync(e => e.Id == id);
+			.FirstOrDefaultAsync(e => e.Id == id, ct);
 
 		if (result is null)
 			return Result.Failure<Domain.Subdomain.Subdomain>(SubdomainInfrastructureError.SubdomainNotFound);
 
 		return Result.Success(result);
 	}
+
+    public async Task<Result<IEnumerable<Domain.Subdomain.Subdomain>>> GetSubdomains(ProjectId id, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Subdomains
+            .Where(e => e.ProjectId == id)
+            .ToListAsync();
+
+        return Result.Success(result.AsEnumerable());
+    }
 }
