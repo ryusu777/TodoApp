@@ -19,7 +19,8 @@ public class UpdateSubdomainKnowledgeCommandHandler
 
     public async Task<Result> Handle(UpdateSubdomainKnowledgeCommand request, CancellationToken cancellationToken)
     {
-        var subdomain = await _subdomainRepository.GetSubdomainById(SubdomainId.Create(request.SubdomainId));
+        var subdomain = await _subdomainRepository
+            .GetSubdomainById(SubdomainId.Create(request.SubdomainId), cancellationToken);
 
         if (subdomain.Value is null)
             return subdomain;

@@ -19,7 +19,8 @@ public class DeleteSubdomainCommandHandler : ICommandHandler<DeleteSubdomainComm
 
     public async Task<Result> Handle(DeleteSubdomainCommand request, CancellationToken cancellationToken)
     {
-        var result = await _subdomainRepo.GetSubdomainById(SubdomainId.Create(request.SubdomainId));
+        var result = await _subdomainRepo
+            .GetSubdomainById(SubdomainId.Create(request.SubdomainId), cancellationToken);
         
         if (result.Value is null)
             return result;

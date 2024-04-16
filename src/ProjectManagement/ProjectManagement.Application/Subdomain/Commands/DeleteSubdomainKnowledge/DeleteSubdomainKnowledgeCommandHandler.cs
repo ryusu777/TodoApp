@@ -22,7 +22,7 @@ public class DeleteSubdomainKnowledgeCommandHandler
     public async Task<Result> Handle(DeleteSubdomainKnowledgeCommand request, CancellationToken cancellationToken)
     {
         var result = await _subdomainRepo
-            .GetSubdomainById(SubdomainId.Create(request.SubdomainId));
+            .GetSubdomainById(SubdomainId.Create(request.SubdomainId), cancellationToken);
 
         if (result.Value is null)
             return result;

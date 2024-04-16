@@ -19,7 +19,7 @@ public class UpdateSubdomainCommandHandler : ICommandHandler<UpdateSubdomainComm
     public async Task<Result> Handle(UpdateSubdomainCommand request, CancellationToken cancellationToken)
     {
         var result = await _subdomainRepo
-            .GetSubdomainById(SubdomainId.Create(request.SubdomainId));
+            .GetSubdomainById(SubdomainId.Create(request.SubdomainId), cancellationToken);
 
         if (result.Value is null)
             return result;
