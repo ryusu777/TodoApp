@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  name: 'Projects',
+  name: 'Project List',
   icon: 'heroicons:document-duplicate-20-solid'
 })
 </script>

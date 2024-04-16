@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { GetProjectById } from '~/domain/project/api/projectApi';
+import Subdomains from '~/domain/subdomain/components/Subdomains.vue';
 
 definePageMeta({
-  name: 'Project Detail'
+  name: 'Project'
 })
 
 const route = useRoute();
@@ -31,4 +32,7 @@ function toDetail() {
     />
   </div>
   <p>{{ projectDetail?.description }}</p>
+  <div>
+    <Subdomains :project-id="projectCode" />
+  </div>
 </template>
