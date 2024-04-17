@@ -61,19 +61,9 @@ async function submit() {
 </script>
 
 <template>
-  <div class="py-5">
-    <div class="flex flex-row gap-3"> 
-      <span class="text-lg font-bold">Project's Subdomain</span>
-      <div v-if="!editable">
-        <UButton 
-          icon="heroicons:arrow-path-rounded-square"
-          size="xs"
-          color="white"
-          variant="ghost"
-          @click="onRefresh"
-          :loading="isFetching"
-        />
-      </div>
+  <div class="py-5 h-full flex flex-col">
+    <div class="flex flex-row gap-x-3 items-end">
+      <span class="text-md font-bold">Subdomain</span>
       <UButton 
         size="xs"
         color="red"
@@ -85,7 +75,7 @@ async function submit() {
         }"
       />
     </div>
-    <div class="flex flex-row flex-wrap gap-3 mt-3 items-center">
+    <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
       <UTabs 
         v-if="tabs.tabs.value.length > 0"
         :model-value="tabs.selectedTab.value" 
@@ -106,8 +96,18 @@ async function submit() {
           }"
         />
       </div>
+      <div>
+        <UButton 
+          icon="heroicons:arrow-path-rounded-square"
+          size="xs"
+          color="white"
+          variant="ghost"
+          @click="onRefresh"
+          :loading="isFetching"
+        />
+      </div>
     </div>
-    <div>
+    <div class="mt-3 flex-grow">
       <SubdomainDetail 
         :subdomain="tabs.currentSubdomain.value" 
         :loading="tabs.isFetchingSubdomainDetail.value"
