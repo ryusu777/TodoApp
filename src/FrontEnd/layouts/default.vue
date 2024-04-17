@@ -13,7 +13,7 @@ const breadcrumb = useBreadcrumb();
 
     <div class="flex flex-row h-full w-full">
       <Sidebar />
-      <div class="p-5 h-full w-full">
+      <div class="p-5 h-full w-full flex flex-col">
         <UBreadcrumb
           class="mb-2"
           :links="breadcrumb.links"

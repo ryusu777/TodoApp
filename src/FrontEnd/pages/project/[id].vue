@@ -32,7 +32,7 @@ function toDetail() {
     />
   </div>
   <p>{{ projectDetail?.description }}</p>
-  <div>
+  <div class="h-full">
     <Subdomains :project-id="projectCode" />
   </div>
 </template>
