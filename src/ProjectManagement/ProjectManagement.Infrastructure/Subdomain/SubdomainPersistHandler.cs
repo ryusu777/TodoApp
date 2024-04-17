@@ -26,7 +26,6 @@ public class SubdomainPersistHandler :
 
     public Task Handle(SubdomainKnowledgeCreated notification, AppDbContext dbContext, CancellationToken cancellationToken)
     {
-        dbContext.SubdomainKnowledges.Add(notification.SubdomainKnowledge);
         return Task.CompletedTask;
     }
 
@@ -37,10 +36,6 @@ public class SubdomainPersistHandler :
 
     public Task Handle(SubdomainDeleted notification, AppDbContext dbContext, CancellationToken cancellationToken)
     {
-        dbContext
-            .Subdomains
-            .Remove(notification.Subdomain);
-
         return Task.CompletedTask;
     }
 
