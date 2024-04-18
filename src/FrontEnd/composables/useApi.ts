@@ -56,9 +56,8 @@ export const useApi = defineStore('api', () => {
    * Sends request on client side
    */
   function $delete<T>(endpoint: string) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      server: false,
-      method: 'DELETE',
+    return $fetch<IApiResponse<T>>(API_URL + endpoint, {
+      method: 'DELETE'
     });
   }
 

@@ -2,7 +2,8 @@
 import SubdomainForm from './SubdomainForm.vue';
 import { useSubdomainForm } from '../composable/useSubdomainForm';
 import { useSubdomainTabs } from '../composable/useSubdomainTabs';
-import type { Subdomain } from '../api/subdomainApi';
+import { DeleteSubdomain, type Subdomain } from '../api/subdomainApi';
+import { FetchError } from 'ofetch';
 
 const props = defineProps<{
   projectId: string;
@@ -10,7 +11,7 @@ const props = defineProps<{
 
 const route = useRoute();
 
-const subdomainId = route.params.subdomainid.toString();
+const subdomainId = route.params.subdomainid?.toString();
 
 const router = useRouter();
 
@@ -43,11 +44,12 @@ function enableEdit() {
   editable.value = true;
 }
 
-const toast = useToast();
-
-function cancel() {
-  form.closeForm();
+function disableEdit() {
+  tabs.enableTabs();
+  editable.value = false;
 }
+
+const toast = useToast();
 
 async function submit() {
   const error = await form.submit();
@@ -79,6 +81,38 @@ function navigate(index: number) {
 function edit({ subdomain }: { subdomain: Subdomain }) {
   form.update(subdomain);
 }
+
+async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => void) {
+  if (!subdomain.id) {
+    toast.add({
+      title: 'Error',
+      description: 'Data does not exist, please refresh the page',
+      color: 'red'
+    });
+    return;
+  }
+
+  try {
+    await DeleteSubdomain({
+      subdomainId: subdomain.id
+    });
+
+    toast.add({
+      title: 'Success',
+      description: 'Successfully deleted subdomain'
+    })
+
+    await onRefresh();
+  } catch (e: any) {
+    if ('data' in e) {
+      toast.add({
+        title: 'Error',
+        description: e.data.errorDescription || 'Something went wrong, please try again later',
+        color: 'red'
+      });
+    }
+  }
+}
 </script>
 
 <template>
@@ -91,6 +125,15 @@ function edit({ subdomain }: { subdomain: Subdomain }) {
         color="white"
         @click="enableEdit"
         icon="heroicons:pencil"
+        v-if="!editable"
+      />
+      <UButton 
+        size="2xs"
+        variant="ghost"
+        color="red"
+        @click="disableEdit"
+        icon="heroicons:x-mark-16-solid"
+        v-if="editable"
       />
     </div>
     <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
@@ -111,7 +154,7 @@ function edit({ subdomain }: { subdomain: Subdomain }) {
         <template #default="{ item, index, selected }">
           <div class="flex flex-row w-full justify-between items-center">
             <span>{{ item.label }}</span>
-            <div v-if="editable" class="space-x-1 ml-2">
+            <div v-if="editable" class="gap-x-1 ml-2 flex">
               <UButton 
                 icon="heroicons:pencil"
                 square
@@ -119,13 +162,40 @@ function edit({ subdomain }: { subdomain: Subdomain }) {
                 @click="edit(item)"
                 v-if="editable" 
               />
-              <UButton 
-                icon="heroicons:trash"
-                square
-                color="red"
-                size="2xs"
-                v-if="editable" 
-              />
+              <UPopover>
+                <UButton 
+                  icon="heroicons:trash"
+                  square
+                  color="red"
+                  size="2xs"
+                  v-if="editable" 
+                />
+
+                <template #panel="{ close }">
+                  <div class="flex flex-col p-3 gap-y-2 text-white">
+                    <span>Are you sure want to delete this?</span>
+                    <div class="flex justify-end gap-x-1">
+                      <UButton 
+                        icon="heroicons:x-mark-16-solid"
+                        label="No"
+                        square
+                        size="2xs"
+                        class="px-2"
+                        @click="close"
+                      />
+                      <UButton 
+                        icon="heroicons:trash"
+                        label="Yes"
+                        square
+                        color="red"
+                        size="2xs"
+                        class="px-2"
+                        @click="doDelete(item, close)"
+                      />
+                    </div>
+                  </div>
+                </template>
+              </UPopover>
             </div>
           </div>
         </template>

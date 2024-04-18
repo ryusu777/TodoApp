@@ -50,7 +50,7 @@ export type DeleteSubdomainRequest = {
   subdomainId: string;
 };
 
-type DeleteSubdomainResponse = {};
+export type DeleteSubdomainResponse = {};
 
 export function DeleteSubdomain(request: DeleteSubdomainRequest) {
   const api = useApi();
@@ -62,7 +62,7 @@ export type DeleteSubdomainKnowledgeRequest = {
   knowledgeId: string;
 };
 
-type DeleteSubdomainKnowledgeResponse = {};
+export type DeleteSubdomainKnowledgeResponse = {};
 
 export function DeleteSubdomainKnowledge(request: DeleteSubdomainKnowledgeRequest) {
   const api = useApi();
