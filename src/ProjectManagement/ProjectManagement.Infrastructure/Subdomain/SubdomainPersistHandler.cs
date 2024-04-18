@@ -36,6 +36,7 @@ public class SubdomainPersistHandler :
 
     public Task Handle(SubdomainDeleted notification, AppDbContext dbContext, CancellationToken cancellationToken)
     {
+        dbContext.Subdomains.Remove(notification.Subdomain);
         return Task.CompletedTask;
     }
 
