@@ -103,11 +103,11 @@ export type GetSubdomainsRequest = {
   projectId: string;
 }
 
-type GetSubdomainsResponse = Subdomain[];
+export type GetSubdomainsResponse = Subdomain[];
 
 export function GetSubdomains(projectId: string) {
   const api = useApi();
-  return api.get<GetSubdomainsResponse>(SubdomainApiRoute.Subdomain(projectId));
+  return api.$get<GetSubdomainsResponse>(SubdomainApiRoute.Subdomain(projectId));
 }
 
 export type GetSubdomainRequest = {
@@ -118,5 +118,5 @@ type GetSubdomainResponse = Subdomain;
 
 export function GetSubdomain(subdomainId: string) {
   const api = useApi();
-  return api.get<GetSubdomainResponse>(SubdomainApiRoute.SubdomainDetail(subdomainId));
+  return api.$get<GetSubdomainResponse>(SubdomainApiRoute.SubdomainDetail(subdomainId));
 }

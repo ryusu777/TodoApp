@@ -5,14 +5,12 @@ export interface IApiResponse<T=void> {
 
 const API_URL = "/api";
 
-export const useApi = () => {
-  /**
+export const useApi = defineStore('api', () => {
+  /*
    * Sends request on client side
    */
   function $get<T>(endpoint: string) {
-    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      server: false,
-    });
+    return $fetch<IApiResponse<T>>(API_URL + endpoint);
   }
 
   /**
@@ -82,4 +80,4 @@ export const useApi = () => {
     $delete,
     delete: deleteFun
   }
-}
+});

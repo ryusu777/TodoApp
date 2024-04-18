@@ -4,11 +4,11 @@ import type { SubdomainKnowledge } from '../api/subdomainApi';
 import StarterKit from '@tiptap/starter-kit';
 
 const props = defineProps<{
-  knowledge: SubdomainKnowledge
+  knowledge?: SubdomainKnowledge
 }>();
 
 const editor = useEditor({
-  content: props.knowledge.content,
+  content: props.knowledge?.content || "put your description here..",
   extensions: [
     StarterKit
   ],
@@ -22,10 +22,13 @@ const editor = useEditor({
 </script>
 
 <template>
-  <div>
+  <div v-if="knowledge">
     <p class="text-bold text-xl">{{ knowledge.title }}</p>
     <EditorContent 
       :editor="editor" 
     />
+  </div>
+  <div v-else class="flex flex-row h-full justify-center items-center">
+    <p class="text-bold text-xl"></p>
   </div>
 </template>

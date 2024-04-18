@@ -6,7 +6,7 @@ const projectPages = await GetProjectPages();
 const pagesLink = computed(() => projectPages.data.value?.data?.map(e => {
     return {
       label: e.name,
-      to: '/project/' + e.id
+      to: '/project/' + e.id + '/subdomain'
     }
   }));
 

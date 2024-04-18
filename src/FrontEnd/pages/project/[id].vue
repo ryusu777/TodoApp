@@ -33,6 +33,6 @@ function toDetail() {
   </div>
   <p>{{ projectDetail?.description }}</p>
   <div class="h-full">
-    <Subdomains :project-id="projectCode" />
+    <NuxtPage :project-id="projectCode" />
   </div>
 </template>
