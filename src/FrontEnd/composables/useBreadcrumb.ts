@@ -49,7 +49,7 @@ export const useBreadcrumb = defineStore('useBreadcrumb', () => {
       path = `${path}/${param}`;
       const match = router.resolve(path)
 
-      if (match.name !== null) {
+      if (match.name !== null && !match.meta.disableBreadcrumb) {
         const foundConverter = converter.find(e => e.key === match.name);
 
         crumb.value.push({

@@ -1,13 +1,13 @@
 import { GetSubdomain, GetSubdomains, type GetSubdomainsResponse, type Subdomain } from "../api/subdomainApi";
 
-export function useSubdomainTabs(projectId: string) {
+export function useSubdomainTabs(projectId: string, currentSubdomainId: string) {
   type IsFetched = Subdomain & { isFetched?: boolean };
   const subdomains = ref<IsFetched[]>([]);
 
   const tabs = computed(() => subdomains.value.map(e => {
     return {
       label: e.title,
-      to: `/project/${projectId}/subdomain/${e.id}`
+      to: `/project/${projectId}/${e.id}`
     };
   }));
 
@@ -44,6 +44,10 @@ export function useSubdomainTabs(projectId: string) {
       subdomains.value = data;
     else
       return errorDescription || "Failed to fetch subdomain list";
+
+    if (currentSubdomainId) {
+      selectedTab.value = subdomains.value.findIndex(e => e.id === currentSubdomainId);
+    }
     
     if (selectedTab.value >= subdomains.value.length)
       selectedTab.value = 0;

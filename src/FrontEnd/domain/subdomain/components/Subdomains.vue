@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SubdomainForm from './SubdomainForm.vue';
-import SubdomainDetail from './SubdomainDetail.vue';
 import { useSubdomainForm } from '../composable/useSubdomainForm';
 import { useSubdomainTabs } from '../composable/useSubdomainTabs';
 import type { Subdomain } from '../api/subdomainApi';
@@ -9,10 +8,15 @@ const props = defineProps<{
   projectId: string;
 }>();
 
-const tabs = useSubdomainTabs(props.projectId);
+const route = useRoute();
 
-await tabs.fetch();
-await tabs.fetchCurrentSubdomain();
+const subdomainId = route.params.subdomainid.toString();
+
+const router = useRouter();
+
+const tabs = useSubdomainTabs(props.projectId, subdomainId);
+
+await tabs.fetch(true);
 
 const form = useSubdomainForm(props.projectId);
 
@@ -58,6 +62,14 @@ async function submit() {
     await onRefresh();
   }
 }
+
+function navigate(index: number) {
+  const currentTab = tabs.tabs.value[index];
+
+  router.push(currentTab.to);
+
+  tabs.setTab(index);
+}
 </script>
 
 <template>
@@ -79,7 +91,7 @@ async function submit() {
       <UTabs 
         v-if="tabs.tabs.value.length > 0"
         :model-value="tabs.selectedTab.value" 
-        @update:model-value="tabs.setTab"
+        @update:model-value="navigate"
         :items="tabs.tabs.value"
         :ui="{
           wrapper: 'space-y-0'
@@ -107,11 +119,9 @@ async function submit() {
         />
       </div>
     </div>
+
     <div class="mt-3 flex-grow">
-      <SubdomainDetail 
-        :subdomain="tabs.currentSubdomain.value" 
-        :loading="tabs.isFetchingSubdomainDetail.value"
-      />
+      <NuxtPage />
     </div>
   </div>
 

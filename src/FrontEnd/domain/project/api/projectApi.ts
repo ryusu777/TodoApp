@@ -68,11 +68,8 @@ export function DeleteProject(projectId: string) {
 
 export type GetProjectByIdResponse = Project;
 
-export function GetProjectById(projectId: string, server?: boolean) {
+export function GetProjectById(projectId: string) {
   const api = useApi();
-
-  if (server)
-    return api.get<GetProjectByIdResponse>(ProjectApiRoute.ProjectDetail(projectId));
 
   return api.$get<GetProjectByIdResponse>(ProjectApiRoute.ProjectDetail(projectId));
 }

@@ -9,7 +9,6 @@ const props = defineProps<{
   knowledges: SubdomainKnowledge[];
 }>();
 
-
 const tabs = computed(() => props.knowledges.map(e => {
   return {
     label: e.title
@@ -23,6 +22,8 @@ const selectedKnowledge = computed(() => props.knowledges[selectedTab.value]);
 const form = useSubdomainKnowledgeForm(props.subdomainId);
 
 const toast = useToast();
+
+const emit = defineEmits(['refresh']);
 
 async function submit() {
   const errorMessage = await form.submit();
@@ -39,6 +40,7 @@ async function submit() {
     });
 
     form.closeForm();
+    emit('refresh');
   }
 }
 
