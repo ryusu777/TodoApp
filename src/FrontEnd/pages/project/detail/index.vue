@@ -10,7 +10,7 @@ definePageMeta({
 
 const route = useRoute();
 const projectCode = route.params.id.toString();
-const { data: response, refresh, pending } = await GetProjectById(projectCode, true);
+const { data: response, refresh, pending } = await useAsyncData(() => GetProjectById(projectCode));
 const projectDetail = computed(() => response.value?.data);
 const projectName = computed(() => response?.value?.data?.name);
 
