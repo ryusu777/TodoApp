@@ -38,6 +38,11 @@ function add() {
 
 const editable = ref(false);
 
+function enableEdit() {
+  tabs.disableTabs();
+  editable.value = true;
+}
+
 const toast = useToast();
 
 function cancel() {
@@ -70,6 +75,10 @@ function navigate(index: number) {
 
   tabs.setTab(index);
 }
+
+function edit({ subdomain }: { subdomain: Subdomain }) {
+  form.update(subdomain);
+}
 </script>
 
 <template>
@@ -77,14 +86,11 @@ function navigate(index: number) {
     <div class="flex flex-row gap-x-3 items-end">
       <span class="text-md font-bold">Subdomain</span>
       <UButton 
-        size="xs"
-        color="red"
-        label="Cancel"
-        @click="cancel"
-        v-if="editable === true"
-        :ui="{
-          font: 'font-bold'
-        }"
+        size="2xs"
+        variant="ghost"
+        color="white"
+        @click="enableEdit"
+        icon="heroicons:pencil"
       />
     </div>
     <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
@@ -94,9 +100,36 @@ function navigate(index: number) {
         @update:model-value="navigate"
         :items="tabs.tabs.value"
         :ui="{
-          wrapper: 'space-y-0'
+          wrapper: 'space-y-0',
+          list: {
+            tab: {
+              base: 'justify-start disabled:cursor-default disabled:opacity-100'
+            }
+          }
         }"
-      />
+      >
+        <template #default="{ item, index, selected }">
+          <div class="flex flex-row w-full justify-between items-center">
+            <span>{{ item.label }}</span>
+            <div v-if="editable" class="space-x-1 ml-2">
+              <UButton 
+                icon="heroicons:pencil"
+                square
+                size="2xs"
+                @click="edit(item)"
+                v-if="editable" 
+              />
+              <UButton 
+                icon="heroicons:trash"
+                square
+                color="red"
+                size="2xs"
+                v-if="editable" 
+              />
+            </div>
+          </div>
+        </template>
+      </UTabs>
       <div>
         <UButton
           size="md"

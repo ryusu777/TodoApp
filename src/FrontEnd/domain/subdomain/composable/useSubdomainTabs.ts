@@ -3,11 +3,18 @@ import { GetSubdomain, GetSubdomains, type GetSubdomainsResponse, type Subdomain
 export function useSubdomainTabs(projectId: string, currentSubdomainId: string) {
   type IsFetched = Subdomain & { isFetched?: boolean };
   const subdomains = ref<IsFetched[]>([]);
+  const disable = ref(false);
 
   const tabs = computed(() => subdomains.value.map(e => {
     return {
       label: e.title,
-      to: `/project/${projectId}/${e.id}`
+      to: `/project/${projectId}/${e.id}`,
+      disabled: disable.value,
+      subdomain: {
+        id: e.id,
+        description: e.description,
+        title: e.title
+      }
     };
   }));
 
@@ -74,6 +81,14 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
       return errorDescription || 'Failed to fetch Subdomain Detail';
   }
 
+  function disableTabs() {
+    disable.value = true;
+  }
+
+  function enableTabs() {
+    disable.value = false;
+  }
+
   return {
     tabs,
     selectedTab,
@@ -81,6 +96,8 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
     setTab,
     fetchCurrentSubdomain,
     currentSubdomain,
-    isFetchingSubdomainDetail
+    isFetchingSubdomainDetail,
+    disableTabs,
+    enableTabs
   }
 }
