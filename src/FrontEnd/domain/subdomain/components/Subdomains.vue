@@ -19,6 +19,10 @@ const tabs = useSubdomainTabs(props.projectId, subdomainId);
 
 await tabs.fetch(true);
 
+if (!subdomainId) {
+  router.push(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
+}
+
 const form = useSubdomainForm(props.projectId);
 
 const isFetching = ref(false);
