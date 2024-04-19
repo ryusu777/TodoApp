@@ -3,7 +3,6 @@ import SubdomainForm from './SubdomainForm.vue';
 import { useSubdomainForm } from '../composable/useSubdomainForm';
 import { useSubdomainTabs } from '../composable/useSubdomainTabs';
 import { DeleteSubdomain, type Subdomain } from '../api/subdomainApi';
-import { FetchError } from 'ofetch';
 
 const props = defineProps<{
   projectId: string;
@@ -19,18 +18,34 @@ const tabs = useSubdomainTabs(props.projectId, subdomainId);
 
 await tabs.fetch(true);
 
-if (!subdomainId) {
-  router.push(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
+if (!subdomainId && tabs.currentSubdomain.value) {
+  router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
 }
+else if (subdomainId && !tabs.currentSubdomain.value)
+  router.replace(`/project/${props.projectId}`);
 
 const form = useSubdomainForm(props.projectId);
 
 const isFetching = ref(false);
 
+const refreshKey = ref(0);
 async function onRefresh() {
+  let shouldRoute = false;
+
+  if (!tabs.currentSubdomain.value)
+    shouldRoute = true;
+
   isFetching.value = true;
   await tabs.fetch();
   isFetching.value = false;
+
+  refreshKey.value++;
+
+  if (shouldRoute && tabs.currentSubdomain.value)
+    router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
+
+  else if (subdomainId && !tabs.currentSubdomain.value)
+    router.replace(`/project/${props.projectId}`);
 }
 
 function update(subdomain: Subdomain) {
@@ -228,7 +243,7 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
     </div>
 
     <div class="mt-3 flex-grow">
-      <NuxtPage />
+      <NuxtPage :key="refreshKey" />
     </div>
   </div>
 
