@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SubdomainKnowledge } from '../api/subdomainApi';
+import { DeleteSubdomainKnowledge, type SubdomainKnowledge } from '../api/subdomainApi';
 import { useSubdomainKnowledgeForm } from '../composable/useSubdomainKnowledgeForm';
 import SubdomainKnowledgeForm from './SubdomainKnowledgeForm.vue';
 import SubdomainKnowledgeVue from './SubdomainKnowledge.vue';
@@ -9,15 +9,32 @@ const props = defineProps<{
   knowledges: SubdomainKnowledge[];
 }>();
 
+const disableTabs = ref(false);
+
 const tabs = computed(() => props.knowledges.map(e => {
   return {
-    label: e.title
+    label: e.title,
+    disabled: disableTabs.value,
+    knowledge: {
+      id: e.id,
+      title: e.title,
+      content: e.content
+    }
   }
 }));
+
+const refreshTabKey = ref(0);
 
 const selectedTab = ref(0);
 
 const selectedKnowledge = computed(() => props.knowledges[selectedTab.value]);
+
+watch(() => selectedKnowledge.value, (val) => {
+  if (!val && selectedTab.value === 0) {
+    refreshTabKey.value++;
+    disableEdit();
+  }
+});
 
 const form = useSubdomainKnowledgeForm(props.subdomainId);
 
@@ -44,9 +61,73 @@ async function submit() {
   }
 }
 
+const editable = ref(false);
+
+function enableEdit() {
+  disableTabs.value = true;
+  editable.value = true;
+}
+
+function disableEdit() {
+  disableTabs.value = false;
+  editable.value = false;
+}
+
+async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close: () => void) {
+  if (!knowledge.id) {
+    toast.add({
+      title: 'Error',
+      description: 'Data does not exist, please refresh the page',
+      color: 'red'
+    });
+    return;
+  }
+
+  try {
+    await DeleteSubdomainKnowledge({
+      knowledgeId: knowledge.id,
+      subdomainId: props.subdomainId
+    });
+
+    toast.add({
+      title: 'Success',
+      description: 'Successfully deleted knowledge'
+    })
+
+    close();
+    emit('refresh');
+  } catch (e: any) {
+    if ('data' in e) {
+      toast.add({
+        title: 'Error',
+        description: e.data.errorDescription || 'Something went wrong, please try again later',
+        color: 'red'
+      });
+    }
+  }
+}
 </script>
 
 <template>
+  <div class="flex flex-row gap-x-2">
+    <p>Knowledges</p>
+    <UButton 
+      size="2xs"
+      variant="ghost"
+      color="white"
+      @click="enableEdit"
+      icon="heroicons:pencil"
+      v-if="!editable"
+    />
+    <UButton 
+      size="2xs"
+      variant="ghost"
+      color="red"
+      @click="disableEdit"
+      icon="heroicons:x-mark-16-solid"
+      v-if="editable"
+    />
+  </div>
   <div class="flex flex-row flex-grow pt-2">
     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg">
       <UTabs 
@@ -59,12 +140,55 @@ async function submit() {
             background: 'bg-transparent dark:bg-transparent',
             padding: 'p-0 px-1 pt-1',
             tab: {
-              base: 'justify-start',
+              base: 'justify-start disabled:cursor-default disabled:opacity-100',
 
             }
           },
         }"
-      />
+        :key="refreshTabKey"
+        >
+          <template #default="{ item }">
+            <div class="flex flex-row w-full justify-between items-center">
+              <span>{{ item.label }}</span>
+              <div v-if="editable" class="gap-x-1 ml-2 flex">
+                <UPopover>
+                  <UButton 
+                    icon="heroicons:trash"
+                    square
+                    color="red"
+                    size="2xs"
+                    v-if="editable" 
+                  />
+
+                  <template #panel="{ close }">
+                    <div class="flex flex-col p-3 gap-y-2 text-white">
+                      <span>Are you sure want to delete this?</span>
+                      <div class="flex justify-end gap-x-1">
+                        <UButton 
+                          icon="heroicons:x-mark-16-solid"
+                          label="No"
+                          square
+                          size="2xs"
+                          class="px-2"
+                          @click="close"
+                        />
+                        <UButton 
+                          icon="heroicons:trash"
+                          label="Yes"
+                          square
+                          color="red"
+                          size="2xs"
+                          class="px-2"
+                          @click="doDelete(item, close)"
+                        />
+                      </div>
+                    </div>
+                  </template>
+                </UPopover>
+              </div>
+            </div>
+          </template>
+        </UTabs>
       <div class="px-1 pb-1">
         <UButton
           size="sm"
@@ -79,7 +203,6 @@ async function submit() {
     <div class="flex-grow pl-5">
       <SubdomainKnowledgeVue 
         :knowledge="selectedKnowledge" 
-        @submit="submit" 
         :subdomain-id="subdomainId"
       />
     </div>

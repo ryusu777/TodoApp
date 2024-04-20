@@ -10,6 +10,8 @@ const props = defineProps<{
 
 const editable = ref(false);
 
+const title = ref(props.knowledge?.title.toString() || '');
+
 const initialValue = computed(() => props.knowledge?.content || "put your description here..");
 
 const toast = useToast();
@@ -36,6 +38,7 @@ function edit() {
 function cancel() {
   editable.value = false;
   editor.value?.commands.setContent(initialValue.value);
+  title.value = props.knowledge?.title || '';
 }
 
 const isSaving = ref(false);
@@ -46,15 +49,15 @@ async function save() {
       isSaving.value = true;
       await UpdateSubdomainKnowledge({
         subdomainKnowledgeId: props.knowledge.id || '',
-        title: props.knowledge.title,
+        title: title.value || '',
         content: editor.value.getHTML() || '',
         subdomainId: props.subdomainId
       });
-      isSaving.value = true;
+      isSaving.value = false;
 
       toast.add({
         title: 'Success',
-        description: 'Successfully deleted subdomain'
+        description: 'Successfully updated knowledge'
       });
 
       editable.value = false;
@@ -84,7 +87,8 @@ async function save() {
 <template>
   <div v-if="knowledge">
     <div class="flex flex-row gap-x-2">
-      <p class="text-bold text-2xl">{{ knowledge.title }}</p>
+      <p class="text-bold text-2xl" v-if="!editable">{{ knowledge.title }}</p>
+      <UInput v-model="title" v-else />
       <UButton 
         size="sm"
         icon="heroicons:pencil"

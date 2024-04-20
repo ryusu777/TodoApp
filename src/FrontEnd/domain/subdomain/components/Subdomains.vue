@@ -48,10 +48,6 @@ async function onRefresh() {
     router.replace(`/project/${props.projectId}`);
 }
 
-function update(subdomain: Subdomain) {
-  form.update(subdomain);
-}
-
 function add() {
   form.create();
 }
@@ -121,6 +117,7 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
       description: 'Successfully deleted subdomain'
     })
 
+    close();
     await onRefresh();
   } catch (e: any) {
     if ('data' in e) {
@@ -170,7 +167,7 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
           }
         }"
       >
-        <template #default="{ item, index, selected }">
+        <template #default="{ item }">
           <div class="flex flex-row w-full justify-between items-center">
             <span>{{ item.label }}</span>
             <div v-if="editable" class="gap-x-1 ml-2 flex">
