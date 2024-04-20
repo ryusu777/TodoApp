@@ -77,7 +77,11 @@ async function submit() {
       </div>
     </div>
     <div class="flex-grow pl-5">
-      <SubdomainKnowledgeVue :knowledge="selectedKnowledge" @submit="submit" />
+      <SubdomainKnowledgeVue 
+        :knowledge="selectedKnowledge" 
+        @submit="submit" 
+        :subdomain-id="subdomainId"
+      />
     </div>
   </div>
 
