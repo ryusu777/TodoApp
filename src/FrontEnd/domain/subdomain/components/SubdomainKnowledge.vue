@@ -8,6 +8,8 @@ const props = defineProps<{
   subdomainId?: string;
 }>();
 
+const emit = defineEmits(['refresh']);
+
 const editable = ref(false);
 
 const title = ref(props.knowledge?.title.toString() || '');
@@ -61,6 +63,7 @@ async function save() {
       });
 
       editable.value = false;
+      emit('refresh');
     } catch (e: any) {
       isSaving.value = false;
       if ('data' in e) {
@@ -71,7 +74,6 @@ async function save() {
         });
       }
     }
-
   }
   else {
     toast.add({
@@ -81,6 +83,10 @@ async function save() {
     });
   }
 }
+
+onBeforeUnmount(() => {
+  editor.value?.destroy();
+})
 
 </script>
 

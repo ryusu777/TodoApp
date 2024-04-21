@@ -25,6 +25,8 @@ const tabs = computed(() => props.knowledges.map(e => {
 
 const refreshTabKey = ref(0);
 
+const refreshKnowledgeKey = ref(0);
+
 const selectedTab = ref(0);
 
 const selectedKnowledge = computed(() => props.knowledges[selectedTab.value]);
@@ -34,7 +36,14 @@ watch(() => selectedKnowledge.value, (val) => {
     refreshTabKey.value++;
     disableEdit();
   }
+  else if (!val) {
+    selectedTab.value = 0;
+  }
+
+  refreshKnowledgeKey.value++;
 });
+
+watch(() => selectedTab.value, () => refreshTabKey.value++);
 
 const form = useSubdomainKnowledgeForm(props.subdomainId);
 
@@ -57,19 +66,21 @@ async function submit() {
     });
 
     form.closeForm();
-    emit('refresh');
+    refresh();
   }
+}
+
+function refresh() {
+  emit('refresh');
 }
 
 const editable = ref(false);
 
 function enableEdit() {
-  disableTabs.value = true;
   editable.value = true;
 }
 
 function disableEdit() {
-  disableTabs.value = false;
   editable.value = false;
 }
 
@@ -95,7 +106,7 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
     })
 
     close();
-    emit('refresh');
+    refresh();
   } catch (e: any) {
     if ('data' in e) {
       toast.add({
@@ -116,7 +127,7 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
       variant="ghost"
       color="white"
       @click="enableEdit"
-      icon="heroicons:pencil"
+      icon="heroicons:trash"
       v-if="!editable"
     />
     <UButton 
@@ -202,6 +213,8 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
     </div>
     <div class="flex-grow pl-5">
       <SubdomainKnowledgeVue 
+        @refresh="refresh"
+        :key="refreshKnowledgeKey"
         :knowledge="selectedKnowledge" 
         :subdomain-id="subdomainId"
       />
@@ -213,7 +226,10 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
     @update:model-value="form.closeForm()"
     prevent-close
   >
-    <SubdomainKnowledgeForm :form="form" @submit="submit" />
+    <SubdomainKnowledgeForm 
+      :form="form" 
+      @submit="submit" 
+    />
   </UModal>
 
 </template>
