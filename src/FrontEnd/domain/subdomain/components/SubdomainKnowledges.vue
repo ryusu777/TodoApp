@@ -120,25 +120,6 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
 </script>
 
 <template>
-  <div class="flex flex-row gap-x-2">
-    <p>Knowledges</p>
-    <UButton 
-      size="2xs"
-      variant="ghost"
-      color="white"
-      @click="enableEdit"
-      icon="heroicons:trash"
-      v-if="!editable"
-    />
-    <UButton 
-      size="2xs"
-      variant="ghost"
-      color="red"
-      @click="disableEdit"
-      icon="heroicons:x-mark-16-solid"
-      v-if="editable"
-    />
-  </div>
   <div class="flex flex-row flex-grow pt-2">
     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg">
       <UTabs 
@@ -208,6 +189,24 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
           color="white"
           class="w-full justify-center"
           @click="form.create()"
+        />
+        <UButton 
+          size="sm"
+          variant="ghost"
+          color="red"
+          class="w-full justify-center"
+          @click="enableEdit"
+          icon="heroicons:trash"
+          v-if="!editable"
+        />
+        <UButton 
+          size="sm"
+          variant="ghost"
+          color="red"
+          @click="disableEdit"
+          class="w-full justify-center"
+          icon="heroicons:x-mark-16-solid"
+          v-if="editable"
         />
       </div>
     </div>
