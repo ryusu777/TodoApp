@@ -55,12 +55,10 @@ function add() {
 const editable = ref(false);
 
 function enableEdit() {
-  tabs.disableTabs();
   editable.value = true;
 }
 
 function disableEdit() {
-  tabs.enableTabs();
   editable.value = false;
 }
 
@@ -119,6 +117,9 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
 
     close();
     await onRefresh();
+
+    if (tabs.tabs.value.length === 0)
+      editable.value = false;
   } catch (e: any) {
     if ('data' in e) {
       toast.add({
