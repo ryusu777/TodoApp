@@ -30,6 +30,6 @@ public class DeleteAssignmentCommandHandler : ICommandHandler<DeleteAssignmentCo
         }
 
         return await _unitOfWork
-            .SaveChangesAsync(new AssignmentDeleted(result.Value.Id), cancellationToken);
+            .SaveChangesAsync(new AssignmentDeleted(result.Value), cancellationToken);
     }
 }
