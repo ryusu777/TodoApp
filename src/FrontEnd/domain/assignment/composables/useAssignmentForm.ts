@@ -8,32 +8,39 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
     id: undefined as string | undefined,
     description: '',
     title: '',
-    phaseId: '',
+    deadline: undefined as string | undefined,
+    reviewer: undefined as string | undefined,
+    phaseId: undefined as string | undefined,
+    subdomainId: undefined as string | undefined,
     assignees: [''],
   });
 
   const schema = object({
     title: string().required('Title is required'),
-    phaseId: string().required('Phase is required'),
-    subdomainId: string().required('Subdomain is required'),
   });
 
   function update(newModel: Assignment) {
-    model.title = newModel.title;
-    model.description = newModel.description || '';
     model.id = newModel.id || '';
+    model.description = newModel.description || '';
+    model.title = newModel.title;
+    model.deadline = newModel.deadline;
+    model.reviewer = newModel.reviewer;
     model.phaseId = newModel.phaseId;
+    model.subdomainId = newModel.subdomainId;
     model.assignees = newModel.assignees;
 
     show.value = true;
   }
 
   function create() {
+    model.id = undefined;
     model.title = '';
     model.description = '';
-    model.id = undefined;
-    model.phaseId = '';
-    model.assignees = ['']
+    model.deadline = undefined;
+    model.reviewer = undefined;
+    model.phaseId = undefined;
+    model.subdomainId = undefined;
+    model.assignees = [''];
 
     show.value = true;
   }
@@ -52,7 +59,9 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
         description: model.description,
         phaseId: model.phaseId,
         projectId,
-        subdomainId
+        subdomainId,
+        deadline: model.deadline,
+        reviewer: model.reviewer
       });
 
       isSubmitting.value = false;
@@ -62,7 +71,11 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
     const response = await UpdateAssignment({
       assignmentId: model.id || '',
       title: model.title,
-      description: model.description
+      description: model.description,
+      subdomainId: model.subdomainId,
+      phaseId: model.phaseId,
+      deadline: model.deadline,
+      reviewer: model.reviewer
     });
 
     isSubmitting.value = false;

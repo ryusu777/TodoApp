@@ -1,5 +1,5 @@
 export const AssignmentApiRoute = {
-  CreateAssignment: (projectId: string) => `/project/${projectId}/assignmnet`,
+  Assignments: (projectId: string) => `/project/${projectId}/assignmnet`,
   DeleteAssignment: (assignmentId: string) => `/assignment/${assignmentId}`,
   AssignmentDetail: (assignmentId: string) => `/assignment/${assignmentId}`,
   Assigning: (assignmentId: string) => `/assignment/${assignmentId}/assign`,
@@ -15,8 +15,33 @@ export interface Assignment {
   description?: string;
   projectId: string;
   status: AssignmentStatusEnum;
-  phaseId: string;
   assignees: string[];
+  phaseId?: string;
+  subdomainId?: string;
+  deadline?: string;
+  reviewer?: string;
+}
+
+export type GetAssignmentsRequest = {
+  projectId: string;
+}
+
+export type GetAssignmentsResponse = Assignment[];
+
+export function GetAssignments(payload: GetAssignmentsRequest) {
+  const api = useApi();
+  return api.$get<GetAssignmentsResponse>(AssignmentApiRoute.Assignments(payload.projectId));
+}
+
+export type GetAssignmentRequest = {
+  assignmentId: string;
+}
+
+export type GetAssignmentResponse = Assignment;
+
+export function GetAssignment(payload: GetAssignmentRequest) {
+  const api = useApi();
+  return api.$get<GetAssignmentResponse>(AssignmentApiRoute.AssignmentDetail(payload.assignmentId));
 }
 
 export type AssigningRequest = {
@@ -47,15 +72,17 @@ export type CreateAssignmentRequest = {
   title: string;
   description: string;
   projectId: string;
-  subdomainId: string;
-  phaseId: string;
+  subdomainId?: string;
+  phaseId?: string;
+  deadline?: string;
+  reviewer?: string;
 };
 
 export type CreateAssignmentResponse = { };
 
 export function CreateAssignment(payload: CreateAssignmentRequest) {
   const api = useApi();
-  return api.$post(AssignmentApiRoute.CreateAssignment(payload.projectId), payload);
+  return api.$post(AssignmentApiRoute.Assignments(payload.projectId), payload);
 }
 
 export type DeleteAssignmentRequest = {
@@ -85,6 +112,10 @@ export type UpdateAssignmentRequest = {
   assignmentId: string;
   title: string;
   description: string;
+  subdomainId?: string;
+  phaseId?: string;
+  deadline?: string;
+  reviewer?: string;
 };
 
 export type UpdateAssignmentResponse = {};
