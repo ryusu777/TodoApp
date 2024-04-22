@@ -2,6 +2,7 @@
 import { GetProjectById } from '~/domain/project/api/projectApi';
 import ProjectPhases from '~/domain/project/components/ProjectPhases.vue';
 import ProjectMembers from '~/domain/project/components/ProjectMembers.vue';
+import { useProject } from '~/domain/project/composable/useProject';
 
 definePageMeta({
   name: 'Detail',
@@ -10,18 +11,19 @@ definePageMeta({
 
 const route = useRoute();
 const projectCode = route.params.id.toString();
-const { data: response, refresh, pending } = await useAsyncData(() => GetProjectById(projectCode));
-const projectDetail = computed(() => response.value?.data);
-const projectName = computed(() => response?.value?.data?.name);
+const state = useProject();
+
+await state.fetch(projectCode, true);
+
+const projectName = computed(() => state.project?.name);
 
 async function onRefresh() {
-  await refresh();
+  await state.fetch(projectCode, false);
 }
 
-const phases = computed(() => response.value?.data?.projectPhases || []);
-const members = computed(() => response
-  .value
-  ?.data
+const phases = computed(() => state.project?.projectPhases || []);
+const members = computed(() => state
+  .project
   ?.projectMembers
   .map(e => { return { username: e } }) || []);
 
@@ -30,21 +32,21 @@ const members = computed(() => response
 <template>
   <div>
     <h1 class="text-bold">{{ projectName }} Detail</h1>
-    <p>{{ projectDetail?.description }}</p>
+    <p>{{ state.project?.description }}</p>
   </div>
   <div>
     <ProjectPhases 
       :phases="phases" 
-      :project-id="projectDetail?.id || ''"
-      :pending="pending"
+      :project-id="state.project?.id || ''"
+      :pending="state.isFetching"
       :refresh="onRefresh"
     />
   </div>
   <div>
     <ProjectMembers
       :members="members" 
-      :project-id="projectDetail?.id || ''"
-      :pending="pending"
+      :project-id="state.project?.id || ''"
+      :pending="state.isFetching"
       :refresh="onRefresh"
     />
   </div>

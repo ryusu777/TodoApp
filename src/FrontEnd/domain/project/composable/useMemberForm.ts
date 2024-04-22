@@ -27,6 +27,8 @@ export function useMemberForm(initialMembers: Member[], projectId: string) {
     username: '',
   });
 
+  const originalUsername = ref('');
+
   const schema = object({
     username: string().required('Username is required').test(
       'unique-name',
@@ -63,12 +65,12 @@ export function useMemberForm(initialMembers: Member[], projectId: string) {
       show.value = false;
       return;
     }
-    const foundPhase = members.value.find(e => e.username === model.username);
+    const foundMember = members.value[currentEditIndex.value];
 
-    if (!foundPhase)
+    if (!foundMember)
       return;
 
-    foundPhase.username = model.username;
+    foundMember.username = model.username;
 
     show.value = false;
     return;

@@ -70,7 +70,6 @@ export type GetProjectByIdResponse = Project;
 
 export function GetProjectById(projectId: string) {
   const api = useApi();
-
   return api.$get<GetProjectByIdResponse>(ProjectApiRoute.ProjectDetail(projectId));
 }
 
