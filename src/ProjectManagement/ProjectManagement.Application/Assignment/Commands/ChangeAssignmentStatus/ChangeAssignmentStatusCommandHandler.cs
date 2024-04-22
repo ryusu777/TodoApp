@@ -22,7 +22,7 @@ public class ChangeAssignmentStatusCommandHandler : ICommandHandler<ChangeAssign
     public async Task<Result> Handle(ChangeAssignmentStatusCommand request, CancellationToken cancellationToken)
     {
         var result = await _assignmentRepository
-            .GetAssignmentById(AssignmentId.Create(request.AssignmentId));
+            .GetAssignmentById(AssignmentId.Create(request.AssignmentId), cancellationToken);
 
         if (result.Value is null)
             return result;

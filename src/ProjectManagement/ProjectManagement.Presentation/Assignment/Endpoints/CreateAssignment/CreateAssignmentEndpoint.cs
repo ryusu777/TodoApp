@@ -15,7 +15,7 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
 
     public override void Configure()
     {
-        Post(AssignmentEndpointRoutes.CreateAssignment);
+        Post(AssignmentEndpointRoutes.Assignments);
         Group<AssignmentEndpointGroup>();
     }
 
@@ -36,7 +36,7 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
                 req.Reviewer,
                 req.SubdomainId,
                 req.PhaseId
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

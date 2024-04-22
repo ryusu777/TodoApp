@@ -31,7 +31,7 @@ public class RemoveAssigneeEndpoint : Endpoint<RemoveAssigneeRequest, RemoveAssi
             .Send(new RemoveAssigneeCommand(
                 req.AssignmentId, 
                 req.AssigneeUsername
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

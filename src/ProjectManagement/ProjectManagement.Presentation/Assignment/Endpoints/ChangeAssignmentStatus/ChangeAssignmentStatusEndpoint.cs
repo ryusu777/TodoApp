@@ -31,7 +31,7 @@ public class ChangeAssignmentStatusEndpoint : Endpoint<ChangeAssignmentStatusReq
             .Send(new ChangeAssignmentStatusCommand(
                 req.AssignmentId,
                 req.AssignmentStatus
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

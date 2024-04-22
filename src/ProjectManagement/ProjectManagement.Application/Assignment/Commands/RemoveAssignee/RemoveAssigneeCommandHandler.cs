@@ -20,7 +20,7 @@ public class RemoveAssigneeCommandHandler : ICommandHandler<RemoveAssigneeComman
     public async Task<Result> Handle(RemoveAssigneeCommand request, CancellationToken cancellationToken)
     {
         var result = await _assignmentRepo.GetAssignmentById(
-            AssignmentId.Create(request.AssignmentId));
+            AssignmentId.Create(request.AssignmentId), cancellationToken);
 
         if (result.Value is null)
         {

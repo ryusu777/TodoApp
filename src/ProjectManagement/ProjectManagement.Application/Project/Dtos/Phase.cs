@@ -23,8 +23,11 @@ public record Phase(
         };
     }
 
-    public static Phase FromDomain(Domain.Project.Entities.Phase phase)
+    public static Phase? FromDomain(Domain.Project.Entities.Phase? phase)
     {
+        if (phase is null)
+            return null;
+        
         return new Phase(
             phase.Id.Value,
             phase.Name,

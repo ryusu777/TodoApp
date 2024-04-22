@@ -24,7 +24,7 @@ public class DeleteAssignmentEndpoint : Endpoint<DeleteAssignmentRequest, Delete
         var result = await _sender
             .Send(new DeleteAssignmentCommand(
                 req.AssignmentId
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

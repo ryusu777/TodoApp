@@ -30,7 +30,7 @@ public class AssigningEndpoint : Endpoint<AssigningRequest, AssigningResponse>
         var result = await _sender
             .Send(new AssigningCommand(
                 req.AssignmentId, req.AssigneeUsername
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

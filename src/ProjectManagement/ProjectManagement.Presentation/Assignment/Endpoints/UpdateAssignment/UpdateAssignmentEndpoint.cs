@@ -35,7 +35,7 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
                 req.SubdomainId,
                 req.PhaseId,
                 req.Reviewer
-            ));
+            ), ct);
 
         if (result.IsFailure) 
         {

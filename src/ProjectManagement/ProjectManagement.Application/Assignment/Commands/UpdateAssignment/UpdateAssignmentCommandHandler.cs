@@ -21,7 +21,7 @@ public class UpdateAssignmentCommandHandler : ICommandHandler<UpdateAssignmentCo
     public async Task<Result> Handle(UpdateAssignmentCommand request, CancellationToken cancellationToken)
     {
         var result = await _assignmentRepository
-            .GetAssignmentById(AssignmentId.Create(request.AssignmentId));
+            .GetAssignmentById(AssignmentId.Create(request.AssignmentId), cancellationToken);
 
         if (result.Value is null)
             return result;

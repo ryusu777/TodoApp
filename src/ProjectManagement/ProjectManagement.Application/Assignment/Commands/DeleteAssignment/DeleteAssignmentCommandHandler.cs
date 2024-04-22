@@ -22,7 +22,7 @@ public class DeleteAssignmentCommandHandler : ICommandHandler<DeleteAssignmentCo
     public async Task<Result> Handle(DeleteAssignmentCommand request, CancellationToken cancellationToken)
     {
         var result = await _assignmentRepository
-            .GetAssignmentById(AssignmentId.Create(request.AssignmentId));
+            .GetAssignmentById(AssignmentId.Create(request.AssignmentId), cancellationToken);
 
         if (result.Value is null) 
         {

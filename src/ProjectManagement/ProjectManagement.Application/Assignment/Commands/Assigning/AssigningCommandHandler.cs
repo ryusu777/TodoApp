@@ -20,7 +20,7 @@ public class AssigningCommandHandler : ICommandHandler<AssigningCommand>
     public async Task<Result> Handle(AssigningCommand request, CancellationToken cancellationToken)
 	{
         var result = await _assignmentRepository
-            .GetAssignmentById(AssignmentId.Create(request.AssignmentId));
+            .GetAssignmentById(AssignmentId.Create(request.AssignmentId), cancellationToken);
 
         if (result.Value is null)
         {
