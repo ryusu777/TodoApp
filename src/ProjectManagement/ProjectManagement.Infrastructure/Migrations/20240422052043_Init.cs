@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitProjectManagementDb : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,7 +33,11 @@ namespace ProjectManagement.Infrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Status = table.Column<string>(type: "varchar(20)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(20)", nullable: false),
+                    SubdomainId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PhaseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Reviewer = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,7 +54,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                 name: "ProjectMember",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -125,24 +129,6 @@ namespace ProjectManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AssignmentSubdomain",
-                columns: table => new
-                {
-                    SubdomainId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AssignmentSubdomain", x => new { x.AssignmentId, x.SubdomainId });
-                    table.ForeignKey(
-                        name: "FK_AssignmentSubdomain_ProjectAssignment_AssignmentId",
-                        column: x => x.AssignmentId,
-                        principalTable: "ProjectAssignment",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SubdomainKnowledge",
                 columns: table => new
                 {
@@ -188,9 +174,6 @@ namespace ProjectManagement.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AssignmentAssignee");
-
-            migrationBuilder.DropTable(
-                name: "AssignmentSubdomain");
 
             migrationBuilder.DropTable(
                 name: "ProjectMember");

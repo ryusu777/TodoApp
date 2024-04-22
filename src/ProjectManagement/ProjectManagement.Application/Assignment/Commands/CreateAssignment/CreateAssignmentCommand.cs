@@ -6,6 +6,8 @@ public record CreateAssignmentCommand(
 	string Title, 
 	string Description, 
 	string ProjectId,
-    Guid SubdomainId,
-    Guid PhaseId
+    DateTime? Deadline,
+    string? Reviewer = null,
+    Guid? SubdomainId = null,
+    Guid? PhaseId = null
 ) : ICommand;

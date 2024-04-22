@@ -4,7 +4,9 @@ namespace ProjectManagement.Presentation.Assignment.Endpoints.Assigning;
 
 public record AssigningRequest : AssigningCommand
 {
-    public AssigningRequest(Guid AssignmentId, string AssigneeUsername) : base(AssignmentId, AssigneeUsername)
+    public AssigningRequest(
+        Guid AssignmentId, 
+        string AssigneeUsername) : base(AssignmentId, AssigneeUsername)
     {
     }
 }

@@ -3,6 +3,7 @@ using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Application.Assignment.Events;
 using ProjectManagement.Application.Project;
+using ProjectManagement.Domain.Common.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Application.Assignment.Commands.CreateAssignment;
@@ -34,8 +35,10 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
 			request.Title,
 			request.Description,
 			ProjectId.Create(request.ProjectId),
-            SubdomainId.Create(request.SubdomainId),
-            PhaseId.Create(request.PhaseId));
+            request.SubdomainId.HasValue ? SubdomainId.Create(request.SubdomainId.Value) : null,
+            request.Deadline,
+            request.PhaseId.HasValue ? PhaseId.Create(request.PhaseId.Value) : null,
+            request.Reviewer is not null ? UserId.Create(request.Reviewer) : null);
 
 		return await _unitOfWork
             .SaveChangesAsync(new AssignmentCreated(createdAssignment), cancellationToken);

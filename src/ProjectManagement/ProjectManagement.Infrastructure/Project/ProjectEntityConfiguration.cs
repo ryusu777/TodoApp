@@ -88,7 +88,8 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
                 .HasConversion(
                     username => username,
                     value => UserId.Create(value).Value
-                );
+                )
+                .HasMaxLength(50);
         });
     }
 }

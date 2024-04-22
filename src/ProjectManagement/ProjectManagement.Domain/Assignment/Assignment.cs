@@ -17,8 +17,10 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         string title, 
         string description, 
         ProjectId projectId,
-        SubdomainId subdomainId,
-        PhaseId phaseId) : base(id)
+        SubdomainId? subdomainId,
+        DateTime? deadline = null,
+        PhaseId? phaseId = null,
+        UserId? reviewer = null) : base(id)
     {
         Title = title;
         Description = description;
@@ -26,22 +28,28 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         Status = new AssignmentStatus(AssignmentStatusEnum.New);
         SubdomainId = subdomainId;
         PhaseId = phaseId;
+        Reviewer = reviewer;
+        Deadline = deadline;
     }
 
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public ProjectId ProjectId { get; private set; }
     public AssignmentStatus Status { get; private set; }
-    public SubdomainId SubdomainId { get; private set; }
-    public PhaseId PhaseId { get; private set; }
+    public SubdomainId? SubdomainId { get; private set; }
+    public PhaseId? PhaseId { get; private set; }
     public ICollection<UserId> Assignees { get; private set; } = new List<UserId>();
+    public UserId? Reviewer { get; private set; }
+    public DateTime? Deadline { get; private set; }
 
     public static Assignment Create(
         string title, 
         string description, 
         ProjectId projectId,
-        SubdomainId subdomainId,
-        PhaseId phaseId)
+        SubdomainId? subdomainId = null,
+        DateTime? deadline = null,
+        PhaseId? phaseId = null,
+        UserId? reviewer = null)
     {
         var result = new Assignment(
             AssignmentId.CreateUnique(),
@@ -49,7 +57,9 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
             description,
             projectId,
             subdomainId,
-            phaseId
+            deadline,
+            phaseId,
+            reviewer
 		);
         return result;
     }
@@ -119,11 +129,23 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result Update(
         string title, 
-        string description
+        string description,
+        SubdomainId? subdomainId = null,
+        PhaseId? phaseId = null,
+        UserId? reviewer = null
     )
     {
         Title = title;
         Description = description;
+
+        if (subdomainId is not null)
+            SubdomainId = subdomainId;
+
+        if (phaseId is not null)
+            PhaseId = phaseId;
+
+        if (reviewer is not null)
+            Reviewer = reviewer;
 
         RaiseDomainEvent(new AssignmentUpdated(this));
 

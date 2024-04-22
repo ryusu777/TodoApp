@@ -31,7 +31,10 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
             .Send(new UpdateAssignmentCommand(
                 req.AssignmentId, 
                 req.Title, 
-                req.Description
+                req.Description,
+                req.SubdomainId,
+                req.PhaseId,
+                req.Reviewer
             ));
 
         if (result.IsFailure) 

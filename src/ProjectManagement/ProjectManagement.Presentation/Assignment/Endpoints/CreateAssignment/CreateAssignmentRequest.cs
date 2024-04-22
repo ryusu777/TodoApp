@@ -8,8 +8,10 @@ public record CreateAssignmentRequest : CreateAssignmentCommand
         string Title, 
         string Description, 
         string ProjectId, 
-        Guid SubdomainId, 
-        Guid PhaseId) : base(Title, Description, ProjectId, SubdomainId, PhaseId)
+        DateTime? Deadline, 
+        string? Reviewer = null, 
+        Guid? SubdomainId = null, 
+        Guid? PhaseId = null) : base(Title, Description, ProjectId, Deadline, Reviewer, SubdomainId, PhaseId)
     {
     }
 }

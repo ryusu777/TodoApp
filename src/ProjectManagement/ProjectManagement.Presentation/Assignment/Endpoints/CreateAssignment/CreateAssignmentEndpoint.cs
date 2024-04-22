@@ -32,6 +32,8 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
                 req.Title, 
                 req.Description, 
                 req.ProjectId,
+                req.Deadline,
+                req.Reviewer,
                 req.SubdomainId,
                 req.PhaseId
             ));

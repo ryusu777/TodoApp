@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectManagement.Domain.Assignment.ValueObjects;
+using ProjectManagement.Domain.Common.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
 
 namespace ProjectManagement.Infrastructure.Assignment;
@@ -42,6 +43,9 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 			.IsRequired(false)
 			.HasMaxLength(50);
 
+        builder.Property(e => e.Deadline)
+            .IsRequired(false);
+
 		builder.Property(e => e.ProjectId)
 			.ValueGeneratedNever()
 			.HasConversion(
@@ -51,17 +55,27 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 
 		builder.Property(e => e.SubdomainId)
 			.ValueGeneratedNever()
+            .IsRequired(false)
 			.HasConversion(
-				id => id.Value,
+				id => id!.Value,
 				value => SubdomainId.Create(value)
 			);
 
 		builder.Property(e => e.PhaseId)
 			.ValueGeneratedNever()
+            .IsRequired(false)
 			.HasConversion(
-				id => id.Value,
+				id => id!.Value,
 				value => PhaseId.Create(value)
 			);
+
+		builder.Property(e => e.Reviewer)
+			.ValueGeneratedNever()
+            .IsRequired(false)
+			.HasConversion(
+				id => id!.Value,
+				value => UserId.Create(value))
+            .HasMaxLength(50);
 
 		builder.HasOne<Domain.Project.Project>()
 			.WithMany()
