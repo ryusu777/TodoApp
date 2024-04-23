@@ -35,6 +35,9 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
 			request.Title,
 			request.Description,
 			ProjectId.Create(request.ProjectId),
+            request.Assignees
+                .Select(e => UserId.Create(e))
+                .ToList(),
             request.SubdomainId.HasValue ? SubdomainId.Create(request.SubdomainId.Value) : null,
             request.Deadline,
             request.PhaseId.HasValue ? PhaseId.Create(request.PhaseId.Value) : null,

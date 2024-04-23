@@ -6,6 +6,7 @@ public record UpdateAssignmentCommand(
     Guid AssignmentId, 
     string Title, 
     string Description,
+    string[] Assignees,
     Guid? SubdomainId = null,
     Guid? PhaseId = null,
     string? Reviewer = null

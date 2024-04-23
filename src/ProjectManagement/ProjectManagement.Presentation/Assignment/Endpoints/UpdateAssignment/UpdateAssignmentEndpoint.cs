@@ -4,7 +4,7 @@ using ProjectManagement.Application.Assignment.Commands.UpdateAssignments;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.UpdateAssignment;
 
-public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, UpdateAssignmentResponse>
+public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentCommand, UpdateAssignmentResponse>
 {
     public ISender _sender;
 
@@ -19,7 +19,7 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
         Group<AssignmentEndpointGroup>();
     }
 
-    public override async Task HandleAsync(UpdateAssignmentRequest req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateAssignmentCommand req, CancellationToken ct)
     {
         if (Route<Guid>("assignment_id") != req.AssignmentId) 
         {
@@ -28,14 +28,7 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentRequest, Update
         }
 
         var result = await _sender
-            .Send(new UpdateAssignmentCommand(
-                req.AssignmentId, 
-                req.Title, 
-                req.Description,
-                req.SubdomainId,
-                req.PhaseId,
-                req.Reviewer
-            ), ct);
+            .Send(req);
 
         if (result.IsFailure) 
         {

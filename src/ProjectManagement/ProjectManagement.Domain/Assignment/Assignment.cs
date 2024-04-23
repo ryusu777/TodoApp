@@ -17,6 +17,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         string title, 
         string description, 
         ProjectId projectId,
+        ICollection<UserId> assignees,
         SubdomainId? subdomainId,
         DateTime? deadline = null,
         PhaseId? phaseId = null,
@@ -30,6 +31,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         PhaseId = phaseId;
         Reviewer = reviewer;
         Deadline = deadline;
+        Assignees = assignees;
     }
 
     public string Title { get; private set; }
@@ -46,6 +48,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         string title, 
         string description, 
         ProjectId projectId,
+        ICollection<UserId> assignees,
         SubdomainId? subdomainId = null,
         DateTime? deadline = null,
         PhaseId? phaseId = null,
@@ -56,6 +59,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
             title,
             description,
             projectId,
+            assignees,
             subdomainId,
             deadline,
             phaseId,
@@ -130,6 +134,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
     public Result Update(
         string title, 
         string description,
+        ICollection<UserId>? assignees,
         SubdomainId? subdomainId = null,
         PhaseId? phaseId = null,
         UserId? reviewer = null
@@ -146,6 +151,9 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
         if (reviewer is not null)
             Reviewer = reviewer;
+
+        if (assignees is not null)
+            Assignees = assignees;
 
         RaiseDomainEvent(new AssignmentUpdated(this));
 

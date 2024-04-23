@@ -30,6 +30,9 @@ public class UpdateAssignmentCommandHandler : ICommandHandler<UpdateAssignmentCo
             .Update(
                 request.Title, 
                 request.Description,
+                request.Assignees
+                    .Select(e => UserId.Create(e))
+                    .ToList(),
                 request.SubdomainId.HasValue ? SubdomainId.Create(request.SubdomainId.Value) : null,
                 request.PhaseId.HasValue ? PhaseId.Create(request.PhaseId.Value) : null,
                 request.Reviewer is not null ? UserId.Create(request.Reviewer) : null);

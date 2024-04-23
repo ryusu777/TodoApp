@@ -4,7 +4,7 @@ using ProjectManagement.Application.Assignment.Commands.CreateAssignment;
 
 namespace ProjectManagement.Presentation.Assignment.Endpoints.CreateAssignment;
 
-public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, CreateAssignmentResponse>
+public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentCommand, CreateAssignmentResponse>
 {
     public ISender _sender;
 
@@ -19,7 +19,7 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
         Group<AssignmentEndpointGroup>();
     }
 
-    public override async Task HandleAsync(CreateAssignmentRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CreateAssignmentCommand req, CancellationToken ct)
     {
         if (Route<string>("project_id") != req.ProjectId) 
         {
@@ -28,15 +28,7 @@ public class CreateAssignmentEndpoint : Endpoint<CreateAssignmentRequest, Create
         }
 
         var result = await _sender
-            .Send(new CreateAssignmentCommand(
-                req.Title, 
-                req.Description, 
-                req.ProjectId,
-                req.Deadline,
-                req.Reviewer,
-                req.SubdomainId,
-                req.PhaseId
-            ), ct);
+            .Send(req);
 
         if (result.IsFailure) 
         {

@@ -6,6 +6,7 @@ public record CreateAssignmentCommand(
 	string Title, 
 	string Description, 
 	string ProjectId,
+    string[] Assignees,
     DateTime? Deadline,
     string? Reviewer = null,
     Guid? SubdomainId = null,
