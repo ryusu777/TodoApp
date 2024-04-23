@@ -10,6 +10,7 @@ definePageMeta({
 const route = useRoute();
 
 const subdomainId = route.params.subdomainid.toString();
+const projectId = route.params.id.toString();
 const { data, refresh } = await useAsyncData(subdomainId, () => GetSubdomain(subdomainId));
 
 const subdomain = computed(() => data.value?.data);
@@ -33,6 +34,7 @@ const selectedTab = ref(0);
     </div>
     <Assignments 
       v-if="selectedTab === 0"
+      :project-id="projectId"
     />
     <SubdomainKnowledges
       v-if="selectedTab === 1"

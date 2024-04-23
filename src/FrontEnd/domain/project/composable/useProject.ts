@@ -23,7 +23,7 @@ export const useProject = defineStore('project', () => {
         errorDescription = response.value.errorDescription;
     } else {
       await apiUtil
-        .try(GetProjectById(projectId),
+        .try(() => GetProjectById(projectId),
           (response: IApiResponse<Project>) => {
             data = response.data;
           }, 
