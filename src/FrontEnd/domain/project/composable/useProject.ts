@@ -7,6 +7,8 @@ export const useProject = defineStore('project', () => {
   const apiUtil = useApiUtils();
   const isFetching = ref(false);
   const $isFetching = computed(() => isFetching.value);
+  const phases = computed(() => project.value?.projectPhases);
+  const members = computed(() => project.value?.projectMembers);
 
   async function fetch(projectId: string, server: boolean) {
     let data: Project | undefined = undefined;
@@ -40,10 +42,11 @@ export const useProject = defineStore('project', () => {
     project.value = data;
   }
 
-
   return {
     project: projectComputed,
     fetch,
-    isFetching: $isFetching
+    isFetching: $isFetching,
+    phases,
+    members
   }
 });

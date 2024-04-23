@@ -3,6 +3,7 @@ import { DeleteSubdomainKnowledge, type SubdomainKnowledge } from '../api/subdom
 import { useSubdomainKnowledgeForm } from '../composable/useSubdomainKnowledgeForm';
 import SubdomainKnowledgeForm from './SubdomainKnowledgeForm.vue';
 import SubdomainKnowledgeVue from './SubdomainKnowledge.vue';
+import { createReusableTemplate } from '@vueuse/core';
 
 const props = defineProps<{
   subdomainId: string;
@@ -117,9 +118,18 @@ async function doDelete({ knowledge }: { knowledge: SubdomainKnowledge }, close:
     }
   }
 }
+
+const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
+
+defineExpose({
+  ReuseTemplate
+});
 </script>
 
 <template>
+  <DefineTemplate>
+    <h1>Knowledge defined template</h1>
+  </DefineTemplate>
   <div class="flex flex-row flex-grow pt-2">
     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg">
       <UTabs 

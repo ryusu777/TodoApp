@@ -14,14 +14,17 @@ const subdomainId = route.params.subdomainid?.toString();
 
 const router = useRouter();
 
-const tabs = useSubdomainTabs(props.projectId, subdomainId);
+const tabs = useSubdomainTabs();
+
+tabs.setProjectId(props.projectId);
+tabs.setSubdomainId(subdomainId)
 
 await tabs.fetch(true);
 
-if (!subdomainId && tabs.currentSubdomain.value) {
-  router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
+if (!subdomainId && tabs.currentSubdomain) {
+  router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.id}`);
 }
-else if (subdomainId && !tabs.currentSubdomain.value)
+else if (subdomainId && !tabs.currentSubdomain)
   router.replace(`/project/${props.projectId}`);
 
 const form = useSubdomainForm(props.projectId);
@@ -32,7 +35,7 @@ const refreshKey = ref(0);
 async function onRefresh() {
   let shouldRoute = false;
 
-  if (!tabs.currentSubdomain.value)
+  if (!tabs.currentSubdomain)
     shouldRoute = true;
 
   isFetching.value = true;
@@ -41,10 +44,10 @@ async function onRefresh() {
 
   refreshKey.value++;
 
-  if (shouldRoute && tabs.currentSubdomain.value)
-    router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.value.id}`);
+  if (shouldRoute && tabs.currentSubdomain)
+    router.replace(`/project/${props.projectId}/${tabs.currentSubdomain.id}`);
 
-  else if (subdomainId && !tabs.currentSubdomain.value)
+  else if (subdomainId && !tabs.currentSubdomain)
     router.replace(`/project/${props.projectId}`);
 }
 
@@ -84,7 +87,7 @@ async function submit() {
 }
 
 function navigate(index: number) {
-  const currentTab = tabs.tabs.value[index];
+  const currentTab = tabs.tabs[index];
 
   router.push(currentTab.to);
 
@@ -118,7 +121,7 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
     close();
     await onRefresh();
 
-    if (tabs.tabs.value.length === 0)
+    if (tabs.tabs.length === 0)
       editable.value = false;
   } catch (e: any) {
     if ('data' in e) {
@@ -155,10 +158,10 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
     </div>
     <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
       <UTabs 
-        v-if="tabs.tabs.value.length > 0"
-        :model-value="tabs.selectedTab.value" 
+        v-if="tabs.tabs.length > 0"
+        :model-value="tabs.selectedTab" 
         @update:model-value="navigate"
-        :items="tabs.tabs.value"
+        :items="tabs.tabs"
         :ui="{
           wrapper: 'space-y-0',
           list: {

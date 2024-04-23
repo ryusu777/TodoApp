@@ -1,7 +1,7 @@
 import { array, object, string } from "yup";
 import { CreateAssignment, UpdateAssignment, type Assignment } from "../api/assignmentApi";
 
-export function useAssignmentForm(projectId: string, subdomainId: string) {
+export function useAssignmentForm(projectId: string) {
   const show = ref(false);
 
   const model = reactive({
@@ -12,7 +12,7 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
     reviewer: undefined as string | undefined,
     phaseId: undefined as string | undefined,
     subdomainId: undefined as string | undefined,
-    assignees: [''],
+    assignees: [] as string[],
   });
 
   const schema = object({
@@ -32,15 +32,15 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
     show.value = true;
   }
 
-  function create() {
+  function create(subdomainId: string) {
     model.id = undefined;
     model.title = '';
     model.description = '';
     model.deadline = undefined;
     model.reviewer = undefined;
     model.phaseId = undefined;
-    model.subdomainId = undefined;
-    model.assignees = [''];
+    model.subdomainId = subdomainId;
+    model.assignees = [];
 
     show.value = true;
   }
@@ -58,10 +58,11 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
         title: model.title,
         description: model.description,
         phaseId: model.phaseId,
-        projectId,
-        subdomainId,
+        subdomainId: model.subdomainId,
         deadline: model.deadline,
-        reviewer: model.reviewer
+        reviewer: model.reviewer,
+        assignees: model.assignees,
+        projectId
       });
 
       isSubmitting.value = false;
@@ -72,6 +73,7 @@ export function useAssignmentForm(projectId: string, subdomainId: string) {
       assignmentId: model.id || '',
       title: model.title,
       description: model.description,
+      assignees: model.assignees,
       subdomainId: model.subdomainId,
       phaseId: model.phaseId,
       deadline: model.deadline,

@@ -1,54 +1,99 @@
 <script setup lang="ts">
 import type { UTextarea } from '#build/components';
+import { useProject } from '~/domain/project/composable/useProject';
 import { useAssignmentForm } from '../composables/useAssignmentForm';
 import InputDate from '~/forms/components/InputDate.vue';
+import { useSubdomainTabs } from '~/domain/subdomain/composable/useSubdomainTabs';
 
 const props = defineProps<{
   form: ReturnType<typeof useAssignmentForm>
 }>();
 
-const { schema, model: state, submit, closeForm } = props.form;
+const { schema, model: state, submit: formSubmit, closeForm, show } = props.form;
 
 const emit = defineEmits(['submit']);
+
+const project = useProject();
+
+const subdomain = useSubdomainTabs();
+
+const subdomainOptions = computed(() => subdomain.tabs.map(e => {
+  return {
+    id: e.subdomain.id,
+    title: e.subdomain.title
+  }
+}));
+
+const selectedSubdomain = ref(subdomainOptions.value.find(e => e.id === state.subdomainId));
+
+const phaseOptions = computed(() => project.phases?.map(e => {
+  return {
+    id: e.id,
+    name: e.name
+  }
+}));
+
+const selectedPhase = ref(project.phases?.find(e => e.id === state.phaseId));
+
+function submit() {
+  state.subdomainId = selectedSubdomain.value?.id;
+  state.phaseId = selectedPhase.value?.id;
+  emit('submit');
+}
+
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="p-5 flex flex-col gap-5" @submit="emit('submit')">
-    <UFormGroup label="Title" name="title">
-      <UInput v-model="state.title" placeholder="title.." />
-    </UFormGroup>
+  <UForm 
+    :schema="schema" 
+    :state="state" 
+    class="p-5 flex flex-col gap-5" 
+    @submit="submit"
+  >
+    <div class="flex gap-x-2">
+      <UFormGroup label="Title" name="title">
+        <UInput v-model="state.title" placeholder="title.." />
+      </UFormGroup>
+
+      <UFormGroup label="Deadline" name="deadline">
+        <InputDate v-model="state.deadline" />
+      </UFormGroup>
+
+      <UFormGroup label="Phase" name="phaseId" class="flex-grow">
+        <USelectMenu
+          option-attribute="name"
+          v-model="selectedPhase"
+          :options="phaseOptions"
+        />
+      </UFormGroup>
+    </div>
+
+    <div class="flex gap-x-2">
+      <UFormGroup label="Assignees" name="assignees" class="flex-1">
+        <USelectMenu 
+          v-model="state.assignees"
+          :options="project.members"
+          multiple
+        />
+      </UFormGroup>
+
+      <UFormGroup label="Reviewer" name="reviewer" class="flex-1">
+        <USelectMenu 
+          v-model="state.reviewer"
+          :options="project.members"
+        />
+      </UFormGroup>
+
+      <UFormGroup label="Subdomain" name="subdomainId" class="flex-1">
+        <USelectMenu
+          option-attribute="title"
+          v-model="selectedSubdomain"
+          :options="subdomainOptions"
+        />
+      </UFormGroup>
+    </div>
 
     <UFormGroup label="Description" name="description">
-      <UInput v-model="state.description" placeholder="this subdomain is for.." />
-    </UFormGroup>
-
-    <UFormGroup label="Deadline" name="deadline">
-      <InputDate v-model="state.deadline" />
-    </UFormGroup>
-
-    <UFormGroup label="Assignees" name="assignees">
-      <USelectMenu 
-        v-model="state.assignees"
-        :options="['joseryu', 'nicoabel', 'agungsukmawan']"
-        multiple
-      />
-    </UFormGroup>
-
-    <UFormGroup label="Phase" name="phaseId">
-      <USelectMenu 
-        v-model="state.phaseId"
-        :options="['UR', 'DR', 'PR']"
-      />
-    </UFormGroup>
-
-    <UFormGroup label="Subdomain" name="subdomainId">
-      <USelectMenu 
-        v-model="state.subdomainId"
-        :options="['Assignment', 'Project', 'Subdomain']"
-      />
-    </UFormGroup>
-
-    <UFormGroup label="Subdomain" name="subdomainId">
       <UTextarea 
         v-model="state.description"
       />

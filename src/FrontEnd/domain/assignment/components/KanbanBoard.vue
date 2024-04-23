@@ -9,7 +9,7 @@ defineProps<{
 
 </script>
 <template>
-  <div class="max-w-[250px] flex flex-col gap-y-2">
+  <div class="w-[250px] flex flex-col gap-y-2">
     <UCard
       :ui="{
         body: {

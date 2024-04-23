@@ -1,14 +1,17 @@
+import { keymap } from "@tiptap/pm/keymap";
 import { GetSubdomain, GetSubdomains, type GetSubdomainsResponse, type Subdomain } from "../api/subdomainApi";
 
-export function useSubdomainTabs(projectId: string, currentSubdomainId: string) {
+export const useSubdomainTabs = defineStore('subdomain', () => {
   type IsFetched = Subdomain & { isFetched?: boolean };
   const subdomains = ref<IsFetched[]>([]);
   const disable = ref(false);
+  const projectId = ref<string>('');
+  const subdomainId = ref<string>();
 
   const tabs = computed(() => subdomains.value.map(e => {
     return {
       label: e.title,
-      to: `/project/${projectId}/${e.id}`,
+      to: `/project/${projectId.value}/${e.id}`,
       disabled: disable.value,
       subdomain: {
         id: e.id,
@@ -29,7 +32,7 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
     let errorDescription: string | null = null;
 
     if (initial) {
-      const { data: response } = await useAsyncData(() => GetSubdomains(projectId));
+      const { data: response } = await useAsyncData(() => GetSubdomains(projectId.value));
 
       if (response?.value?.data)
         data = response.value.data;
@@ -37,7 +40,7 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
       if (response.value?.errorDescription)
         errorDescription = response.value.errorDescription;
     } else {
-      const { data: response, errorDescription: errorResponse } = await GetSubdomains(projectId);
+      const { data: response, errorDescription: errorResponse } = await GetSubdomains(projectId.value);
 
       if (response)
         data = response;
@@ -52,8 +55,8 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
     else
       return errorDescription || "Failed to fetch subdomain list";
 
-    if (currentSubdomainId) {
-      selectedTab.value = subdomains.value.findIndex(e => e.id === currentSubdomainId);
+    if (subdomainId.value) {
+      selectedTab.value = subdomains.value.findIndex(e => e.id === subdomainId.value);
     }
     
     if (selectedTab.value >= subdomains.value.length)
@@ -89,6 +92,14 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
     disable.value = false;
   }
 
+  function setProjectId(newProjectId: string) {
+    projectId.value = newProjectId;
+  }
+  
+  function setSubdomainId(newSubdomainId: string) {
+    subdomainId.value = newSubdomainId;
+  }
+
   return {
     tabs,
     selectedTab,
@@ -98,6 +109,8 @@ export function useSubdomainTabs(projectId: string, currentSubdomainId: string) 
     currentSubdomain,
     isFetchingSubdomainDetail,
     disableTabs,
-    enableTabs
+    enableTabs,
+    setProjectId,
+    setSubdomainId
   }
-}
+})

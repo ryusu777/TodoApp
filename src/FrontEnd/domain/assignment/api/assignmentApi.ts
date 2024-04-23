@@ -72,6 +72,7 @@ export type CreateAssignmentRequest = {
   title: string;
   description: string;
   projectId: string;
+  assignees: string[];
   subdomainId?: string;
   phaseId?: string;
   deadline?: string;
@@ -112,6 +113,7 @@ export type UpdateAssignmentRequest = {
   assignmentId: string;
   title: string;
   description: string;
+  assignees: string[];
   subdomainId?: string;
   phaseId?: string;
   deadline?: string;
