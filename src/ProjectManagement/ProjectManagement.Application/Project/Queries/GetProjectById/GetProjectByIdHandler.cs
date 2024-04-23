@@ -34,7 +34,7 @@ public class GetProjectByIdHandler : IQueryHandler<GetProjectByIdQuery, GetProje
             project.Name,
             project.Description,
             (int)project.Status,
-            project.ProjectPhases.Select(Phase.FromDomain).ToList(),
+            project.ProjectPhases.Select(e => Phase.FromDomain(e)!).ToList(),
             project.ProjectMembers.Select(e => e.Value).ToList()
         ));
     }
