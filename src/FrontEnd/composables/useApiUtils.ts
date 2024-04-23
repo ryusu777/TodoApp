@@ -1,12 +1,13 @@
 export function useApiUtils() {
 
   async function tryFunction<TResponse>(
-    promise: Promise<TResponse>,
-    onSucess: (response: TResponse) => any,
+    callback: () => Promise<TResponse>,
+    onSuccess: (response: TResponse) => any,
     onError: (errorDescription: string) => any
   ) {
     try {
-      return await promise;
+      const response = await callback();
+      onSuccess(response);
     } catch(e: any) {
       if ('data' in e) {
         if ('errorDescription' in e.data)
