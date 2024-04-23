@@ -2,12 +2,15 @@ import { GetAssignments, type Assignment, type GetAssignmentsResponse } from "..
 
 export function useAssignmentState(projectId: string) {
   const assignments = ref<Assignment[]>([]);
+  const assignmentsComputed = computed(() => assignments.value);
+
+  const apiUtil = useApiUtils();
   
-  async function fetch(initial: boolean) {
+  async function fetch(server: boolean) {
     let data: GetAssignmentsResponse | null = null;
     let errorDescription: string | null = null;
 
-    if (initial) {
+    if (server) {
       const { data: response } = await useAsyncData(() => GetAssignments({ projectId }));
 
       if (response.value?.data)
@@ -16,14 +19,27 @@ export function useAssignmentState(projectId: string) {
       if (response.value?.errorDescription)
         errorDescription = response.value.errorDescription;
     } else {
-      const { data: response, errorDescription: errorResponse } = await GetAssignments({ projectId });
-
-      if (response)
-        data = response;
-
-      if (errorResponse)
-        errorDescription = errorResponse;
+      await apiUtil
+        .try(() => GetAssignments({ projectId }),
+          (response: IApiResponse<GetAssignmentsResponse>) => {
+            data = response.data!;
+          }, 
+          (error: string) => {
+            errorDescription = error;
+          }
+        );
     }
+
+    if (data)
+      assignments.value = data;
+
+    if (errorDescription)
+      return errorDescription;
+  }
+
+  return {
+    fetch,
+    assignments: assignmentsComputed
   }
 }
 

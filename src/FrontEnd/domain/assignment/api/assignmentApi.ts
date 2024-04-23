@@ -1,5 +1,5 @@
 export const AssignmentApiRoute = {
-  Assignments: (projectId: string) => `/project/${projectId}/assignmnet`,
+  Assignments: (projectId: string) => `/project/${projectId}/assignment`,
   DeleteAssignment: (assignmentId: string) => `/assignment/${assignmentId}`,
   AssignmentDetail: (assignmentId: string) => `/assignment/${assignmentId}`,
   Assigning: (assignmentId: string) => `/assignment/${assignmentId}/assign`,
