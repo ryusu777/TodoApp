@@ -190,7 +190,6 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
                   size="2xs"
                   v-if="editable" 
                 />
-
                 <template #panel="{ close }">
                   <div class="flex flex-col p-3 gap-y-2 text-white">
                     <span>Are you sure want to delete this?</span>

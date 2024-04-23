@@ -69,18 +69,26 @@ async function submit() {
   </DefineTemplate>
   <div class="flex gap-x-3">
     <KanbanBoard
+      :state="state"
+      :form="form"
       type="Todo"
       :assignments="filteredAssignments.New || []"
     />
     <KanbanBoard
+      :state="state"
+      :form="form"
       type="In Progress"
       :assignments="filteredAssignments.OnProgress || []"
     />
     <KanbanBoard
+      :state="state"
+      :form="form"
       type="Waiting Review"
       :assignments="filteredAssignments.WaitingReview || []"
     />
     <KanbanBoard
+      :state="state"
+      :form="form"
       type="Done"
       :assignments="filteredAssignments.Completed || []"
     />

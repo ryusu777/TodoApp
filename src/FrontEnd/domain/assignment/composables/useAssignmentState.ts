@@ -1,10 +1,24 @@
-import { GetAssignments, type Assignment, type GetAssignmentsResponse } from "../api/assignmentApi";
+import { DeleteAssignment, GetAssignments, type Assignment, type GetAssignmentsResponse } from "../api/assignmentApi";
 
 export function useAssignmentState(projectId: string) {
   const assignments = ref<Assignment[]>([]);
   const assignmentsComputed = computed(() => assignments.value);
 
   const apiUtil = useApiUtils();
+
+  async function doDelete(assignmentId: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => DeleteAssignment({ assignmentId }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
   
   async function fetch(server: boolean) {
     let data: GetAssignmentsResponse | null = null;
@@ -39,7 +53,8 @@ export function useAssignmentState(projectId: string) {
 
   return {
     fetch,
-    assignments: assignmentsComputed
+    assignments: assignmentsComputed,
+    delete: doDelete
   }
 }
 
