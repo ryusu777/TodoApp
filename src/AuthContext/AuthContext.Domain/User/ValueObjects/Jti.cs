@@ -18,4 +18,8 @@ public class Jti : ValueObject
     {
         return new(value);
     }
+    public static Jti CreateUnique() 
+    {
+        return new(Guid.NewGuid().ToString());
+    }
 }

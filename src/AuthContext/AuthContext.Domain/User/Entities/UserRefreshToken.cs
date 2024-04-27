@@ -10,27 +10,23 @@ public class UserRefreshToken : Entity<Jti>
 #pragma warning restore CS8618
 
     public RefreshToken RefreshToken { get; private set; }
-    public UserId UserId { get; private set; }
     public DateTime ExpiresAt { get; private set; }
 
     private UserRefreshToken(
         Jti id,
         RefreshToken refreshToken,
-        DateTime expiresAt,
-        UserId userId) : base(id)
+        DateTime expiresAt) : base(id)
     {
         RefreshToken = refreshToken;
-        UserId = userId;
         ExpiresAt = expiresAt;
     }
 
     public static UserRefreshToken Create(
         Jti id,
         RefreshToken refreshToken,
-        DateTime expiresAt,
-        UserId userId)
+        DateTime expiresAt)
     {
-        return new(id, refreshToken, expiresAt, userId);
+        return new(id, refreshToken, expiresAt);
     }
 
     public bool IsExpired()

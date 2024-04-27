@@ -13,11 +13,11 @@ public class User : AggregateRoot<UserId>
 
     private List<UserRefreshToken> RefreshToken = new();
 
-    public GiteaUserId GiteaUserId { get; private set; }
+    public GiteaUserId? GiteaUserId { get; private set; }
 
     private User(
         UserId username,
-        GiteaUserId giteaUserId
+        GiteaUserId? giteaUserId = null
     ) : base(username)
     {
         GiteaUserId = giteaUserId;
@@ -25,7 +25,7 @@ public class User : AggregateRoot<UserId>
 
     public static User Create(
         UserId username,
-        GiteaUserId giteaUserId
+        GiteaUserId? giteaUserId = null
     )
     {
         return new User(username, giteaUserId);
@@ -68,7 +68,7 @@ public class User : AggregateRoot<UserId>
             return UserDomainError.RefreshTokenExists;
 
         UserRefreshToken token = UserRefreshToken
-            .Create(jti, refreshToken, expiresAt, Id);
+            .Create(jti, refreshToken, expiresAt);
 
         RefreshToken
             .Add(token);
