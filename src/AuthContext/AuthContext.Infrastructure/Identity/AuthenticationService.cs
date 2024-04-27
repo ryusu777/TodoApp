@@ -166,4 +166,11 @@ public class AuthenticationService : IAuthenticationService
                 "bearer",
                 refreshTokenString);
     }
+
+    public async Task<Result<string>> RequestChangePasswordAsync(string username, CancellationToken ct)
+    {
+        AppIdentityUser user = await _userManager.Users.FirstAsync(e => e.UserName == username, ct);
+
+        return Result.Success(await _userManager.GeneratePasswordResetTokenAsync(user));
+    }
 }

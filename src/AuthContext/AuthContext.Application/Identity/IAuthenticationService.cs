@@ -16,6 +16,10 @@ public interface IAuthenticationService
         RefreshToken refreshToken, 
         CancellationToken ct);
 
+    public Task<Result<string>> RequestChangePasswordAsync(
+        string username, 
+        CancellationToken ct);
+
     public string GetUsername(JwtToken jwtToken);
 
     public Jti GetJti(JwtToken token);

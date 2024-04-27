@@ -28,6 +28,7 @@ public class OnboardUserCommandHandler : ICommandHandler<OnboardUserCommand>
         var createdUser = Domain.User.User
             .Create(
                 UserId.Create(request.Username),
+                Domain.User.ValueObjects.Email.Create(request.Email),
                 GiteaUserId.Create(request.GiteaUserId)
             );
 
