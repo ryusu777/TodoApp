@@ -1,0 +1,16 @@
+name: todoapp
+
+services:
+  project-management:
+    build:
+      context: .
+      dockerfile: ./ProjectManagement/Dockerfile
+    environment:
+      - ConnectionStrings__AppDbContext=server=192.168.1.7;Database=TodoApp;User ID=sa;Password=RoseCat21*;Trusted_Connection=false;TrustServerCertificate=true
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./ApiGateway/Dockerfile
+    ports:
+      - "8080:80"
