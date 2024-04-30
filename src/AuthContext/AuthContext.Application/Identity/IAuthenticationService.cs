@@ -20,6 +20,8 @@ public interface IAuthenticationService
         string username, 
         CancellationToken ct);
 
+    public Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct);
+
     public string GetUsername(JwtToken jwtToken);
 
     public Jti GetJti(JwtToken token);
