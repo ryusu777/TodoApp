@@ -6,6 +6,8 @@ using AuthContext.Application.Identity.Model;
 using AuthContext.Domain.User.ValueObjects;
 using AuthContext.Infrastructure.Identity.Entities;
 using Library.Models;
+using MassTransit;
+using MassTransitContracts.GetAuthProviderUri;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -17,11 +19,13 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<AppIdentityUser> _userManager;
     private readonly JwtOptions _jwtOptions;
+    private readonly IRequestClient<GetAuthProviderUriRequest> _authProviderUriClient;
 
-    public AuthenticationService(UserManager<AppIdentityUser> userManager, IOptions<JwtOptions> jwtOptions)
+    public AuthenticationService(UserManager<AppIdentityUser> userManager, IOptions<JwtOptions> jwtOptions, IRequestClient<GetAuthProviderUriRequest> authProviderUriClient)
     {
         _userManager = userManager;
         _jwtOptions = jwtOptions.Value;
+        _authProviderUriClient = authProviderUriClient;
     }
 
     private string GetJtiString(string token)
@@ -172,5 +176,15 @@ public class AuthenticationService : IAuthenticationService
         AppIdentityUser user = await _userManager.Users.FirstAsync(e => e.UserName == username, ct);
 
         return Result.Success(await _userManager.GeneratePasswordResetTokenAsync(user));
+    }
+
+    public Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct)
+    {
+        var uriResult = _authProviderUriClient
+            .GetResponse<GetAuthProviderUriResponse>(
+                new GetAuthProviderUriRequest(state.ToString()),
+                ct);
+
+
     }
 }

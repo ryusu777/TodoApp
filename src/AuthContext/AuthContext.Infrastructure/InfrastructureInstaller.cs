@@ -7,6 +7,7 @@ using AuthContext.Infrastructure.Persistence;
 using AuthContext.Infrastructure.Persistence.Data;
 using AuthContext.Infrastructure.Persistence.Mediator;
 using AuthContext.Infrastructure.User;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,21 @@ public static class InfrastructureInstaller
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+        services.AddMassTransit(bc => 
+        {
+            bc.SetKebabCaseEndpointNameFormatter();
+            bc.UsingRabbitMq((context, configurator) => 
+            {
+                configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
+                {
+                    h.Username(config["MessageBroker:Username"]!);
+                    h.Username(config["MessageBroker:Password"]!);
+                });
+
+                configurator.ConfigureEndpoints(context);
+            });
+        });
 
         return services;
     }
