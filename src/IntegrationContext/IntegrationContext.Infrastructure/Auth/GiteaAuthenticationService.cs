@@ -19,9 +19,13 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserRepository _userRepository;
 
-    private string BaseUrl => $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
+    private string BaseUrl => $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/authorize-gitea";
 
-    public GiteaAuthenticationService(IHttpClientFactory httpFactory, IOptions<GiteaClientCredentials> credentials, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
+    public GiteaAuthenticationService(
+        IHttpClientFactory httpFactory, 
+        IOptions<GiteaClientCredentials> credentials, 
+        IHttpContextAccessor httpContextAccessor, 
+        IUserRepository userRepository)
     {
         _httpFactory = httpFactory;
         _credentials = credentials.Value;

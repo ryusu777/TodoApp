@@ -1,4 +1,5 @@
 using IntegrationContext.Application.Abstractions.Data;
+using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Infrastructure.Auth;
 using IntegrationContext.Infrastructure.Persistence;
@@ -35,6 +36,7 @@ public static class InfrastructureInstaller
         services.AddMassTransit(bc => 
         {
             bc.SetKebabCaseEndpointNameFormatter();
+            bc.AddConsumer<GetAuthProviderUriConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
