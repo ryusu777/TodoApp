@@ -14,3 +14,9 @@ services:
       dockerfile: ./ApiGateway/Dockerfile
     ports:
       - "8080:80"
+
+  rabbit-mq:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DEFAULT_USER: guest
+      - RABBITMQ_DEFAULT_PASS: guest
