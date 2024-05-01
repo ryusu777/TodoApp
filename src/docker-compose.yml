@@ -2,11 +2,31 @@ name: todoapp
 
 services:
   project-management:
+    depends_on: 
+      - rabbit-mq
     build:
       context: .
       dockerfile: ./ProjectManagement/Dockerfile
     environment:
-      - ConnectionStrings__AppDbContext=server=192.168.1.7;Database=TodoApp;User ID=sa;Password=RoseCat21*;Trusted_Connection=false;TrustServerCertificate=true
+      - ConnectionStrings__AppDbContext
+
+  integration-context:
+    depends_on: 
+      - rabbit-mq
+    build:
+      context: .
+      dockerfile: ./IntegrationContext/Dockerfile
+    environment:
+      - ConnectionStrings__AppDbContext
+
+  auth-context:
+    depends_on: 
+      - rabbit-mq
+    build:
+      context: .
+      dockerfile: ./AuthContext/Dockerfile
+    environment:
+      - ConnectionStrings__AppDbContext
 
   api-gateway:
     build:
@@ -17,6 +37,8 @@ services:
 
   rabbit-mq:
     image: rabbitmq:management
+    ports:
+      - "5672:5672"
     environment:
-      - RABBITMQ_DEFAULT_USER: guest
-      - RABBITMQ_DEFAULT_PASS: guest
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
