@@ -178,13 +178,16 @@ public class AuthenticationService : IAuthenticationService
         return Result.Success(await _userManager.GeneratePasswordResetTokenAsync(user));
     }
 
-    public Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct)
+    public async Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct)
     {
-        var uriResult = _authProviderUriClient
+        var uriResult = await _authProviderUriClient
             .GetResponse<GetAuthProviderUriResponse>(
                 new GetAuthProviderUriRequest(state.ToString()),
                 ct);
 
+        if (uriResult is null)
+            return Result.Failure<Uri>(IdentityInfrastructureError.FailedToGetCredential);
 
+        return Result.Success(uriResult.Message.AuthorizeUri);
     }
 }
