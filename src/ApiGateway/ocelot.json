@@ -48,6 +48,18 @@
         }
       ]
     },
+    {
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+      "UpstreamHttpMethod": ["Get", "Post", "Put", "Delete"],
+      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth-context",
+          "Port": 80
+        }
+      ]
+    },
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8080"
