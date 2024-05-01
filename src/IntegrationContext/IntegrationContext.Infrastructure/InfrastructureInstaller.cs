@@ -1,7 +1,9 @@
 using IntegrationContext.Application.Abstractions.Data;
+using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Infrastructure.Auth;
+using IntegrationContext.Infrastructure.Gitea.Repositories;
 using IntegrationContext.Infrastructure.Persistence;
 using IntegrationContext.Infrastructure.Persistence.Data;
 using IntegrationContext.Infrastructure.Persistence.Mediator;
@@ -18,20 +20,22 @@ public static class InfrastructureInstaller
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration config)
     {
-		services
-			.AddPersistMediator();
+        services
+            .AddPersistMediator();
 
-		services.AddScoped<IUnitOfWork, UnitOfWork>();
-		services.AddDbContext<AppDbContext>(opt =>
-		{
-			//opt.UseInMemoryDatabase("InMemoryDb");
-			opt.UseSqlServer(
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IGiteaAuthenticationService, GiteaAuthenticationService>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddDbContext<AppDbContext>(opt =>
+        {
+            //opt.UseInMemoryDatabase("InMemoryDb");
+            opt.UseSqlServer(
                 config.GetConnectionString("AppDbContext"),
                 o => 
                 {
                     o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
                 });
-		});
+        });
 
         services.AddMassTransit(bc => 
         {
