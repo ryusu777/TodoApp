@@ -11,18 +11,22 @@ public class GetAuthProviderUriConsumer : IConsumer<GetAuthProviderUriRequest>
 {
     private readonly string _giteaUrl;
     private readonly GiteaClientCredentials _credentials;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly string _clientUrl;
+    private string BaseUrl => $"{_clientUrl}/authorize-gitea";
 
-    private string BaseUrl => $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/authorize-gitea";
-
-    public GetAuthProviderUriConsumer(IConfiguration config, IOptions<GiteaClientCredentials> credentials, IHttpContextAccessor httpContextAccessor)
+    public GetAuthProviderUriConsumer(IConfiguration config, IOptions<GiteaClientCredentials> credentials)
     {
         var url = config["GiteaUrl"];
         if (url is null)
             throw new Exception("Gitea url is not found, please set Gitea Url in configuration");
+
+        var clientUrl = config["ClientUrl"];
+        if (clientUrl is null)
+            throw new Exception("Client url is not found, please set Client Url in configuration");
+
+        _clientUrl = clientUrl;
         _giteaUrl = url;
         _credentials = credentials.Value;
-        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task Consume(ConsumeContext<GetAuthProviderUriRequest> context)
