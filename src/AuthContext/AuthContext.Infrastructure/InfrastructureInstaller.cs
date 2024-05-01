@@ -1,6 +1,9 @@
 using AuthContext.Application.Abstractions.Data;
+using AuthContext.Application.Email;
 using AuthContext.Application.Identity;
+using AuthContext.Application.Identity.Model;
 using AuthContext.Application.User;
+using AuthContext.Infrastructure.Email;
 using AuthContext.Infrastructure.Identity;
 using AuthContext.Infrastructure.Identity.Entities;
 using AuthContext.Infrastructure.Persistence;
@@ -21,9 +24,12 @@ public static class InfrastructureInstaller
         this IServiceCollection services, IConfiguration config)
     {
 		services
-			.AddPersistMediator();
+		    .AddPersistMediator();
 
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IUserRepository, UserRepository>();
+		services.AddScoped<IAuthenticationService, AuthenticationService>();
+		services.AddScoped<IEmailService, EmailService>();
 		services.AddDbContext<AppDbContext>(opt =>
 		{
 			//opt.UseInMemoryDatabase("InMemoryDb");
@@ -56,6 +62,8 @@ public static class InfrastructureInstaller
                 configurator.ConfigureEndpoints(context);
             });
         });
+
+        services.Configure<JwtOptions>(config.GetSection(JwtOptions.OptionSection));
 
         return services;
     }
