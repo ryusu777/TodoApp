@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/api/**': {
-      proxy: { to: 'http://localhost:5168/api/**' }
+      proxy: { to: 'http://api-gateway/api/**' }
     }
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
@@ -19,5 +19,5 @@ export default defineNuxtConfig({
   },
   ui: {
     icons: {}
-  }
+  },
 });
