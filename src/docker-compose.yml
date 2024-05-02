@@ -1,6 +1,13 @@
 name: todoapp
 
 services:
+  front-end:
+    build:
+      context: .
+      dockerfile: ./FrontEnd/Dockerfile
+    ports:
+      - "8080:3000"
+
   project-management:
     depends_on: 
       - rabbit-mq
@@ -32,8 +39,6 @@ services:
     build:
       context: .
       dockerfile: ./ApiGateway/Dockerfile
-    ports:
-      - "8080:80"
 
   rabbit-mq:
     image: rabbitmq:management
