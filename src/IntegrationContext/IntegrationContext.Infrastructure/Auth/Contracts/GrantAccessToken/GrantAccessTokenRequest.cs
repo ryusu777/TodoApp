@@ -1,4 +1,4 @@
-namespace IntegrationContext.Infrastructure.Auth.Contracts;
+namespace IntegrationContext.Infrastructure.Auth.Contracts.GrantAccessToken;
 
 public record GrantAccessTokenRequest(
     string client_id,
