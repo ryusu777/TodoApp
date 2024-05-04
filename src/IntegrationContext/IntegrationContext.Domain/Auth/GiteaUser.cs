@@ -10,11 +10,25 @@ public class GiteaUser : AggregateRoot<GiteaUserId>
     private GiteaUser() { }
 #pragma warning restore CS8618
 
+    private GiteaUser(
+        GiteaUserId id,
+        UserId username
+    ): base(id) {
+        UserId = username;
+    }
+
     public UserId UserId { get; private set; }
     public JwtToken? JwtToken { get; private set; }
     public RefreshToken? RefreshToken { get; private set; }
     public DateTime? JwtExpiresAt { get; private set; }
     public DateTime? RefreshTokenExpiresAt { get; private set; }
+
+    public static GiteaUser Create(
+        GiteaUserId id,
+        UserId username
+    ) {
+        return new(id, username);
+    }
 
     public void RefreshTokens(
         JwtToken jwtToken, 
