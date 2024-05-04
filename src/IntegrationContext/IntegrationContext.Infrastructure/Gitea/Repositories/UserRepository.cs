@@ -16,6 +16,19 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
 
+    public async Task<Result<GiteaUser>> GetGiteaUserByGiteaUserId(GiteaUserId id, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .GiteaUsers
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+        if (result is null)
+            return Result
+                .Failure<GiteaUser>(AuthDomainError.UserNotFound);
+
+        return Result.Success(result);
+    }
+
     public async Task<Result<GiteaUser>> GetGiteaUserByUsername(UserId username, CancellationToken ct)
     {
         var result = await _dbContext
@@ -24,7 +37,7 @@ public class UserRepository : IUserRepository
 
         if (result is null)
             return Result
-                .Failure<GiteaUser>(GiteaUserInfrastructureError.UserNotFound);
+                .Failure<GiteaUser>(AuthDomainError.UserNotFound);
 
         return Result.Success(result);
     }

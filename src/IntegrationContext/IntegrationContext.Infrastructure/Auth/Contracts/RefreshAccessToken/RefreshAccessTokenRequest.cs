@@ -1,4 +1,4 @@
-namespace IntegrationContext.Infrastructure.Auth.Contracts;
+namespace IntegrationContext.Infrastructure.Auth.Contracts.RefreshAccessToken;
 
 public record RefreshAccessTokenRequest(
     string client_id,
