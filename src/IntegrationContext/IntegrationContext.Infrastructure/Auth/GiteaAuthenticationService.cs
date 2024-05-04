@@ -1,9 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
+using System.Security.Claims;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Auth.Models;
+using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
-using IntegrationContext.Infrastructure.Auth.Contracts;
+using IntegrationContext.Infrastructure.Auth.Contracts.GrantAccessToken;
+using IntegrationContext.Infrastructure.Auth.Contracts.RefreshAccessToken;
 using Library.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -38,7 +41,7 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
         return Task.FromResult(Result.Success(_credentials));
     }
 
-    public async Task<Result<GiteaAuthenticationResult>> GrantAccessTokenAsync(UserId username, string verifyCode, CancellationToken ct)
+    public async Task<Result<GiteaAuthenticationResult>> GrantAccessTokenAsync(string verifyCode, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
@@ -90,6 +93,38 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
                 .Failure<GiteaAuthenticationResult>(UserInfrastructureError.FailedToAuthenticateGitea);
 
         return Result.Success(credential);
+    }
+
+    public async Task<Result<GiteaAuthenticatedUser>> GetAuthenticatedUser(JwtToken token, CancellationToken ct)
+    {
+        var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        client.DefaultRequestHeaders
+            .Add("Authorization", "token " + token.Value);
+
+        var result = await client.GetFromJsonAsync<GiteaAuthenticatedUser>("api/v1/user", ct);
+
+        if (result is null)
+            return Result
+                .Failure<GiteaAuthenticatedUser>(AuthDomainError.FailedToFetchGiteaUser);
+
+        return Result.Success(result);
+    }
+
+    public Result<DateTime> GetExpiredDateTime(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+
+        JwtSecurityToken readToken = handler.ReadJwtToken(token);
+
+        Claim? expClaim = readToken
+            .Claims
+            .FirstOrDefault(e => e.Type == JwtRegisteredClaimNames.Exp);
+
+        if (expClaim is null)
+            return Result.Failure<DateTime>(AuthDomainError.InvalidToken);
+
+        return Result.Success(readToken.ValidTo);
     }
 }
 
