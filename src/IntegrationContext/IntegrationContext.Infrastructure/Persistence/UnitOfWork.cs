@@ -51,6 +51,7 @@ public class UnitOfWork : IUnitOfWork
 			foreach (var domainEvent in _populatedDomainEvents)
 			{
 				await _publisher.Publish(domainEvent, cancellationToken);
+                _populatedDomainEvents.Remove(domainEvent);
 			}
             return Result.Success();
         }
