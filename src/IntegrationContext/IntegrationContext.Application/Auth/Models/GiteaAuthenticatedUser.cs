@@ -7,7 +7,7 @@ public class GiteaAuthenticatedUser
     public string? avatar_url { get; set; }
     public DateTime created { get; set; }
     public string? description { get; set; }
-    public string? email { get; set; }
+    public required string email { get; set; }
     public int followers_count { get; set; }
     public int following_count { get; set; }
     public string? full_name { get; set; }

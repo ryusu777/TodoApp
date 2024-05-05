@@ -31,7 +31,7 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
 
         if (grantResult.IsFailure || grantResult.Value is null)
         {
-            await context.RespondAsync(new GrantAccessTokenResponse(false, "", grantResult.Error.Code, grantResult.Error.Description));
+            await context.RespondAsync(new GrantAccessTokenResponse(false, "", "", grantResult.Error.Code, grantResult.Error.Description));
             return;
         }
 
@@ -43,7 +43,7 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
         if (giteaAuthenticatedUser.IsFailure 
             || giteaAuthenticatedUser.Value is null)
         {
-            await context.RespondAsync(new GrantAccessTokenResponse(false, "", 
+            await context.RespondAsync(new GrantAccessTokenResponse(false, "", "",
                 giteaAuthenticatedUser.Error.Code, 
                 giteaAuthenticatedUser.Error.Description));
             return;
@@ -81,7 +81,7 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
         }
         else 
         {
-            await context.RespondAsync(new GrantAccessTokenResponse(false, "", 
+            await context.RespondAsync(new GrantAccessTokenResponse(false, "", "",
                 foundUser.Error.Code, 
                 foundUser.Error.Description));
             return;
@@ -91,7 +91,7 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
 
         if (persistResult.IsFailure)
         {
-            await context.RespondAsync(new GrantAccessTokenResponse(false, "", 
+            await context.RespondAsync(new GrantAccessTokenResponse(false, "", "",
                 persistResult.Error.Code, 
                 persistResult.Error.Description));
             return;
@@ -100,6 +100,7 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
         await context.RespondAsync(new GrantAccessTokenResponse(
             true, 
             giteaAuthenticatedUser.Value.login, 
+            giteaAuthenticatedUser.Value.email,
             null, 
             null));
     }
