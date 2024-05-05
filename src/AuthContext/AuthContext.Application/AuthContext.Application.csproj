@@ -13,5 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Library.csproj" />
     <ProjectReference Include="..\AuthContext.Domain\AuthContext.Domain.csproj" />
+    <ProjectReference Include="..\..\MassTransitContracts\MassTransitContracts.csproj" />
   </ItemGroup>
 </Project>

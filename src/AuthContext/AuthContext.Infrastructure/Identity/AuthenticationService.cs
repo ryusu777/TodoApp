@@ -3,11 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using AuthContext.Application.Identity;
 using AuthContext.Application.Identity.Model;
+using AuthContext.Domain.User;
 using AuthContext.Domain.User.ValueObjects;
 using AuthContext.Infrastructure.Identity.Entities;
 using Library.Models;
 using MassTransit;
 using MassTransitContracts.GetAuthProviderUri;
+using MassTransitContracts.GrantAccessToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -20,12 +22,18 @@ public class AuthenticationService : IAuthenticationService
     private readonly UserManager<AppIdentityUser> _userManager;
     private readonly JwtOptions _jwtOptions;
     private readonly IRequestClient<GetAuthProviderUriRequest> _authProviderUriClient;
+    private readonly IRequestClient<GrantAccessTokenRequest> _grantAccessTokenClient;
 
-    public AuthenticationService(UserManager<AppIdentityUser> userManager, IOptions<JwtOptions> jwtOptions, IRequestClient<GetAuthProviderUriRequest> authProviderUriClient)
+    public AuthenticationService(
+        UserManager<AppIdentityUser> userManager,
+        IOptions<JwtOptions> jwtOptions,
+        IRequestClient<GetAuthProviderUriRequest> authProviderUriClient,
+        IRequestClient<GrantAccessTokenRequest> grantAccessTokenClient)
     {
         _userManager = userManager;
         _jwtOptions = jwtOptions.Value;
         _authProviderUriClient = authProviderUriClient;
+        _grantAccessTokenClient = grantAccessTokenClient;
     }
 
     private string GetJtiString(string token)
@@ -85,20 +93,20 @@ public class AuthenticationService : IAuthenticationService
         Claim? jtiClaim = principal.Claims.FirstOrDefault(e => e.Type == JwtRegisteredClaimNames.Jti);
 
         if (principal is null || jtiClaim is null)
-            return Result.Failure<AuthenticationResult>(IdentityInfrastructureError.InvalidRefreshToken);
+            return Result.Failure<AuthenticationResult>(UserDomainError.InvalidRefreshToken);
 
         Jti jwtJti = GetJti(jwtToken);
         Jti refreshTokenJti = GetJti(refreshToken);
 
         if (jwtJti != refreshToken)
-            return Result.Failure<AuthenticationResult>(IdentityInfrastructureError.InvalidRefreshTokenOrJwtToken);
+            return Result.Failure<AuthenticationResult>(UserDomainError.InvalidRefreshTokenOrJwtToken);
 
         string username = GetUsername(jwtToken);
 
         AppIdentityUser? user = await _userManager.Users.FirstOrDefaultAsync(e => e.UserName == username);
 
         if (user is null)
-            return Result.Failure<AuthenticationResult>(IdentityInfrastructureError.IssuedUserNotFound);
+            return Result.Failure<AuthenticationResult>(UserDomainError.IssuedUserNotFound);
 
         return Result.Success(GenerateAuthenticationResult(user));
     }
@@ -111,14 +119,14 @@ public class AuthenticationService : IAuthenticationService
 
         if (user is null)
             return Result
-                .Failure<AuthenticationResult>(IdentityInfrastructureError.IncorrectUsernameOrPassword);
+                .Failure<AuthenticationResult>(UserDomainError.IncorrectUsernameOrPassword);
 
         var isPasswordCorrect = await _userManager
             .CheckPasswordAsync(user, password);
 
         if (!isPasswordCorrect)
             return Result
-                .Failure<AuthenticationResult>(IdentityInfrastructureError.IncorrectUsernameOrPassword);
+                .Failure<AuthenticationResult>(UserDomainError.IncorrectUsernameOrPassword);
 
         return Result.Success(GenerateAuthenticationResult(user));
     }
@@ -186,8 +194,59 @@ public class AuthenticationService : IAuthenticationService
                 ct);
 
         if (uriResult is null)
-            return Result.Failure<Uri>(IdentityInfrastructureError.FailedToGetCredential);
+            return Result.Failure<Uri>(UserDomainError.FailedToGetCredential);
 
         return Result.Success(uriResult.Message.AuthorizeUri);
+    }
+
+    public async Task<Result<GrantAccessTokenResponse>> GrantGiteaAccessToken(string code, CancellationToken ct)
+    {
+        var grantResult = await _grantAccessTokenClient
+            .GetResponse<GrantAccessTokenResponse>(new GrantAccessTokenRequest(code), ct);
+
+        if (grantResult is null)
+            return Result.Failure<GrantAccessTokenResponse>(UserDomainError.FailedToGrantAccessToken);
+
+        if (grantResult.Message.ErrorCode is not null)
+            return Result.Failure<GrantAccessTokenResponse>(new Error(
+                grantResult.Message.ErrorCode,
+                grantResult.Message.ErrorDescription
+            ));
+
+        return Result.Success(new GrantAccessTokenResponse(
+            true, 
+            grantResult.Message.Username,
+            grantResult.Message.Email,
+            null,
+            null
+        ));
+    }
+
+    public async Task<Result> RegisterUserAsync(UserId username, Domain.User.ValueObjects.Email email, CancellationToken ct)
+    {
+        var result = await _userManager
+            .CreateAsync(new AppIdentityUser
+            {
+                Email = email.Value,
+                UserName = username.Value
+            });
+
+        if (!result.Succeeded)
+            return Result.Failure(new Error(result.Errors.ElementAt(0).Code, result.Errors.ElementAt(0).Description));
+
+        return Result.Success();
+    }
+
+    public async Task<Result<AuthenticationResult>> SignInAsync(string username, CancellationToken ct)
+    {
+        var user = await _userManager
+            .Users
+            .FirstOrDefaultAsync(e => e.UserName == username);
+
+        if (user is null)
+            return Result
+                .Failure<AuthenticationResult>(UserDomainError.UserNotFound);
+
+        return Result.Success(GenerateAuthenticationResult(user));
     }
 }
