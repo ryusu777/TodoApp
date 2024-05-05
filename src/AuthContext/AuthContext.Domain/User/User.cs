@@ -17,18 +17,22 @@ public class User : AggregateRoot<UserId>
 
     private User(
         UserId username,
-        Email email
+        Email email,
+        List<UserRefreshToken>? refreshToken = null
     ) : base(username)
     {
         Email = email;
+        if (refreshToken is not null)
+            RefreshToken = refreshToken;
     }
 
     public static User Create(
         UserId username,
-        Email email
+        Email email,
+        List<UserRefreshToken>? refreshToken = null
     )
     {
-        return new User(username, email);
+        return new User(username, email, refreshToken);
     }
 
     public void DeleteExpiredRefreshTokens()
