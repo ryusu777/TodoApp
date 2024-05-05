@@ -41,6 +41,7 @@ public static class InfrastructureInstaller
         {
             bc.SetKebabCaseEndpointNameFormatter();
             bc.AddConsumer<GetAuthProviderUriConsumer>();
+            bc.AddConsumer<GrantAccessTokenConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
