@@ -21,6 +21,10 @@ public interface IAuthenticationService
         string username, 
         CancellationToken ct);
 
+    public Task<bool> IsUserOnboarded(
+        string username, 
+        CancellationToken ct);
+
     public Task<Result<AuthenticationResult>> RefreshTokenAsync(
         JwtToken jwtToken, 
         RefreshToken refreshToken, 

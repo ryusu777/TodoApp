@@ -249,4 +249,16 @@ public class AuthenticationService : IAuthenticationService
 
         return Result.Success(GenerateAuthenticationResult(user));
     }
+
+    public async Task<bool> IsUserOnboarded(string username, CancellationToken ct)
+    {
+        var user = await _userManager
+            .Users
+            .FirstOrDefaultAsync(e => e.UserName == username);
+
+        if (user is null)
+            return false;
+
+        return await _userManager.HasPasswordAsync(user);
+    }
 }
