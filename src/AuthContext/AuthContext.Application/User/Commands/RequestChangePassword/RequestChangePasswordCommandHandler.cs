@@ -2,6 +2,7 @@ using AuthContext.Application.Abstractions.Messaging;
 using AuthContext.Application.Email;
 using AuthContext.Application.Email.Model;
 using AuthContext.Application.Identity;
+using AuthContext.Domain.User;
 using Library.Models;
 
 namespace AuthContext.Application.User.Commands.RequestChangePassword;
@@ -24,7 +25,7 @@ public class RequestChangePasswordCommandHandler : ICommandHandler<RequestChange
         var user = await _userRepository.GetUserByUsernameAsync(request.Username, cancellationToken);
 
         if (user.Value is null)
-            return Result.Failure(UserApplicationError.UserNotFound);
+            return Result.Failure(UserDomainError.UserNotFound);
 
         Result<string> resetPasswordTokenResult = await _authService
             .RequestChangePasswordAsync(user.Value.Id.Value, cancellationToken);

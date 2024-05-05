@@ -1,6 +1,7 @@
 using AuthContext.Application.Abstractions.Data;
 using AuthContext.Application.Abstractions.Messaging;
-using AuthContext.Application.User.Events;
+using AuthContext.Domain.User.Events;
+using AuthContext.Domain.User;
 using AuthContext.Domain.User.ValueObjects;
 using Library.Models;
 
@@ -23,13 +24,12 @@ public class OnboardUserCommandHandler : ICommandHandler<OnboardUserCommand>
             .GetUserByUsernameAsync(request.Username, cancellationToken);
 
         if (findUserResult is not null)
-            return UserApplicationError.UserAlreadyOnboarded;
+            return UserDomainError.UserAlreadyOnboarded;
 
         var createdUser = Domain.User.User
             .Create(
                 UserId.Create(request.Username),
-                Domain.User.ValueObjects.Email.Create(request.Email),
-                GiteaUserId.Create(request.GiteaUserId)
+                Domain.User.ValueObjects.Email.Create(request.Email)
             );
 
         _unitOfWork.AddEventQueue(new UserCreated(createdUser));
