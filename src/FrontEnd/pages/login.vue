@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { object, string } from 'yup';
+import { SignInWithGitea } from '~/domain/auth/api/authApi';
 
 definePageMeta({
-  layout: 'login'
+  layout: false
 });
 
 const schema = object({
@@ -15,9 +16,15 @@ const state = reactive({
   password: ''
 });
 
-async function submit() {
+async function signInWithGitea() {
+  const response = await SignInWithGitea();
 
+  if (response.data)
+    window.location.replace(response.data);
 }
+
+async function submit() {}
+
 </script>
 
 <template>
@@ -62,6 +69,7 @@ async function submit() {
             variant="solid"
             color="gray"
             class="justify-center gap-x-3"
+            @click="signInWithGitea"
           >
             <template #leading>
               <img src="/public/gitea-logo.svg" class="h-[24px]" />
