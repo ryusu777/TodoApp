@@ -1,6 +1,6 @@
 using AuthContext.Presentation.Common;
 
-namespace AuthContext.Presentation.User.Endpoints.SignInWithGitea;
+namespace AuthContext.Presentation.Auth.Endpoints.SignInWithGitea;
 
 public record SignInWithGiteaResponse(
     string? ErrorDescription,

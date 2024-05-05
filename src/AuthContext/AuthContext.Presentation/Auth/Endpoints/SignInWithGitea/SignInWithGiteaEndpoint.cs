@@ -2,7 +2,7 @@ using AuthContext.Application.User.Commands.SignInWithGitea;
 using FastEndpoints;
 using MediatR;
 
-namespace AuthContext.Presentation.User.Endpoints.SignInWithGitea;
+namespace AuthContext.Presentation.Auth.Endpoints.SignInWithGitea;
 
 public class SignInWithGitea : EndpointWithoutRequest<SignInWithGiteaResponse>
 {
@@ -15,8 +15,8 @@ public class SignInWithGitea : EndpointWithoutRequest<SignInWithGiteaResponse>
 
     public override void Configure()
     {
-        Get(UserEndpointRoutes.SignInWithGitea);
-        Group<UserEndpointGroup>();
+        Get(AuthEndpointRoutes.SignInWithGitea);
+        Group<AuthEndpointGroup>();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
