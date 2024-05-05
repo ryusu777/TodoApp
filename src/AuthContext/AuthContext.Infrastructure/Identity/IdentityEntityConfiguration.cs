@@ -9,15 +9,6 @@ public class IdentityEntityConfiguration : IEntityTypeConfiguration<AppIdentityU
 {
     public void Configure(EntityTypeBuilder<AppIdentityUser> builder)
     {
-        builder
-            .Property(e => e.GiteaUserId)
-            .ValueGeneratedNever()
-            .IsRequired(false)
-            .HasConversion(
-                id => id!.Value,
-                value => GiteaUserId.Create(value)
-            );
-
         ConfigureRefreshTokenTable(builder);
     }
 

@@ -15,25 +15,20 @@ public class User : AggregateRoot<UserId>
 
     public Email Email { get; private set; }
 
-    public GiteaUserId? GiteaUserId { get; private set; }
-
     private User(
         UserId username,
-        Email email,
-        GiteaUserId? giteaUserId = null
+        Email email
     ) : base(username)
     {
-        GiteaUserId = giteaUserId;
         Email = email;
     }
 
     public static User Create(
         UserId username,
-        Email email,
-        GiteaUserId? giteaUserId = null
+        Email email
     )
     {
-        return new User(username, email, giteaUserId);
+        return new User(username, email);
     }
 
     public void DeleteExpiredRefreshTokens()
