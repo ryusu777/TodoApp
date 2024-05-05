@@ -11,6 +11,7 @@ using AuthContext.Infrastructure.Persistence.Data;
 using AuthContext.Infrastructure.Persistence.Mediator;
 using AuthContext.Infrastructure.User;
 using MassTransit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -41,9 +42,15 @@ public static class InfrastructureInstaller
                 });
 		});
 
+        var authenticatorProviderType = typeof(AuthenticatorTokenProvider<>).MakeGenericType(typeof(AppIdentityUser));
+        var emailTokenProviderType = typeof(EmailTokenProvider<>).MakeGenericType(typeof(AppIdentityUser));
+
         services
             .AddIdentityCore<AppIdentityUser>()
-            .AddEntityFrameworkStores<AppDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider(TokenOptions.DefaultAuthenticatorProvider, authenticatorProviderType)
+            .AddTokenProvider(TokenOptions.DefaultEmailProvider, emailTokenProviderType)
+            .AddTokenProvider(TokenOptions.DefaultProvider, authenticatorProviderType);
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
