@@ -51,8 +51,10 @@ public class UnitOfWork : IUnitOfWork
 			foreach (var domainEvent in _populatedDomainEvents)
 			{
 				await _publisher.Publish(domainEvent, cancellationToken);
-                _populatedDomainEvents.Remove(domainEvent);
 			}
+
+            _populatedDomainEvents.RemoveAll(e => true);
+
             return Result.Success();
         }
         catch (DbUpdateException e)
