@@ -9,6 +9,7 @@ using IntegrationContext.Infrastructure.Auth.Contracts.GrantAccessToken;
 using IntegrationContext.Infrastructure.Auth.Contracts.RefreshAccessToken;
 using Library.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace IntegrationContext.Infrastructure.Auth;
@@ -19,21 +20,29 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
 
     private readonly IHttpClientFactory _httpFactory;
     private readonly GiteaClientCredentials _credentials;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserRepository _userRepository;
-
-    private string BaseUrl => $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/authorize-gitea";
+    private readonly string _clientUrl;
+    private string BaseUrl => $"{_clientUrl}/authorize-gitea";
 
     public GiteaAuthenticationService(
+		IConfiguration config,
         IHttpClientFactory httpFactory, 
         IOptions<GiteaClientCredentials> credentials, 
-        IHttpContextAccessor httpContextAccessor, 
         IUserRepository userRepository)
     {
         _httpFactory = httpFactory;
         _credentials = credentials.Value;
-        _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;
+
+        var url = config["GiteaUrl"];
+        if (url is null)
+            throw new Exception("Gitea url is not found, please set Gitea Url in configuration");
+
+        var clientUrl = config["ClientUrl"];
+        if (clientUrl is null)
+            throw new Exception("Client url is not found, please set Client Url in configuration");
+
+        _clientUrl = clientUrl;
     }
 
     public Task<Result<GiteaClientCredentials>> GetClientCredentials(CancellationToken ct)
@@ -53,13 +62,22 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
             BaseUrl
         ), ct);
 
-        var credential = await result.Content.ReadFromJsonAsync<GiteaAuthenticationResult>();
+        if (!result.IsSuccessStatusCode)
+            return Result
+                .Failure<GiteaAuthenticationResult>(UserInfrastructureError.FailedToAuthenticateGitea);
+
+        var credential = await result.Content.ReadFromJsonAsync<GrantAccessTokenResponse>();
 
         if (credential is null)
             return Result
                 .Failure<GiteaAuthenticationResult>(UserInfrastructureError.FailedToAuthenticateGitea);
 
-        return Result.Success(credential);
+        return Result.Success(new GiteaAuthenticationResult(
+            JwtToken.Create(credential.access_token),
+            RefreshToken.Create(credential.refresh_token),
+            GetExpiredDateTime(credential.access_token).Value,
+            GetExpiredDateTime(credential.refresh_token).Value
+		));
     }
 
     public async Task<Result<GiteaAuthenticationResult>> RefreshTokenAsync(UserId username, CancellationToken ct)
@@ -86,13 +104,18 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
             refreshToken.Value
         ), ct);
 
-        var credential = await result.Content.ReadFromJsonAsync<GiteaAuthenticationResult>();
+        var credential = await result.Content.ReadFromJsonAsync<GrantAccessTokenResponse>();
 
         if (credential is null)
             return Result
                 .Failure<GiteaAuthenticationResult>(UserInfrastructureError.FailedToAuthenticateGitea);
 
-        return Result.Success(credential);
+        return Result.Success(new GiteaAuthenticationResult(
+            JwtToken.Create(credential.access_token),
+            RefreshToken.Create(credential.refresh_token),
+            GetExpiredDateTime(credential.access_token).Value,
+            GetExpiredDateTime(credential.refresh_token).Value
+		));
     }
 
     public async Task<Result<GiteaAuthenticatedUser>> GetAuthenticatedUser(JwtToken token, CancellationToken ct)
