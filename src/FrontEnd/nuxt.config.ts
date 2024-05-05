@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+//
+console.log(process.env.API_URL);
 export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: {
@@ -6,7 +8,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/api/**': {
-      proxy: { to: 'http://api-gateway/api/**' }
+      proxy: { to: process.env.API_URL + '/api/**' }
     }
   },
   modules: ['@nuxt/ui', '@pinia/nuxt'],
