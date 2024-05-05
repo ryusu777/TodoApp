@@ -1,5 +1,5 @@
 using Library.Models;
 
-namespace AuthContext.Application.User.Events;
+namespace AuthContext.Domain.User.Events;
 
 public record UserCreated(Domain.User.User User) : IDomainEvent;
