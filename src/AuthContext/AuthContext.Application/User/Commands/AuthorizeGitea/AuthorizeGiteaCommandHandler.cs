@@ -39,10 +39,10 @@ public class AuthorizeGiteaCommandHandler : ICommandHandler<AuthorizeGiteaComman
         Domain.User.ValueObjects.Email userEmail = Domain.User.ValueObjects.Email.Create(result.Value.Email);
 
         if (foundUser.Error == UserDomainError.UserNotFound)
-            return await OnboardUser(username, userEmail, cancellationToken);
+            return await RegisterUnOnboardedUser(username, userEmail, cancellationToken);
 
         if (!await _authService.IsUserOnboarded(username.Value, cancellationToken))
-            return await ReOnboardUser(username, userEmail, cancellationToken);
+            return await ReRegisterUnOnboardedUser(username, userEmail, cancellationToken);
 
         var authResult = await _authService.SignInAsync(username.Value, cancellationToken);
         
@@ -57,7 +57,7 @@ public class AuthorizeGiteaCommandHandler : ICommandHandler<AuthorizeGiteaComman
         ));
     }
 
-    private async Task<Result<AuthorizeGiteaResult>> ReOnboardUser(
+    private async Task<Result<AuthorizeGiteaResult>> ReRegisterUnOnboardedUser(
         UserId username, Domain.User.ValueObjects.Email userEmail, CancellationToken ct
     )
     {
@@ -79,7 +79,7 @@ public class AuthorizeGiteaCommandHandler : ICommandHandler<AuthorizeGiteaComman
             ));
     }
 
-    private async Task<Result<AuthorizeGiteaResult>> OnboardUser(
+    private async Task<Result<AuthorizeGiteaResult>> RegisterUnOnboardedUser(
         UserId username, Domain.User.ValueObjects.Email userEmail, CancellationToken cancellationToken)
     {
         var registerResult = await _authService.RegisterUserAsync(
