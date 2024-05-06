@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { object, string } from 'yup';
-import { SignInWithGitea } from '~/domain/auth/api/authApi';
+import { SignIn, SignInWithGitea } from '~/domain/auth/api/authApi';
+import { useAuth } from '~/domain/auth/composables/useAuth';
 
 definePageMeta({
-  layout: false
+  layout: 'login'
 });
 
 const schema = object({
@@ -23,7 +24,29 @@ async function signInWithGitea() {
     window.location.replace(response.data);
 }
 
-async function submit() {}
+const toast = useToast();
+const authStore = useAuth();
+const router = useRouter();
+const apiUtils = useApiUtils();
+
+async function submit() {
+  apiUtils.try(() => SignIn({
+      username: state.username,
+      password: state.password
+    }),
+    async (loginResponse) => {
+      authStore.setTokens(loginResponse.data?.access_token!, loginResponse.data?.refresh_token!);
+      await router.replace('/')
+    },
+    (errorDescription) => {
+      toast.add({
+        title: 'Error',
+        description: errorDescription,
+        color: 'red'
+      });
+    }
+  )
+}
 
 </script>
 
@@ -61,6 +84,7 @@ async function submit() {}
 
           <UButton 
             label="Login"
+            type="submit"
             class="justify-center gap-x-3 mt-3"
           />
 
