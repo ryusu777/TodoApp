@@ -9,14 +9,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const authCode = to.query.code ?? "";
 
   const { data: authorizeResult } = await useAsyncData(() => AuthorizeGitea(authCode as string));
-
+    
   if (authorizeResult.value?.errorDescription) {
     toast.add({
       title: 'Failed',
       description: authorizeResult.value?.errorDescription,
       color: 'red'
     });
-    return navigateTo('/login');
+    return '/login';
   }
 
   else if (authorizeResult.value?.data?.authResult) {
@@ -25,10 +25,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
       authorizeResult.value.data?.authResult.refresh_token
     );
 
-    return navigateTo('/');
+    return '/';
   }
   else if (authorizeResult.value?.data?.onboardInformation) {
-    return navigateTo('/onboard-user');
+    const username = encodeURIComponent(authorizeResult.value.data.onboardInformation.username);
+    const email = encodeURIComponent(authorizeResult.value.data.onboardInformation.email);
+    const passwordToken = encodeURIComponent(authorizeResult.value.data.onboardInformation.passwordChangeToken);
+    const query = `username=${username}&email=${email}&passwordToken=${passwordToken}`;
+    return '/onboard-user?' + query;
   }
 
   return;
