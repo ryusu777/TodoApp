@@ -22,7 +22,7 @@ namespace AuthContext.Infrastructure;
 public static class InfrastructureInstaller
 {
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services, IConfiguration config)
+        this IServiceCollection services, IConfiguration config, Type tokenProvider)
     {
 		services
 		    .AddPersistMediator();
@@ -50,7 +50,7 @@ public static class InfrastructureInstaller
             .AddEntityFrameworkStores<AppDbContext>()
             .AddTokenProvider(TokenOptions.DefaultAuthenticatorProvider, authenticatorProviderType)
             .AddTokenProvider(TokenOptions.DefaultEmailProvider, emailTokenProviderType)
-            .AddTokenProvider(TokenOptions.DefaultProvider, authenticatorProviderType);
+            .AddTokenProvider(TokenOptions.DefaultProvider, tokenProvider.MakeGenericType(typeof(AppIdentityUser)));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();

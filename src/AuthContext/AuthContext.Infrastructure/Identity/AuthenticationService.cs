@@ -182,8 +182,9 @@ public class AuthenticationService : IAuthenticationService
     public async Task<Result<string>> RequestChangePasswordAsync(string username, CancellationToken ct)
     {
         AppIdentityUser user = await _userManager.Users.FirstAsync(e => e.UserName == username, ct);
+        var result = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-        return Result.Success(await _userManager.GeneratePasswordResetTokenAsync(user));
+        return Result.Success(result);
     }
 
     public async Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct)
@@ -260,5 +261,21 @@ public class AuthenticationService : IAuthenticationService
             return false;
 
         return await _userManager.HasPasswordAsync(user);
+    }
+
+    public async Task<Result> ChangePasswordAsync(string username, string newPassword, string passwordResetToken, CancellationToken ct)
+    {
+        var user = await _userManager
+            .Users
+            .FirstOrDefaultAsync(e => e.UserName == username);
+
+        if (user is null)
+            return UserDomainError.UserNotFound;
+
+        var result = await _userManager.ResetPasswordAsync(user, passwordResetToken, newPassword);
+        if (!result.Succeeded)
+            return Result.Failure(new Error(result.Errors.First().Code, result.Errors.First().Description));
+
+        return Result.Success();
     }
 }

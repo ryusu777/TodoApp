@@ -3,6 +3,7 @@ using AuthContext.Application;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FastEndpoints.Security;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,7 @@ builder.Services.SwaggerDocument(opt =>
     };
 });
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration, typeof(DataProtectorTokenProvider<>));
 builder.Services.AddAuthenticationJwtBearer(e => e.SigningKey = "Secrets");
 builder.Services.AddAuthorization();
 builder.Services.AddCors(opt => {

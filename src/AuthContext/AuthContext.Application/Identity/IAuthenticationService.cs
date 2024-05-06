@@ -34,6 +34,12 @@ public interface IAuthenticationService
         string username, 
         CancellationToken ct);
 
+    public Task<Result> ChangePasswordAsync(
+        string username, 
+        string newPassword,
+        string passwordResetToken,
+        CancellationToken ct);
+
     public Task<Result<Uri>> GetGiteaAuthProviderUrl(Guid state, CancellationToken ct);
 
     public Task<Result<GrantAccessTokenResponse>> GrantGiteaAccessToken(string code, CancellationToken ct);
