@@ -28,11 +28,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo('/');
   }
   else if (authorizeResult.value?.data?.onboardInformation) {
-    authStore.setCurrentOnboardment(
-      authorizeResult.value.data.onboardInformation.username,
-      authorizeResult.value.data.onboardInformation.email,
-      authorizeResult.value.data.onboardInformation.passwordChangeToken,
-    );
     return navigateTo('/onboard-user');
   }
 
