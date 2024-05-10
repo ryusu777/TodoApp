@@ -1,4 +1,5 @@
 using IntegrationContext.Application.Abstractions.Messaging;
+using IntegrationContext.Application.Pagination.Models;
 using Library.Models;
 
 namespace IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
@@ -16,7 +17,7 @@ public class GetGiteaRepositoryHandler : IQueryHandler<GetGiteaRepositoryQuery, 
     {
         var result = await _giteaRepoService.GetGiteaRepositoriesAsync(
             request.SearchText,
-            request.Page,
+            new Paging(request.ItemPerPage, request.Page),
             cancellationToken
         );
 
