@@ -4,9 +4,9 @@ namespace IntegrationContext.Domain.GiteaIssues.ValueObjects;
 
 public class ProjectId : ValueObject
 {
-    public Guid Value { get; init; }
+    public string Value { get; init; }
 
-    private ProjectId(Guid value)
+    private ProjectId(string value)
     {
         Value = value;
     }
@@ -14,7 +14,7 @@ public class ProjectId : ValueObject
     {
         yield return Value;
     }
-    public static ProjectId Create(Guid value) 
+    public static ProjectId Create(string value) 
     {
         return new(value);
     }
