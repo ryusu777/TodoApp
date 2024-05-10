@@ -8,7 +8,6 @@ using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Infrastructure.Auth.Contracts.GrantAccessToken;
 using IntegrationContext.Infrastructure.Auth.Contracts.RefreshAccessToken;
 using Library.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 

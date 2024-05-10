@@ -14,7 +14,7 @@ public interface IGiteaRepositoryService
         CancellationToken ct
     );
 
-    public Task<Result<ICollection<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(
+    public Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(
         string searchText,
         Paging? page,
         CancellationToken ct
