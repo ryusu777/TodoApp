@@ -16,6 +16,7 @@ services:
       dockerfile: ./ProjectManagement/Dockerfile
     environment:
       - ConnectionStrings__AppDbContext
+      - JwtOptions__SecretKey
 
   integration-context:
     depends_on: 
@@ -26,6 +27,7 @@ services:
     environment:
       - ConnectionStrings__AppDbContext
       - ClientUrl
+      - JwtOptions__SecretKey
 
   auth-context:
     depends_on: 
@@ -35,6 +37,7 @@ services:
       dockerfile: ./AuthContext/Dockerfile
     environment:
       - ConnectionStrings__AppDbContext
+      - JwtOptions__SecretKey
 
   api-gateway:
     depends_on:
