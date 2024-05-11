@@ -2,6 +2,9 @@ using IntegrationContext.Application.GiteaRepositories.Dtos;
 
 namespace IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
 
-public record GetGiteaRepositoryResult(
-    ICollection<GiteaRepositoryDto> Repositories
-);
+public class GetGiteaRepositoryResult : List<GiteaRepositoryDto>
+{
+    public GetGiteaRepositoryResult(IEnumerable<GiteaRepositoryDto> collection) : base(collection)
+    {
+    }
+}
