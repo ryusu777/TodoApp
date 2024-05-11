@@ -1,5 +1,6 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
+using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaIssues.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.Events;

@@ -1,6 +1,6 @@
 using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Application.Pagination.Models;
-using IntegrationContext.Domain.GiteaIssues.ValueObjects;
+using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Library.Models;
 
 namespace IntegrationContext.Application.GiteaRepositories;
