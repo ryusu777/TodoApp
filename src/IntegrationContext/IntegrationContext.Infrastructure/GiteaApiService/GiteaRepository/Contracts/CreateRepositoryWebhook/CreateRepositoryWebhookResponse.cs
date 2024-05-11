@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace IntegrationContext.Infrastructure.Gitea.Services.GiteaRepository.Contracts.CreateRepositoryWebhook;
+namespace IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.CreateRepositoryWebhook;
 
 public class CreateRepositoryWebhookResponse
 {

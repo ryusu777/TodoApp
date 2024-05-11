@@ -3,14 +3,14 @@ using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Application.Pagination.Models;
-using IntegrationContext.Domain.GiteaIssues.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
-using IntegrationContext.Infrastructure.Gitea.Services.GiteaRepository.Contracts.CreateRepositoryWebhook;
-using IntegrationContext.Infrastructure.Gitea.Services.GiteaRepository.Contracts.GetRepositories;
+using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
+using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.CreateRepositoryWebhook;
+using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.GetRepositories;
 using Library.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace IntegrationContext.Infrastructure.Gitea.Services.GiteaRepository;
+namespace IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository;
 
 public class GiteaRepositoryService : IGiteaRepositoryService
 {
