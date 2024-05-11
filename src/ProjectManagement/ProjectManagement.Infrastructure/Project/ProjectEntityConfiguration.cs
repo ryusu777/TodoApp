@@ -22,6 +22,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
 
         builder.Property(e => e.Id)
             .ValueGeneratedNever()
+            .HasMaxLength(30)
             .HasConversion(
                 id => id.Value,
                 value => ProjectId.Create(value));
