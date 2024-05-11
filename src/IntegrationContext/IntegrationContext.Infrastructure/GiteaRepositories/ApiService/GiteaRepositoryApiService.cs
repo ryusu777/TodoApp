@@ -16,17 +16,19 @@ namespace IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 
 public class GiteaRepositoryService : IGiteaRepositoryService
 {
-    public const string CLIENT_NAME = "gitea";
+    public const string CLIENT_NAME = "gitea-api";
 
     private readonly IHttpClientFactory _httpFactory;
     private readonly IUserRepository _userRepository;
+    private readonly IGiteaAuthenticationService _authService;
     private readonly string _issueHookUrl;
     private readonly string _hookAuthToken;
 
     public GiteaRepositoryService(
-		IConfiguration config,
-        IHttpClientFactory httpFactory, 
-        IUserRepository userRepository)
+        IConfiguration config,
+        IHttpClientFactory httpFactory,
+        IUserRepository userRepository,
+        IGiteaAuthenticationService authService)
     {
         _httpFactory = httpFactory;
         _userRepository = userRepository;
@@ -38,9 +40,10 @@ public class GiteaRepositoryService : IGiteaRepositoryService
         var hookAuthToken = config["Hooks:AuthToken"];
         if (hookAuthToken is null)
             throw new ArgumentNullException("Please set configuration for Hooks:AuthToken");
-        
+
         _issueHookUrl = hookUrl;
         _hookAuthToken = hookAuthToken;
+        _authService = authService;
     }
 
     public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
@@ -73,9 +76,15 @@ public class GiteaRepositoryService : IGiteaRepositoryService
         ));
     }
 
-    public async Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(string searchText, Paging? page, CancellationToken ct)
+    public async Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(UserId userId, string searchText, Paging? page, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        var userJwt = await _authService.GetUserJwt(userId, ct);
+        if (userJwt.IsFailure || userJwt.Value is null)
+            return Result.Failure<List<GiteaRepositoryDto>>(userJwt.Error);
+
+        client.DefaultRequestHeaders.Add("Authorization", "token " + userJwt.Value);
 
         var response = await client
             .GetFromJsonAsync<GetRepositoriesResponse>("repos/search?" +

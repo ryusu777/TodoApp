@@ -23,6 +23,7 @@ public interface IGiteaRepositoryService
     );
 
     public Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(
+        UserId user,
         string searchText,
         Paging? page,
         CancellationToken ct

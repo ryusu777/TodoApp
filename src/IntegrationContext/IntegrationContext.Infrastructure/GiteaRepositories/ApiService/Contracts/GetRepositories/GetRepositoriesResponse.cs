@@ -25,7 +25,7 @@ public class GetRepositoriesResponse
     }
 
     [JsonPropertyName("ok")]
-    public required string Ok { get; set; }
+    public required bool Ok { get; set; }
 
     [JsonPropertyName("data")]
     public required ICollection<Repository> Data { get; set; }
