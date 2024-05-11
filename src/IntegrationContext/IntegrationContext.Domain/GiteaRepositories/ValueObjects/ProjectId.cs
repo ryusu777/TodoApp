@@ -1,6 +1,6 @@
 using Library.Models;
 
-namespace IntegrationContext.Domain.GiteaIssues.ValueObjects;
+namespace IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 
 public class ProjectId : ValueObject
 {

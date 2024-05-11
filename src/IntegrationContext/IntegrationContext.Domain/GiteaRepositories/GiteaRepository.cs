@@ -1,4 +1,4 @@
-using IntegrationContext.Domain.GiteaIssues.ValueObjects;
+using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Library.Models;
 
