@@ -59,6 +59,18 @@
           "Port": 80
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/integration/{everything}",
+      "UpstreamHttpMethod": ["Get", "Post", "Put", "Delete"],
+      "DownstreamPathTemplate": "/api/integration/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "integration-context",
+          "Port": 80
+        }
+      ]
     }
   ]
 }
