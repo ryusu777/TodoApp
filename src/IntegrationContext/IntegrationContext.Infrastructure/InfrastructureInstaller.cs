@@ -59,7 +59,7 @@ public static class InfrastructureInstaller
 
         services.AddHttpClient(GiteaAuthenticationService.CLIENT_NAME, (serviceProvider, httpClient) =>
         {
-            httpClient.BaseAddress = new Uri(config["GiteaUrl"]!);
+            httpClient.BaseAddress = new Uri(config["GiteaUrl"]! + "/api/v1");
         });
 
         services.AddHttpContextAccessor();
