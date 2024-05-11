@@ -10,7 +10,7 @@ using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contract
 using Library.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository;
+namespace IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 
 public class GiteaRepositoryService : IGiteaRepositoryService
 {

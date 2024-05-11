@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.GetRepositories;
+namespace IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.GetRepositories;
 
 public class GetRepositoriesResponse
 {

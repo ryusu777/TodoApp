@@ -4,7 +4,7 @@ using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Infrastructure.Auth;
-using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository;
+using IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 using IntegrationContext.Infrastructure.GiteaUsers;
 using IntegrationContext.Infrastructure.Persistence;
 using IntegrationContext.Infrastructure.Persistence.Data;
