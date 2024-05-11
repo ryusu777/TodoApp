@@ -4,6 +4,7 @@ using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Infrastructure.Auth;
+using IntegrationContext.Infrastructure.GiteaRepositories;
 using IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 using IntegrationContext.Infrastructure.GiteaUsers;
 using IntegrationContext.Infrastructure.Persistence;
@@ -28,6 +29,7 @@ public static class InfrastructureInstaller
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IGiteaAuthenticationService, GiteaAuthenticationService>();
         services.AddScoped<IGiteaRepositoryService, GiteaRepositoryService>();
+        services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddDbContext<AppDbContext>(opt =>
         {

@@ -4,4 +4,5 @@ public static class GiteaRepositoriesRoutes
 {
     public const string AttachRepository = "/attach-repository";
     public const string GiteaRepositories = "/gitea-repository";
+    public const string ProjectRepositories = "/repository";
 }
