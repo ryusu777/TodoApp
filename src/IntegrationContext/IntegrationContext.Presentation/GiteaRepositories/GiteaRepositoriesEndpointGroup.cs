@@ -8,8 +8,6 @@ public class GiteaRepositoriesEndpointGroup : Group
     public GiteaRepositoriesEndpointGroup()
     {
         Configure(GlobalEndpointRoutes.ApiPrefix, ep => 
-        {
-            ep.AllowAnonymous();
-        }); 
+        { }); 
     }
 }
