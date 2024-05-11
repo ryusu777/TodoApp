@@ -5,7 +5,7 @@ using IntegrationContext.Infrastructure.Persistence.Data;
 namespace IntegrationContext.Infrastructure.GiteaRepositories;
 
 public class GiteaRepositoryPersistHandler
-    : IPersistEventHandler<RepositoryHookCreated>
+    : IPersistEventHandler<GiteaRepositoryCreated>
 {
     private readonly AppDbContext _context;
 
@@ -14,7 +14,7 @@ public class GiteaRepositoryPersistHandler
         _context = context;
     }
 
-    public Task Handle(RepositoryHookCreated notification, AppDbContext dbContext, CancellationToken cancellationToken)
+    public Task Handle(GiteaRepositoryCreated notification, AppDbContext dbContext, CancellationToken cancellationToken)
     {
         _context.GiteaRepositories.Add(notification.GiteaRepository);
         return Task.CompletedTask;

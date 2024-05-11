@@ -1,8 +1,8 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
 using IntegrationContext.Domain.Auth.ValueObjects;
-using IntegrationContext.Domain.GiteaIssues.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
+using IntegrationContext.Domain.GiteaRepositories.Entities;
 using IntegrationContext.Domain.GiteaRepositories.Events;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Library.Models;
@@ -24,6 +24,16 @@ public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCo
     {
         ProjectId projectId = ProjectId.Create(request.ProjectId);
 
+        var repository = await _repoService
+            .GetGiteaRepositoryByOwnerAsync(
+                UserId.Create(request.RepoOwner),
+                request.RepoName,
+                cancellationToken
+            );
+
+        if (repository.IsFailure || repository.Value is null)
+            return repository.Error;
+
         var createHookResult = await _repoService
             .CreateRepositoryHookAsync(
                 projectId,
@@ -32,17 +42,21 @@ public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCo
                 cancellationToken
             );
 
-        if (createHookResult.IsFailure)
+        if (createHookResult.IsFailure || createHookResult.Value is null)
             return createHookResult.Error;
 
         var entity = GiteaRepository.Create(
-            GiteaRepositoryId.Create(createHookResult.Value),
+            GiteaRepositoryId.Create(repository.Value.Id),
             projectId,
             UserId.Create(request.RepoOwner),
-            request.RepoName
+            request.RepoName,
+            new RepositoryHook[] 
+            {
+                createHookResult.Value
+            }
         );
 
-        entity.RaiseDomainEvent(new RepositoryHookCreated(entity));
+        entity.RaiseDomainEvent(new GiteaRepositoryCreated(entity));
 
         return await _unitOfWork.SaveChangesAsync(entity.DomainEvents, cancellationToken);
     }

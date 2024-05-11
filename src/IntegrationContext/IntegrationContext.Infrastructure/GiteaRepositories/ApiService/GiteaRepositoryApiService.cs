@@ -3,10 +3,12 @@ using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Application.Pagination.Models;
+using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
+using IntegrationContext.Domain.GiteaRepositories.Entities;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
-using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.CreateRepositoryWebhook;
-using IntegrationContext.Infrastructure.GiteaApiService.GiteaRepository.Contracts.GetRepositories;
+using IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.CreateRepositoryWebhook;
+using IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.GetRepositories;
 using Library.Models;
 using Microsoft.Extensions.Configuration;
 
@@ -41,7 +43,7 @@ public class GiteaRepositoryService : IGiteaRepositoryService
         _hookAuthToken = hookAuthToken;
     }
 
-    public async Task<Result<int>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
+    public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
@@ -61,9 +63,14 @@ public class GiteaRepositoryService : IGiteaRepositoryService
         var response = await result.Content.ReadFromJsonAsync<CreateRepositoryWebhookResponse>();
 
         if (response is null || !result.IsSuccessStatusCode)
-            return Result.Failure<int>(GiteaRepositoryDomainError.FailedToCreateGiteaRepositoryHook);
+            return Result.Failure<RepositoryHook>(GiteaRepositoryDomainError.FailedToCreateGiteaRepositoryHook);
 
-        return Result.Success(response.Id);
+        return Result.Success(RepositoryHook.Create(
+            RepositoryHookId.Create(response.Id),
+            new Uri(response.Config.Url),
+            response.Events.Select(e => HookEvent.Create(e)).ToList(),
+            response.Active
+        ));
     }
 
     public async Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(string searchText, Paging? page, CancellationToken ct)
@@ -81,8 +88,26 @@ public class GiteaRepositoryService : IGiteaRepositoryService
 
         return Result
             .Success(response.Data
-                .Select(e => new GiteaRepositoryDto(e.RepoOwner, e.RepoName))
+                .Select(e => new GiteaRepositoryDto(e.Id, e.RepoOwner, e.RepoName))
                 .ToList());
+    }
+
+    public async Task<Result<GiteaRepositoryDto>> GetGiteaRepositoryByOwnerAsync(UserId owner, string repoName, CancellationToken ct)
+    {
+        var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        var response = await client
+            .GetFromJsonAsync<GetRepositoryByOwnerResponse>($"repos/{owner.Value}/{repoName}");
+
+        if (response is null)
+            return Result.Failure<GiteaRepositoryDto>(GiteaRepositoryDomainError.FailedToGetGiteaRepositories);
+
+        return Result
+            .Success(new GiteaRepositoryDto(
+                response.Id,
+                response.RepoOwner,
+                response.RepoName
+            ));
     }
 }
 
