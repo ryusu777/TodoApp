@@ -1,5 +1,6 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
+using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Pagination.Models;
 using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
@@ -12,16 +13,18 @@ public class GetGiteaRepositoryHandler : IQueryHandler<GetGiteaRepositoryQuery, 
 {
     private readonly IGiteaRepositoryService _giteaRepoService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IGiteaUserDomainService _userDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public GetGiteaRepositoryHandler(IGiteaRepositoryService giteaRepoService, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
-    {
-        _giteaRepoService = giteaRepoService;
-        _httpContextAccessor = httpContextAccessor;
-        _unitOfWork = unitOfWork;
-    }
+	public GetGiteaRepositoryHandler(IGiteaRepositoryService giteaRepoService, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService)
+	{
+		_giteaRepoService = giteaRepoService;
+		_httpContextAccessor = httpContextAccessor;
+		_unitOfWork = unitOfWork;
+		_userDomainService = userDomainService;
+	}
 
-    public async Task<Result<GetGiteaRepositoryResult>> Handle(GetGiteaRepositoryQuery request, CancellationToken cancellationToken)
+	public async Task<Result<GetGiteaRepositoryResult>> Handle(GetGiteaRepositoryQuery request, CancellationToken cancellationToken)
     {
         var userId = _httpContextAccessor
             .HttpContext
@@ -33,8 +36,13 @@ public class GetGiteaRepositoryHandler : IQueryHandler<GetGiteaRepositoryQuery, 
         if (userId is null)
             return Result.Failure<GetGiteaRepositoryResult>(AuthDomainError.GiteaUserNotAuthenticated);
 
+        var user = await _userDomainService.GetOrRefreshJwt(UserId.Create(userId), cancellationToken);
+
+        if (user.IsFailure || user.Value is null || user.Value.JwtToken is null)
+            return Result.Failure<GetGiteaRepositoryResult>(user.Error);
+
         var result = await _giteaRepoService.GetGiteaRepositoriesAsync(
-            UserId.Create(userId),
+            user.Value.JwtToken,
             request.SearchText,
             new Paging(request.ItemPerPage, request.Page),
             cancellationToken
@@ -43,7 +51,7 @@ public class GetGiteaRepositoryHandler : IQueryHandler<GetGiteaRepositoryQuery, 
         if (result.IsFailure || result.Value is null)
             return Result.Failure<GetGiteaRepositoryResult>(result.Error);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(user.Value.DomainEvents, cancellationToken);
         return Result.Success(new GetGiteaRepositoryResult(result.Value));
     }
 }

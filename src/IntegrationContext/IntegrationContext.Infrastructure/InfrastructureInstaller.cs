@@ -31,6 +31,7 @@ public static class InfrastructureInstaller
         services.AddScoped<IGiteaRepositoryService, GiteaRepositoryService>();
         services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
         services.AddDbContext<AppDbContext>(opt =>
         {
             //opt.UseInMemoryDatabase("InMemoryDb");

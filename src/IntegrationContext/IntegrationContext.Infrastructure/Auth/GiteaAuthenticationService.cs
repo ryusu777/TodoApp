@@ -1,11 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
-using System.Security.Claims;
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Domain.Auth;
-using IntegrationContext.Domain.Auth.Events;
 using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Infrastructure.Auth.Contracts.GrantAccessToken;
 using IntegrationContext.Infrastructure.Auth.Contracts.RefreshAccessToken;
@@ -78,9 +75,7 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
 
         return Result.Success(new GiteaAuthenticationResult(
             JwtToken.Create(credential.access_token),
-            RefreshToken.Create(credential.refresh_token),
-            GetExpiredDateTime(credential.access_token).Value,
-            GetExpiredDateTime(credential.refresh_token).Value
+            RefreshToken.Create(credential.refresh_token)
 		));
     }
 
@@ -104,7 +99,7 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
         var result = await client.PostAsJsonAsync("/login/oauth/access_token", new RefreshAccessTokenRequest(
             _credentials.ClientId,
             _credentials.ClientSecret,
-            "authorization_code",
+            "refresh_token",
             refreshToken.Value
         ), ct);
 
@@ -116,9 +111,7 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
 
         return Result.Success(new GiteaAuthenticationResult(
             JwtToken.Create(credential.access_token),
-            RefreshToken.Create(credential.refresh_token),
-            GetExpiredDateTime(credential.access_token).Value,
-            GetExpiredDateTime(credential.refresh_token).Value
+            RefreshToken.Create(credential.refresh_token)
 		));
     }
 
@@ -136,61 +129,6 @@ public class GiteaAuthenticationService : IGiteaAuthenticationService
                 .Failure<GiteaAuthenticatedUser>(AuthDomainError.FailedToFetchGiteaUser);
 
         return Result.Success(result);
-    }
-
-    public Result<DateTime> GetExpiredDateTime(string token)
-    {
-        var handler = new JwtSecurityTokenHandler();
-
-        JwtSecurityToken readToken = handler.ReadJwtToken(token);
-
-        Claim? expClaim = readToken
-            .Claims
-            .FirstOrDefault(e => e.Type == JwtRegisteredClaimNames.Exp);
-
-        if (expClaim is null)
-            return Result.Failure<DateTime>(AuthDomainError.InvalidToken);
-
-        return Result.Success(readToken.ValidTo);
-    }
-
-    public async Task<Result<string>> GetUserJwt(UserId userId, CancellationToken ct)
-    {
-        var user = await _userRepository.GetGiteaUserByUsername(userId, ct);
-
-        if (user.IsFailure || user.Value is null)
-            return Result.Failure<string>(user.Error);
-
-        if (user.Value.JwtToken is null || user.Value.RefreshToken is null)
-            return Result.Failure<string>(AuthDomainError.GiteaUserNotAuthenticated);
-
-        var userJwtExpiryDate = GetExpiredDateTime(user.Value.JwtToken.Value);
-
-        if (userJwtExpiryDate.IsFailure)
-            return Result.Failure<string>(userJwtExpiryDate.Error);
-
-        var userRefreshTokenExpiryDate = GetExpiredDateTime(user.Value.RefreshToken.Value ?? "");
-
-        if (userRefreshTokenExpiryDate.IsFailure)
-            return Result.Failure<string>(userRefreshTokenExpiryDate.Error);
-
-        if (userJwtExpiryDate.Value > DateTime.UtcNow)
-            return Result.Success(user.Value.JwtToken.Value);
-
-        if (userJwtExpiryDate.Value <= DateTime.UtcNow && userRefreshTokenExpiryDate.Value > DateTime.UtcNow)
-        {
-            var refreshTokenResult = await RefreshTokenAsync(userId, ct);
-
-            if (refreshTokenResult.IsFailure || refreshTokenResult.Value is null)
-                return Result.Failure<string>(refreshTokenResult.Error);
-
-            _unitOfWork.AddEventQueue(new AccessTokenGranted(
-                refreshTokenResult.Value.JwtToken, refreshTokenResult.Value.RefreshToken));
-
-            return Result.Success(refreshTokenResult.Value.JwtToken.Value);
-        }
-        
-        return Result.Failure<string>(AuthDomainError.GiteaUserNotAuthenticated);
     }
 }
 

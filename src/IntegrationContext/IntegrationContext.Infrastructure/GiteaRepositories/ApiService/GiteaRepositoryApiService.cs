@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Application.GiteaRepositories.Dtos;
@@ -21,32 +22,35 @@ public class GiteaRepositoryService : IGiteaRepositoryService
     private readonly IHttpClientFactory _httpFactory;
     private readonly IUserRepository _userRepository;
     private readonly IGiteaAuthenticationService _authService;
+    private readonly IGiteaUserDomainService _userDomainService;
     private readonly string _issueHookUrl;
     private readonly string _hookAuthToken;
 
-    public GiteaRepositoryService(
-        IConfiguration config,
-        IHttpClientFactory httpFactory,
-        IUserRepository userRepository,
-        IGiteaAuthenticationService authService)
-    {
-        _httpFactory = httpFactory;
-        _userRepository = userRepository;
+	public GiteaRepositoryService(
+		IConfiguration config,
+		IHttpClientFactory httpFactory,
+		IUserRepository userRepository,
+		IGiteaAuthenticationService authService,
+		IGiteaUserDomainService userDomainService)
+	{
+		_httpFactory = httpFactory;
+		_userRepository = userRepository;
 
-        var hookUrl = config["Hooks:Issue"];
-        if (hookUrl is null)
-            throw new ArgumentNullException("Please set configuration for Hooks:Issue");
+		var hookUrl = config["Hooks:Issue"];
+		if (hookUrl is null)
+			throw new ArgumentNullException("Please set configuration for Hooks:Issue");
 
-        var hookAuthToken = config["Hooks:AuthToken"];
-        if (hookAuthToken is null)
-            throw new ArgumentNullException("Please set configuration for Hooks:AuthToken");
+		var hookAuthToken = config["Hooks:AuthToken"];
+		if (hookAuthToken is null)
+			throw new ArgumentNullException("Please set configuration for Hooks:AuthToken");
 
-        _issueHookUrl = hookUrl;
-        _hookAuthToken = hookAuthToken;
-        _authService = authService;
-    }
+		_issueHookUrl = hookUrl;
+		_hookAuthToken = hookAuthToken;
+		_authService = authService;
+		_userDomainService = userDomainService;
+	}
 
-    public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
+	public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
@@ -76,15 +80,12 @@ public class GiteaRepositoryService : IGiteaRepositoryService
         ));
     }
 
-    public async Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(UserId userId, string searchText, Paging? page, CancellationToken ct)
+    public async Task<Result<List<GiteaRepositoryDto>>> GetGiteaRepositoriesAsync(
+        JwtToken jwt, string? searchText, Paging? page, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
-        var userJwt = await _authService.GetUserJwt(userId, ct);
-        if (userJwt.IsFailure || userJwt.Value is null)
-            return Result.Failure<List<GiteaRepositoryDto>>(userJwt.Error);
-
-        client.DefaultRequestHeaders.Add("Authorization", "token " + userJwt.Value);
+        client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var response = await client
             .GetFromJsonAsync<GetRepositoriesResponse>("repos/search?" +

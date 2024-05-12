@@ -37,9 +37,7 @@ public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand>
         userResult.Value
             .RefreshTokens(
                 newTokens.JwtToken,
-                newTokens.RefreshToken,
-                newTokens.JwtTokenExpiresAt,
-                newTokens.RefreshTokenExpiresAt);
+                newTokens.RefreshToken);
 
         return await _unitOfWork.SaveChangesAsync(userResult.Value.DomainEvents, cancellationToken);
     }

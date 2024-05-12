@@ -65,16 +65,9 @@ public class GrantAccessTokenConsumer : IConsumer<GrantAccessTokenRequest>
         }
         else if (foundUser.Value is not null)
         {
-            Result<DateTime> jwtExpiry = _giteaAuthService
-                .GetExpiredDateTime(grantResult.Value.JwtToken.Value);
-            Result<DateTime> refreshTokenExpiry = _giteaAuthService
-                .GetExpiredDateTime(grantResult.Value.RefreshToken.Value);
-
             foundUser.Value.RefreshTokens(
                 grantResult.Value.JwtToken,
-                grantResult.Value.RefreshToken,
-                jwtExpiry.Value,
-                refreshTokenExpiry.Value
+                grantResult.Value.RefreshToken
             );
 
             _unitOfWork.AddEventsQueue(foundUser.Value.DomainEvents);

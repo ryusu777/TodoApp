@@ -10,6 +10,4 @@ public interface IGiteaAuthenticationService
     public Task<Result<GiteaAuthenticationResult>> GrantAccessTokenAsync(string verifyCode, CancellationToken ct);
     public Task<Result<GiteaClientCredentials>> GetClientCredentials(CancellationToken ct);
     public Task<Result<GiteaAuthenticatedUser>> GetAuthenticatedUser(JwtToken token, CancellationToken ct);
-    public Result<DateTime> GetExpiredDateTime(string token);
-    public Task<Result<string>> GetUserJwt(UserId userId, CancellationToken ct);
 }
