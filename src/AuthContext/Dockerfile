@@ -17,7 +17,7 @@ COPY ./AuthContext/ ./AuthContext/
 COPY ./Library/ ./Library/
 COPY ./MassTransitContracts/ ./MassTransitContracts/
 WORKDIR /App/AuthContext
-RUN dotnet publish ./AuthContext.Presentation/AuthContext.Presentation.csproj -c Release -o out
+RUN dotnet publish ./AuthContext.Presentation/AuthContext.Presentation.csproj -c Debug -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
