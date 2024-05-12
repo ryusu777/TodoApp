@@ -42,11 +42,5 @@ public class GiteaUserEntitiesConfiguration : IEntityTypeConfiguration<GiteaUser
                 token => token!.Value,
                 value => RefreshToken.Create(value)
             );
-
-        builder.Property(e => e.JwtExpiresAt)
-            .IsRequired(false);
-
-        builder.Property(e => e.RefreshTokenExpiresAt)
-            .IsRequired(false);
     }
 }

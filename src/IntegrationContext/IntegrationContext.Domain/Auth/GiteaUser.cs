@@ -20,8 +20,6 @@ public class GiteaUser : AggregateRoot<GiteaUserId>
     public UserId UserId { get; private set; }
     public JwtToken? JwtToken { get; private set; }
     public RefreshToken? RefreshToken { get; private set; }
-    public DateTime? JwtExpiresAt { get; private set; }
-    public DateTime? RefreshTokenExpiresAt { get; private set; }
 
     public static GiteaUser Create(
         GiteaUserId id,
@@ -32,14 +30,10 @@ public class GiteaUser : AggregateRoot<GiteaUserId>
 
     public void RefreshTokens(
         JwtToken jwtToken, 
-        RefreshToken refreshToken,
-        DateTime jwtExpiresAt,
-        DateTime refreshTokenExpiresAt)
+        RefreshToken refreshToken)
     {
         JwtToken = jwtToken;
         RefreshToken = refreshToken;
-        JwtExpiresAt = jwtExpiresAt;
-        RefreshTokenExpiresAt = refreshTokenExpiresAt;
 
         RaiseDomainEvent(new GiteaUserTokenRefreshed(this));
     }
