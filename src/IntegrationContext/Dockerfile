@@ -17,7 +17,7 @@ COPY ./IntegrationContext/ ./IntegrationContext/
 COPY ./Library/ ./Library/
 COPY ./MassTransitContracts/ ./MassTransitContracts/
 WORKDIR /App/IntegrationContext
-RUN dotnet publish ./IntegrationContext.Presentation/IntegrationContext.Presentation.csproj -c Release -o out
+RUN dotnet publish ./IntegrationContext.Presentation/IntegrationContext.Presentation.csproj -c Debug -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
