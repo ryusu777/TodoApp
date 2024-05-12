@@ -7,5 +7,4 @@ public record GetGiteaRepositoriesResponse(
     string? ErrorCode,
     string? ErrorDescription,
     GetGiteaRepositoryResult? Data
-)
-: IApiResponse<GetGiteaRepositoryResult>;
+) : IApiResponse<GetGiteaRepositoryResult>;
