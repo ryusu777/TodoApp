@@ -50,12 +50,14 @@ public class GiteaRepositoryService : IGiteaRepositoryService
 		_userDomainService = userDomainService;
 	}
 
-	public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
+	public async Task<Result<RepositoryHook>> CreateRepositoryHookAsync(JwtToken jwt, ProjectId projectId, string RepoOwner, string RepoName, CancellationToken ct)
     {
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
+        client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
+
         var result = await client.PostAsJsonAsync(
-            $"/repos/{RepoOwner}/{RepoName}/hooks", 
+            $"repos/{RepoOwner}/{RepoName}/hooks", 
             new CreateRepositoryWebhookRequest
             {
                 AuthorizationHeader = _hookAuthToken,

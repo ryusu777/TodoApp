@@ -10,6 +10,7 @@ namespace IntegrationContext.Application.GiteaRepositories;
 public interface IGiteaRepositoryService
 {
     public Task<Result<RepositoryHook>> CreateRepositoryHookAsync(
+        JwtToken jwt,
         ProjectId projectId,
         string RepoOwner,
         string RepoName,
