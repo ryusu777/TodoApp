@@ -1,8 +1,9 @@
 <script setup lang="ts">
 definePageMeta({
   name: 'Home',
-  icon: 'i-heroicons-home'
-})
+  icon: 'i-heroicons-home',
+  middleware: 'authorization'
+});
 </script>
 
 <template>

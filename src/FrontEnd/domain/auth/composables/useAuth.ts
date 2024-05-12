@@ -12,8 +12,8 @@ export const useAuth = defineStore('auth', () => {
   }
 
   function clearAuth() {
-    jwtToken.value = undefined;
-    refreshToken.value = undefined;
+    jwtToken.value = null;
+    refreshToken.value = null;
   }
 
   function isAuthenticated() {
@@ -26,7 +26,9 @@ export const useAuth = defineStore('auth', () => {
     return true;
   }
 
-  function isTokenExpired(token: string) {
+  function isTokenExpired(token: string | undefined) {
+    if (!token)
+      return false;
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(

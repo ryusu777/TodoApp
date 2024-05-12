@@ -4,8 +4,14 @@ import { SignIn, SignInWithGitea } from '~/domain/auth/api/authApi';
 import { useAuth } from '~/domain/auth/composables/useAuth';
 
 definePageMeta({
-  layout: 'login'
+  layout: 'login',
+  name: 'login'
 });
+
+const router = useRouter();
+const authStore = useAuth();
+if (authStore.isAuthenticated())
+  router.replace('/');
 
 const schema = object({
   username: string().required('Username is required'),
@@ -30,8 +36,6 @@ async function signInWithGitea() {
 }
 
 const toast = useToast();
-const authStore = useAuth();
-const router = useRouter();
 const apiUtils = useApiUtils();
 
 async function submit() {
