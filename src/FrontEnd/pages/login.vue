@@ -17,8 +17,13 @@ const state = reactive({
   password: ''
 });
 
+const isSigningIn = ref(false);
+const isSigningInWithGitea = ref(false);
+
 async function signInWithGitea() {
+  isSigningInWithGitea.value = true;
   const response = await SignInWithGitea();
+  isSigningInWithGitea.value = false;
 
   if (response.data)
     window.location.replace(response.data);
@@ -30,15 +35,18 @@ const router = useRouter();
 const apiUtils = useApiUtils();
 
 async function submit() {
+  isSigningIn.value = true;
   apiUtils.try(() => SignIn({
       username: state.username,
       password: state.password
     }),
     async (loginResponse) => {
+      isSigningIn.value = false;
       authStore.setTokens(loginResponse.data?.access_token!, loginResponse.data?.refresh_token!);
       await router.replace('/')
     },
     (errorDescription) => {
+      isSigningIn.value = false;
       toast.add({
         title: 'Error',
         description: errorDescription,
@@ -86,6 +94,7 @@ async function submit() {
             label="Login"
             type="submit"
             class="justify-center gap-x-3 mt-3"
+            :loading="isSigningIn"
           />
 
           <UButton 
@@ -94,6 +103,7 @@ async function submit() {
             color="gray"
             class="justify-center gap-x-3"
             @click="signInWithGitea"
+            :loading="isSigningInWithGitea"
           >
             <template #leading>
               <img src="/public/gitea-logo.svg" class="h-[24px]" />
