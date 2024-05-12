@@ -2,11 +2,11 @@
 import { GetSubdomain } from '~/domain/subdomain/api/subdomainApi';
 import SubdomainKnowledges from '~/domain/subdomain/components/SubdomainKnowledges.vue';
 import Assignments from '~/domain/assignment/components/Assignments.vue';
-import type { ComponentPublicInstance } from 'vue';
 import type { ReuseTemplateComponent } from '@vueuse/core';
 
 definePageMeta({
-  disableBreadcrumb: true
+  disableBreadcrumb: true,
+  middleware: 'authorization'
 });
 
 const route = useRoute();

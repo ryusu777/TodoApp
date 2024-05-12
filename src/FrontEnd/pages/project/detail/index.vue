@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { GetProjectById } from '~/domain/project/api/projectApi';
 import ProjectPhases from '~/domain/project/components/ProjectPhases.vue';
 import ProjectMembers from '~/domain/project/components/ProjectMembers.vue';
 import { useProject } from '~/domain/project/composable/useProject';
 
 definePageMeta({
   name: 'Detail',
-  path: '/project/:id/detail'
+  path: '/project/:id/detail',
+  middleware: 'authorization'
 });
 
 const route = useRoute();

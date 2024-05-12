@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { GetProjectById } from '~/domain/project/api/projectApi';
 import { useProject } from '~/domain/project/composable/useProject';
 import Subdomains from '~/domain/subdomain/components/Subdomains.vue';
 
 definePageMeta({
   name: 'Project',
-  keepalive: true
+  keepalive: true,
+  middleware: 'authorization'
 })
 
 const route = useRoute();

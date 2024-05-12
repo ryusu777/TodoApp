@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
   name: 'Project List',
-  icon: 'heroicons:document-duplicate-20-solid'
+  icon: 'heroicons:document-duplicate-20-solid',
+  middleware: 'authorization'
 })
 </script>
 

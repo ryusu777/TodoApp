@@ -1,5 +1,6 @@
 export const AuthApiRoute = {
   SignIn: "/auth/sign-in",
+  RefreshToken: "/auth/refresh-token",
   SignInWithGitea: "/auth/sign-in-gitea",
   AuthorizeGitea: "/auth/authorize-gitea",
   OnboardUser: "/auth/onboard-user"
@@ -21,6 +22,18 @@ export function SignIn(payload: SignInRequest) {
   const api = useApi();
   return api
     .$post<SignInResponse>(AuthApiRoute.SignIn, payload);
+}
+
+type RefreshTokenRequest = {
+  jwtToken: string;
+  refreshToken: string;
+}
+
+type RefreshTokenResponse = SignInResponse;
+
+export function RefreshToken(payload: RefreshTokenRequest) {
+  const api = useApi();
+  return api.$post<RefreshTokenResponse>(AuthApiRoute.RefreshToken, payload);
 }
 
 type SignInWithGiteaResponse = string;
