@@ -9,8 +9,11 @@ export const useApi = defineStore('api', () => {
   /*
    * Sends request on client side
    */
-  function $get<T>(endpoint: string) {
-    return $fetch<IApiResponse<T>>(API_URL + endpoint);
+  function $get<T>(endpoint: string, payload?: any, headers?: any) {
+    return $fetch<IApiResponse<T>>(API_URL + endpoint, {
+      query: payload,
+      headers: headers
+    });
   }
 
   /**
@@ -25,10 +28,11 @@ export const useApi = defineStore('api', () => {
   /**
    * Sends request on client side
    */
-  function $post<T>(endpoint: string, payload: any) {
+  function $post<T>(endpoint: string, payload: any, headers?: any) {
     return $fetch<IApiResponse<T>>(API_URL + endpoint, {
       method: 'POST',
       body: payload,
+      headers
     });
   }
 
