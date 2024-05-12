@@ -3,9 +3,18 @@ import { GetGiteaRepository, type GiteaRepository } from '../api/giteaIntegratio
 
 const loading = ref(false);
 
+const props = defineProps<{
+  selected?: GiteaRepository
+}>();
+
+const emit = defineEmits(['update:selected']);
+
+function update(val: GiteaRepository) {
+  emit('update:selected', val);
+}
+
 const apiUtils = useApiUtils();
 const toast = useToast();
-const selected = ref<GiteaRepository>();
 
 function search(q: string): Promise<GiteaRepository[]> {
   loading.value = true;
@@ -35,7 +44,8 @@ function search(q: string): Promise<GiteaRepository[]> {
     :searchable="search"
     :loading="loading"
     searchable-placeholder="Search a repo.."
-    v-model="selected"
+    :model-value="selected"
+    @update:model-value="update"
     trailing
     :debounce="300"
   >

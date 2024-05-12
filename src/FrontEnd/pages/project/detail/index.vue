@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ProjectPhases from '~/domain/project/components/ProjectPhases.vue';
 import ProjectMembers from '~/domain/project/components/ProjectMembers.vue';
+import ProjectRepositories from '~/domain/project/components/ProjectRepositories.vue';
 import { useProject } from '~/domain/project/composable/useProject';
 
 definePageMeta({
@@ -48,6 +49,11 @@ const members = computed(() => state
       :project-id="state.project?.id || ''"
       :pending="state.isFetching"
       :refresh="onRefresh"
+    />
+  </div>
+  <div>
+    <ProjectRepositories 
+      :project-id="state.project?.id || ''"
     />
   </div>
 </template>
