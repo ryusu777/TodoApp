@@ -84,7 +84,10 @@ public class AuthenticationService : IAuthenticationService
 
         ClaimsPrincipal principal = handler.ValidateToken(refreshToken.Value, new TokenValidationParameters
         {
+            ValidAudience = _jwtOptions.Audience,
+            ValidIssuer = _jwtOptions.Issuer,
             ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
             IssuerSigningKey = GetSigningCredentials().Key
@@ -98,7 +101,7 @@ public class AuthenticationService : IAuthenticationService
         Jti jwtJti = GetJti(jwtToken);
         Jti refreshTokenJti = GetJti(refreshToken);
 
-        if (jwtJti != refreshToken)
+        if (jwtJti != refreshTokenJti)
             return Result.Failure<AuthenticationResult>(UserDomainError.InvalidRefreshTokenOrJwtToken);
 
         string username = GetUsername(jwtToken);

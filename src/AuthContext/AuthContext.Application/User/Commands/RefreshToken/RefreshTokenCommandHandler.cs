@@ -31,21 +31,6 @@ public class RefreshingTokenCommandHandler : ICommandHandler<RefreshingTokenComm
             return Failure(userResult.Error);
         }
 
-        var user = userResult.Value;
-
-        var revocationResult = user.RevokeRefreshToken(_identityService
-            .GetJti(RefreshToken.Create(request.RefreshToken)));
-
-        if (revocationResult.IsFailure)
-            return Failure(revocationResult.Error);
-
-        _unitOfWork.AddEventsQueue(user.DomainEvents);
-
-        var persistingResult = await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        if (persistingResult.IsFailure)
-            return Failure(persistingResult.Error);
-
         var refreshTokenResult = await _identityService
             .RefreshTokenAsync(
                 JwtToken.Create(request.JwtToken),
@@ -58,6 +43,19 @@ public class RefreshingTokenCommandHandler : ICommandHandler<RefreshingTokenComm
         }
 
         var tokenResult = refreshTokenResult.Value;
+
+        var user = userResult.Value;
+
+        var revocationResult = user.RevokeRefreshToken(_identityService
+            .GetJti(RefreshToken.Create(request.RefreshToken)));
+
+        if (revocationResult.IsFailure)
+            return Failure(revocationResult.Error);
+
+        var persistingResult = await _unitOfWork.SaveChangesAsync(user.DomainEvents, cancellationToken);
+
+        if (persistingResult.IsFailure)
+            return Failure(persistingResult.Error);
 
         return Result
             .Success<RefreshingTokenCommandResult>(new RefreshingTokenCommandResult(
