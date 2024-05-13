@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 
-public class GiteaRepositoryService : IGiteaRepositoryService
+public class GiteaRepositoryApiService : IGiteaRepositoryService
 {
     public const string CLIENT_NAME = "gitea-api";
 
@@ -25,7 +25,7 @@ public class GiteaRepositoryService : IGiteaRepositoryService
     private readonly string _issueHookUrl;
     private readonly string _hookAuthToken;
 
-	public GiteaRepositoryService(
+	public GiteaRepositoryApiService(
 		IConfiguration config,
 		IHttpClientFactory httpFactory,
 		IUserRepository userRepository,

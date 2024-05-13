@@ -28,7 +28,7 @@ public static class InfrastructureInstaller
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IGiteaAuthenticationService, GiteaAuthenticationService>();
-        services.AddScoped<IGiteaRepositoryService, GiteaRepositoryService>();
+        services.AddScoped<IGiteaRepositoryService, GiteaRepositoryApiService>();
         services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
@@ -65,7 +65,7 @@ public static class InfrastructureInstaller
             httpClient.BaseAddress = new Uri(config["GiteaUrl"]!);
         });
 
-        services.AddHttpClient(GiteaRepositoryService.CLIENT_NAME, (serviceProvider, httpClient) =>
+        services.AddHttpClient(GiteaRepositoryApiService.CLIENT_NAME, (serviceProvider, httpClient) =>
         {
             httpClient.BaseAddress = new Uri(config["GiteaUrl"]! + "api/v1/");
         });
