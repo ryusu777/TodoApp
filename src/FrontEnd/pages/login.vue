@@ -28,11 +28,20 @@ const isSigningInWithGitea = ref(false);
 
 async function signInWithGitea() {
   isSigningInWithGitea.value = true;
-  const response = await SignInWithGitea();
-  isSigningInWithGitea.value = false;
-
-  if (response.data)
-    window.location.replace(response.data);
+  apiUtils.try(() => SignInWithGitea(),
+    (response) => {
+      isSigningInWithGitea.value = false;
+      if (response.data)
+        window.location.replace(response.data);
+    },
+    (errorDescription) => {
+      isSigningInWithGitea.value = false;
+      toast.add({
+        title: 'Error',
+        description: errorDescription,
+        color: 'red'
+      });
+    });
 }
 
 const toast = useToast();
