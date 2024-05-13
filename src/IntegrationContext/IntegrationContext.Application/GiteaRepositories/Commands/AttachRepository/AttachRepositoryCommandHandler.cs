@@ -1,6 +1,7 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
 using IntegrationContext.Application.Auth;
+using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
 using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
@@ -19,16 +20,18 @@ public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCo
     private readonly IUnitOfWork _unitOfWork;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IGiteaUserDomainService _userDomainService;
+    private readonly IGiteaRepositoryRepository _repoRepository;
 
-	public AttachRepositoryCommandHandler(IGiteaRepositoryService repoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService, IHttpContextAccessor httpContextAccessor)
-	{
-		_repoService = repoService;
-		_unitOfWork = unitOfWork;
-		_userDomainService = userDomainService;
-		_httpContextAccessor = httpContextAccessor;
-	}
+    public AttachRepositoryCommandHandler(IGiteaRepositoryService repoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService, IHttpContextAccessor httpContextAccessor, IGiteaRepositoryRepository repoRepository)
+    {
+        _repoService = repoService;
+        _unitOfWork = unitOfWork;
+        _userDomainService = userDomainService;
+        _httpContextAccessor = httpContextAccessor;
+        _repoRepository = repoRepository;
+    }
 
-	public async Task<Result> Handle(AttachRepositoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AttachRepositoryCommand request, CancellationToken cancellationToken)
     {
         var userId = _httpContextAccessor
             .HttpContext
@@ -44,6 +47,13 @@ public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCo
 
         if (user.IsFailure || user.Value is null || user.Value.JwtToken is null)
             return Result.Failure<GetGiteaRepositoryResult>(user.Error);
+
+        var foundRepo = await _repoRepository
+            .GetProjectRepositoriesAsync(ProjectId.Create(request.ProjectId), cancellationToken);
+
+        if (foundRepo.Value is not null &&
+            foundRepo.Value.Any(e => e.RepoOwner == request.RepoOwner && e.RepoName == request.RepoName))
+            return Result.Failure<GetGiteaRepositoryResult>(GiteaRepositoryDomainError.GiteaRepositoryAlreadyAttached);
 
         ProjectId projectId = ProjectId.Create(request.ProjectId);
 

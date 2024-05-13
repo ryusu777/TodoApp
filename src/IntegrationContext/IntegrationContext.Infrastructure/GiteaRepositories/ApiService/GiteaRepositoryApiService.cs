@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Application.GiteaRepositories.Dtos;
