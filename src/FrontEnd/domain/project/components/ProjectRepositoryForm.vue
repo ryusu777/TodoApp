@@ -53,6 +53,8 @@ async function onSubmit() {
   });
 
   closeForm();
+
+  await props.form.refresh();
 }
 
 function closeForm() {
