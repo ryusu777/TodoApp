@@ -1,7 +1,6 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
 using IntegrationContext.Application.Auth;
-using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
 using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
@@ -18,32 +17,20 @@ public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCo
 {
     private readonly IGiteaRepositoryService _repoService;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IGiteaUserDomainService _userDomainService;
     private readonly IGiteaRepositoryRepository _repoRepository;
 
-    public AttachRepositoryCommandHandler(IGiteaRepositoryService repoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService, IHttpContextAccessor httpContextAccessor, IGiteaRepositoryRepository repoRepository)
+    public AttachRepositoryCommandHandler(IGiteaRepositoryService repoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService, IGiteaRepositoryRepository repoRepository)
     {
         _repoService = repoService;
         _unitOfWork = unitOfWork;
         _userDomainService = userDomainService;
-        _httpContextAccessor = httpContextAccessor;
         _repoRepository = repoRepository;
     }
 
     public async Task<Result> Handle(AttachRepositoryCommand request, CancellationToken cancellationToken)
     {
-        var userId = _httpContextAccessor
-            .HttpContext
-            .User
-            .Claims
-            .FirstOrDefault(e => e.Type == "sub")
-            ?.Value;
-
-        if (userId is null)
-            return Result.Failure<GetGiteaRepositoryResult>(AuthDomainError.GiteaUserNotAuthenticated);
-
-        var user = await _userDomainService.GetOrRefreshJwt(UserId.Create(userId), cancellationToken);
+        var user = await _userDomainService.GetOrRefreshJwt(UserId.Create(request.UserId), cancellationToken);
 
         if (user.IsFailure || user.Value is null || user.Value.JwtToken is null)
             return Result.Failure<GetGiteaRepositoryResult>(user.Error);

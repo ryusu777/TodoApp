@@ -5,7 +5,7 @@ using MediatR;
 
 namespace IntegrationContext.Presentation.GiteaRepositories.Endpoints.AttachRepositoryEndpoint;
 
-public class AttachRepositoryEndpoint : Endpoint<AttachRepositoryCommand, AttachRepositoryResponse>
+public class AttachRepositoryEndpoint : Endpoint<AttachRepositoryRequest, AttachRepositoryResponse>
 {
     public ISender _sender;
 
@@ -20,9 +20,22 @@ public class AttachRepositoryEndpoint : Endpoint<AttachRepositoryCommand, Attach
         Group<GiteaRepositoriesEndpointGroup>();
     }
 
-    public override async Task HandleAsync(AttachRepositoryCommand req, CancellationToken ct)
+    public override async Task HandleAsync(AttachRepositoryRequest req, CancellationToken ct)
     {
-        var result = await _sender.Send(req, ct);
+        var userId = User
+            .Claims
+            .FirstOrDefault(e => e.Type == "sub")
+            ?.Value;
+
+        if (userId is null)
+        {
+            await SendForbiddenAsync();
+            return;
+        }
+
+        var result = await _sender.Send(new AttachRepositoryCommand(
+            userId, req.ProjectId, req.RepoOwner, req.RepoName
+        ), ct);
 
         if (result.IsFailure) 
         {
