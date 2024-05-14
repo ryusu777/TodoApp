@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntegrationContext.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240514040247_AddedCommandOutbox")]
+    [Migration("20240514164019_AddedCommandOutbox")]
     partial class AddedCommandOutbox
     {
         /// <inheritdoc />
@@ -56,7 +56,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("CommandResult")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("MaxTries")

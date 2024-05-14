@@ -28,7 +28,7 @@ namespace IntegrationContext.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CommandDetail = table.Column<string>(type: "nvarchar(2000)", nullable: false),
-                    CommandResult = table.Column<string>(type: "nvarchar(2000)", nullable: false),
+                    CommandResult = table.Column<string>(type: "nvarchar(2000)", nullable: true),
                     Tries = table.Column<int>(type: "int", nullable: false),
                     MaxTries = table.Column<int>(type: "int", nullable: false),
                     SuccessAt = table.Column<DateTime>(type: "datetime2", nullable: true)

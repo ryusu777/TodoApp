@@ -53,7 +53,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("CommandResult")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("MaxTries")
