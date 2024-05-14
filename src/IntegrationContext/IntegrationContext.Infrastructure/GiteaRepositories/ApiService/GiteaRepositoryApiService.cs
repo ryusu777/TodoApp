@@ -20,7 +20,6 @@ public class GiteaRepositoryApiService : IGiteaRepositoryService
 
     private readonly IHttpClientFactory _httpFactory;
     private readonly IUserRepository _userRepository;
-    private readonly IGiteaAuthenticationService _authService;
     private readonly IGiteaUserDomainService _userDomainService;
     private readonly string _issueHookUrl;
     private readonly string _hookAuthToken;
@@ -45,7 +44,6 @@ public class GiteaRepositoryApiService : IGiteaRepositoryService
 
 		_issueHookUrl = hookUrl;
 		_hookAuthToken = hookAuthToken;
-		_authService = authService;
 		_userDomainService = userDomainService;
 	}
 

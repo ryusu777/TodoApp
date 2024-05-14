@@ -12,4 +12,7 @@ public static class GiteaRepositoryDomainError
 
     public static Error GiteaRepositoryAlreadyAttached
         => new(nameof(GiteaRepositoryAlreadyAttached), "The gitea repository is already attached to the project");
+
+    public static Error GiteaRepositoryNotFoundInTheProject
+        => new(nameof(GiteaRepositoryNotFoundInTheProject), "The gitea repository is not found in the project");
 }

@@ -1,5 +1,6 @@
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Application.GiteaRepositories.Dtos;
+using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using IntegrationContext.Infrastructure.Persistence.Data;
 using Library.Models;
@@ -26,6 +27,25 @@ public class GiteaRepositoryRepository : IGiteaRepositoryRepository
                 e.RepoOwner.Value, 
                 e.RepoName))
             .ToListAsync();
+
+        return Result.Success(result);
+    }
+
+    public async Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(GiteaRepositoryId id, ProjectId projectId, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .GiteaRepositories
+            .Where(e => e.Id == id && e.ProjectId == projectId)
+            .Select(e => new GiteaRepositoryDto(
+                e.Id.Value, 
+                e.RepoOwner.Value, 
+                e.RepoName))
+            .FirstOrDefaultAsync();
+
+        if (result is null)
+            return Result
+                .Failure<GiteaRepositoryDto>(GiteaRepositoryDomainError
+                    .GiteaRepositoryNotFoundInTheProject);
 
         return Result.Success(result);
     }
