@@ -2,8 +2,10 @@ using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
+using IntegrationContext.Application.CommandOutboxes;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Infrastructure.Auth;
+using IntegrationContext.Infrastructure.CommandOutboxes;
 using IntegrationContext.Infrastructure.GiteaRepositories;
 using IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 using IntegrationContext.Infrastructure.GiteaUsers;
@@ -32,6 +34,7 @@ public static class InfrastructureInstaller
         services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
+        services.AddScoped<ICommandOutboxDomainService, CommandOutboxDomainService>();
         services.AddDbContext<AppDbContext>(opt =>
         {
             //opt.UseInMemoryDatabase("InMemoryDb");

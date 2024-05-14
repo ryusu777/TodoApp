@@ -2,28 +2,31 @@ using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Abstractions.Messaging;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
-using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.Entities;
 using IntegrationContext.Domain.GiteaRepositories.Events;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Library.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace IntegrationContext.Application.GiteaRepositories.Commands.AttachRepository;
 
 public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCommand>
 {
     private readonly IGiteaRepositoryService _repoService;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IGiteaUserDomainService _userDomainService;
     private readonly IGiteaRepositoryRepository _repoRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AttachRepositoryCommandHandler(IGiteaRepositoryService repoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService, IGiteaRepositoryRepository repoRepository)
+    public AttachRepositoryCommandHandler(
+        IGiteaRepositoryService repoService, 
+        IUnitOfWork unitOfWork, 
+        IGiteaUserDomainService userDomainService, 
+        IGiteaRepositoryRepository repoRepository
+    )
     {
-        _repoService = repoService;
         _unitOfWork = unitOfWork;
+        _repoService = repoService;
         _userDomainService = userDomainService;
         _repoRepository = repoRepository;
     }

@@ -1,5 +1,6 @@
 using System.Reflection;
 using IntegrationContext.Domain.Auth;
+using IntegrationContext.Domain.CommandOutboxes;
 using IntegrationContext.Domain.GiteaIssues;
 using IntegrationContext.Domain.GiteaRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ public class AppDbContext : DbContext
     public virtual required DbSet<GiteaRepository> GiteaRepositories { get; set; }
 
     public virtual required DbSet<GiteaIssue> GiteaIssues { get; set; }
+
+    public virtual required DbSet<CommandOutbox> CommandOutboxes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

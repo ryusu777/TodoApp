@@ -1,3 +1,4 @@
+using IntegrationContext.Domain.CommandOutboxes.Events;
 using IntegrationContext.Domain.CommandOutboxes.ValueObjects;
 using Library.Models;
 
@@ -34,7 +35,7 @@ public class CommandOutbox : AggregateRoot<CommandOutboxId>
         return new(CommandOutboxId.CreateUnique(), commandDetail, maxTries);
     }
 
-    public void Success(string commandResult)
+    public void Success(string? commandResult)
     {
         CommandResult = commandResult;
         SuccessAt = DateTime.Now;
@@ -43,5 +44,6 @@ public class CommandOutbox : AggregateRoot<CommandOutboxId>
     public void IncrementTries()
     {
         Tries++;
+        RaiseDomainEvent(new CommandFailed(this));
     }
 }

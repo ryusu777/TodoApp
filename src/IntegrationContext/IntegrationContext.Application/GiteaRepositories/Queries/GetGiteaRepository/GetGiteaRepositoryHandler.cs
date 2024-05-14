@@ -5,7 +5,6 @@ using IntegrationContext.Application.Pagination.Models;
 using IntegrationContext.Domain.Auth;
 using IntegrationContext.Domain.Auth.ValueObjects;
 using Library.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepository;
 
