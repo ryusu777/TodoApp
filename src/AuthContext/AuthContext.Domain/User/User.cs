@@ -37,13 +37,18 @@ public class User : AggregateRoot<UserId>
 
     public void DeleteExpiredRefreshTokens()
     {
+        List<UserRefreshToken> expiredRefreshToken = new List<UserRefreshToken>();
         foreach (var token in RefreshToken) 
         {
             if (token.IsExpired()) 
             {
-                RefreshToken.Remove(token);
-                RaiseDomainEvent(new RefreshTokenDeleted(token));
+                expiredRefreshToken.Add(token);
             }
+        }
+        foreach (var expiredToken in expiredRefreshToken)
+        {
+            RefreshToken.Remove(expiredToken);
+            RaiseDomainEvent(new RefreshTokenDeleted(expiredToken));
         }
     }
 
