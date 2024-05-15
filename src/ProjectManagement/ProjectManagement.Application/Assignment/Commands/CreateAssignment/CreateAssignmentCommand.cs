@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Application.Abstractions.Messaging;
+﻿using System.Text.Json.Serialization;
+using ProjectManagement.Application.Abstractions.Messaging;
 
 namespace ProjectManagement.Application.Assignment.Commands.CreateAssignment;
 
@@ -8,7 +9,11 @@ public record CreateAssignmentCommand(
 	string ProjectId,
     string[] Assignees,
     DateTime? Deadline,
+    int GiteaRepositoryId,
     string? Reviewer = null,
     Guid? SubdomainId = null,
     Guid? PhaseId = null
-) : ICommand;
+) : ICommand {
+    [JsonIgnore]
+    public string UserId { get; set; } = "";
+};

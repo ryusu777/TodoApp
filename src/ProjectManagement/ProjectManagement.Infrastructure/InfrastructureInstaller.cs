@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Application.Abstractions.Data;
@@ -30,6 +31,21 @@ public static class InfrastructureInstaller
 		services.AddScoped<IProjectRepository, ProjectRepository>();
 		services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 		services.AddScoped<ISubdomainRepository, SubdomainRepository>();
+
+        services.AddMassTransit(bc => 
+        {
+            bc.SetKebabCaseEndpointNameFormatter();
+            bc.UsingRabbitMq((context, configurator) => 
+            {
+                configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
+                {
+                    h.Username(config["MessageBroker:Username"]!);
+                    h.Username(config["MessageBroker:Password"]!);
+                });
+
+                configurator.ConfigureEndpoints(context);
+            });
+        });
 
 		return services;
 	}

@@ -1,6 +1,5 @@
 namespace ProjectManagement.Infrastructure.Assignment;
 
-using ProjectManagement.Application.Assignment.Events;
 using ProjectManagement.Domain.Assignment.Events;
 using ProjectManagement.Infrastructure.Persistence;
 using ProjectManagement.Infrastructure.Persistence.Data;

@@ -1,8 +1,8 @@
 ﻿using Library.Models;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
-using ProjectManagement.Application.Assignment.Events;
 using ProjectManagement.Application.Project;
+using ProjectManagement.Domain.Assignment.Events;
 using ProjectManagement.Domain.Common.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
 
@@ -44,6 +44,9 @@ public class CreateAssignmentCommandHandler : ICommandHandler<CreateAssignmentCo
             request.Reviewer is not null ? UserId.Create(request.Reviewer) : null);
 
 		return await _unitOfWork
-            .SaveChangesAsync(new AssignmentCreated(createdAssignment), cancellationToken);
+            .SaveChangesAsync(new AssignmentCreated(
+                createdAssignment, 
+                UserId.Create(request.UserId),
+                request.GiteaRepositoryId), cancellationToken);
 	}
 }

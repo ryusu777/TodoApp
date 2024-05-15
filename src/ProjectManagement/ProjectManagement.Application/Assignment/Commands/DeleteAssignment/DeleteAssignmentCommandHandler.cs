@@ -1,7 +1,7 @@
 using Library.Models;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
-using ProjectManagement.Application.Assignment.Events;
+using ProjectManagement.Domain.Assignment.Events;
 using ProjectManagement.Domain.Assignment.ValueObjects;
 
 namespace ProjectManagement.Application.Assignment.Commands.DeleteAssignment;
