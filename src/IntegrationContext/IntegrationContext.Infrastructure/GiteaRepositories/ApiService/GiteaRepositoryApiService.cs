@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 
-public class GiteaRepositoryApiService : IGiteaRepositoryService
+public class GiteaRepositoryApiService : IGiteaRepositoryApiService
 {
     public const string CLIENT_NAME = "gitea-api";
 

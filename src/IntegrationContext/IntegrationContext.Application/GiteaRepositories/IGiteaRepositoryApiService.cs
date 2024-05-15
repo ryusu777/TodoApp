@@ -7,7 +7,7 @@ using Library.Models;
 
 namespace IntegrationContext.Application.GiteaRepositories;
 
-public interface IGiteaRepositoryService
+public interface IGiteaRepositoryApiService
 {
     public Task<Result<RepositoryHook>> CreateRepositoryHookAsync(
         JwtToken jwt,

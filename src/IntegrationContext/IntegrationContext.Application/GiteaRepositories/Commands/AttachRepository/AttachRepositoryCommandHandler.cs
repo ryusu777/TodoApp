@@ -13,13 +13,13 @@ namespace IntegrationContext.Application.GiteaRepositories.Commands.AttachReposi
 
 public class AttachRepositoryCommandHandler : ICommandHandler<AttachRepositoryCommand>
 {
-    private readonly IGiteaRepositoryService _repoService;
+    private readonly IGiteaRepositoryApiService _repoService;
     private readonly IGiteaUserDomainService _userDomainService;
     private readonly IGiteaRepositoryRepository _repoRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public AttachRepositoryCommandHandler(
-        IGiteaRepositoryService repoService, 
+        IGiteaRepositoryApiService repoService, 
         IUnitOfWork unitOfWork, 
         IGiteaUserDomainService userDomainService, 
         IGiteaRepositoryRepository repoRepository

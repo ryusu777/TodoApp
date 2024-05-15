@@ -10,11 +10,11 @@ namespace IntegrationContext.Application.GiteaRepositories.Queries.GetGiteaRepos
 
 public class GetGiteaRepositoryHandler : IQueryHandler<GetGiteaRepositoryQuery, GetGiteaRepositoryResult>
 {
-    private readonly IGiteaRepositoryService _giteaRepoService;
+    private readonly IGiteaRepositoryApiService _giteaRepoService;
     private readonly IGiteaUserDomainService _userDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
-	public GetGiteaRepositoryHandler(IGiteaRepositoryService giteaRepoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService)
+	public GetGiteaRepositoryHandler(IGiteaRepositoryApiService giteaRepoService, IUnitOfWork unitOfWork, IGiteaUserDomainService userDomainService)
 	{
 		_giteaRepoService = giteaRepoService;
 		_unitOfWork = unitOfWork;

@@ -30,7 +30,7 @@ public static class InfrastructureInstaller
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IGiteaAuthenticationService, GiteaAuthenticationService>();
-        services.AddScoped<IGiteaRepositoryService, GiteaRepositoryApiService>();
+        services.AddScoped<IGiteaRepositoryApiService, GiteaRepositoryApiService>();
         services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
