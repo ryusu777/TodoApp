@@ -4,6 +4,7 @@ WORKDIR /App
 COPY ./ProjectManagement/*/*.csproj .
 RUN for file in $(ls *.csproj); do mkdir -p ProjectManagement/${file%.*}/ && mv $file ./ProjectManagement/${file%.*}/; done
 COPY ./Library/Library.csproj ./Library/
+COPY ./MassTransitContracts/MassTransitContracts.csproj ./MassTransitContracts/
 COPY ./ProjectManagement/ProjectManagement.sln ./ProjectManagement/
 
 FROM build-env AS dependencies
@@ -14,8 +15,9 @@ FROM dependencies AS release
 WORKDIR /App
 COPY ./ProjectManagement/ ./ProjectManagement/
 COPY ./Library/ ./Library/
+COPY ./MassTransitContracts/ ./MassTransitContracts/
 WORKDIR /App/ProjectManagement
-RUN dotnet publish ./ProjectManagement.Presentation/ProjectManagement.Presentation.csproj -c Release -o out
+RUN dotnet publish ./ProjectManagement.Presentation/ProjectManagement.Presentation.csproj -c Debug -o out
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
