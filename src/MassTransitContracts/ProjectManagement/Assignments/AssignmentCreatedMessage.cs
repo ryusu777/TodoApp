@@ -4,7 +4,7 @@ public record AssignmentCreatedMessage(
     string UserId,
     Guid Id,
     string Title, 
-    string Description,
+    string? Description,
     string ProjectId,
     ICollection<string> Assignees,
     DateTime? Deadline,
