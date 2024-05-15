@@ -3,6 +3,7 @@ using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Application.CommandOutboxes;
+using IntegrationContext.Application.GiteaIssues.MessageConsumers.AssignmentCreated;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Infrastructure.Auth;
 using IntegrationContext.Infrastructure.CommandOutboxes;
@@ -51,6 +52,7 @@ public static class InfrastructureInstaller
             bc.SetKebabCaseEndpointNameFormatter();
             bc.AddConsumer<GetAuthProviderUriConsumer>();
             bc.AddConsumer<GrantAccessTokenConsumer>();
+            bc.AddConsumer<AssignmentCreatedConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
