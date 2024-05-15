@@ -17,7 +17,7 @@ builder.Services.SwaggerDocument(opt =>
 });
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddAuthenticationJwtBearer(e => e.SigningKey = "Secrets");
+builder.Services.AddAuthenticationJwtBearer(e => e.SigningKey = builder.Configuration["JwtOptions:SecretKey"]);
 builder.Services.AddAuthorization();
 builder.Services.AddCors(opt => {
     opt.AddDefaultPolicy(policy => {
