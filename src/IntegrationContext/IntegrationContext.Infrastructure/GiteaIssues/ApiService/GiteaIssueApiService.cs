@@ -48,14 +48,20 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             {
                 Assignees = message.Assignees,
                 Body = message.Description,
-                DueDate = message.Deadline,
+                DueDate = message.Deadline?.ToString("yyyy-MM-ddThh:mm:ss.fffZ"),
                 Title = message.Title
             },
             ct);
 
+        if (!result.IsSuccessStatusCode)
+            return Result.Failure<GiteaIssue>(new Error(
+                GiteaIssueDomainError.FailedToCreateIssue.Code,
+                await result.Content.ReadAsStringAsync()
+            ));
+
         var response = await result.Content.ReadFromJsonAsync<CreateIssueResponse>();
 
-        if (response is null || !result.IsSuccessStatusCode)
+        if (response is null)
             return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToCreateIssue);
 
         GiteaIssue createdIssue = GiteaIssue.Create(
@@ -98,7 +104,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             {
                 Assignees = message.Assignees,
                 Body = message.Description,
-                DueDate = message.Deadline,
+                DueDate = message.Deadline?.ToString("yyyy-MM-ddThh:mm:ss.fffZ"),
                 Title = message.Title
             },
             ct);
@@ -106,7 +112,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         if (!result.IsSuccessStatusCode)
             return Result.Failure(new Error(
                 GiteaIssueDomainError.FailedToUpdateIssue.Code,
-                result.Content.ToString()
+                await result.Content.ReadAsStringAsync()
             ));
 
         var response = await result.Content.ReadFromJsonAsync<UpdateIssueResponse>();
@@ -146,7 +152,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             ct);
 
         if (!result.IsSuccessStatusCode)
-            return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToCreateIssue);
+            return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToDeleteIssue);
 
         return Result.Success(issue);
     }

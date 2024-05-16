@@ -11,7 +11,7 @@ public class CreateIssueRequest
     public string? Body { get; set; }
 
     [JsonPropertyName("due_date")]
-    public DateTime? DueDate { get; set; }
+    public string? DueDate { get; set; }
 
     [JsonPropertyName("title")]
     public required string Title { get; set; }
