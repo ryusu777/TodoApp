@@ -1,3 +1,5 @@
+import { useAuth } from "~/domain/auth/composables/useAuth";
+
 export const AssignmentApiRoute = {
   Assignments: (projectId: string) => `/project/${projectId}/assignment`,
   DeleteAssignment: (assignmentId: string) => `/assignment/${assignmentId}`,
@@ -30,7 +32,12 @@ export type GetAssignmentsResponse = Assignment[];
 
 export function GetAssignments(payload: GetAssignmentsRequest) {
   const api = useApi();
-  return api.$get<GetAssignmentsResponse>(AssignmentApiRoute.Assignments(payload.projectId));
+  const auth = useAuth();
+  return api
+    .$get<GetAssignmentsResponse>(AssignmentApiRoute.Assignments(payload.projectId), null,
+    {
+      'Authorization': 'Bearer ' + auth.jwtToken
+    });
 }
 
 export type GetAssignmentRequest = {
@@ -41,7 +48,11 @@ export type GetAssignmentResponse = Assignment;
 
 export function GetAssignment(payload: GetAssignmentRequest) {
   const api = useApi();
-  return api.$get<GetAssignmentResponse>(AssignmentApiRoute.AssignmentDetail(payload.assignmentId));
+  const auth = useAuth();
+  return api.$get<GetAssignmentResponse>(AssignmentApiRoute.AssignmentDetail(payload.assignmentId), null,
+    {
+      'Authorization': 'Bearer ' + auth.jwtToken
+    });
 }
 
 export type AssigningRequest = {
@@ -53,7 +64,10 @@ export type AssigningResponse = { };
 
 export function Assigning(payload: AssigningRequest) {
   const api = useApi();
-  return api.$post(AssignmentApiRoute.Assigning(payload.assignmentId), payload);
+  const auth = useAuth();
+  return api.$post(AssignmentApiRoute.Assigning(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type ChangeAssignmentStatusRequest = {
@@ -65,13 +79,17 @@ export type ChangeAssignmentStatusResponse = { };
 
 export function ChangeAssignmentStatus(payload: ChangeAssignmentStatusRequest) {
   const api = useApi();
-  return api.$post(AssignmentApiRoute.AssignmentStatus(payload.assignmentId), payload);
+  const auth = useAuth();
+  return api.$post(AssignmentApiRoute.AssignmentStatus(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type CreateAssignmentRequest = {
   title: string;
   description: string;
   projectId: string;
+  giteaRepositoryId: number;
   assignees: string[];
   subdomainId?: string;
   phaseId?: string;
@@ -83,7 +101,10 @@ export type CreateAssignmentResponse = { };
 
 export function CreateAssignment(payload: CreateAssignmentRequest) {
   const api = useApi();
-  return api.$post(AssignmentApiRoute.Assignments(payload.projectId), payload);
+  const auth = useAuth();
+  return api.$post(AssignmentApiRoute.Assignments(payload.projectId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type DeleteAssignmentRequest = {
@@ -94,7 +115,10 @@ export type DeleteAssignmentResponse = {};
 
 export function DeleteAssignment(payload: DeleteAssignmentRequest) {
   const api = useApi();
-  return api.$delete(AssignmentApiRoute.DeleteAssignment(payload.assignmentId));
+  const auth = useAuth();
+  return api.$delete(AssignmentApiRoute.DeleteAssignment(payload.assignmentId), null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type RemoveAssigneeRequest = {
@@ -106,7 +130,10 @@ export type RemoveAssigneeResponse = {};
 
 export function RemoveAssignee(payload: RemoveAssigneeRequest) {
   const api = useApi();
-  return api.$post(AssignmentApiRoute.RemoveAssignee(payload.assignmentId), payload);
+  const auth = useAuth();
+  return api.$post(AssignmentApiRoute.RemoveAssignee(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type UpdateAssignmentRequest = {
@@ -124,5 +151,8 @@ export type UpdateAssignmentResponse = {};
 
 export function UpdateAssignment(payload: UpdateAssignmentRequest) {
   const api = useApi();
-  return api.$put(AssignmentApiRoute.AssignmentDetail(payload.assignmentId), payload);
+  const auth = useAuth();
+  return api.$put(AssignmentApiRoute.AssignmentDetail(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
