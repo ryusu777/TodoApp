@@ -12,6 +12,7 @@ public class CommandOutbox : AggregateRoot<CommandOutboxId>
 
     public string CommandDetail { get; private set; }
     public string? CommandResult { get; private set; }
+    public string? LastError { get; private set; }
     public int Tries { get; private set; } = 0;
     public int MaxTries { get; private set; }
     public DateTime? SuccessAt { get; private set; }
@@ -41,9 +42,10 @@ public class CommandOutbox : AggregateRoot<CommandOutboxId>
         SuccessAt = DateTime.Now;
     }
 
-    public void IncrementTries()
+    public void Failure(string? errorResult)
     {
         Tries++;
+        LastError = errorResult;
         RaiseDomainEvent(new CommandFailed(this));
     }
 }

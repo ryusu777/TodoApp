@@ -27,6 +27,10 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
         builder.Property(e => e.CommandResult)
             .IsRequired(false)
             .HasColumnType("nvarchar(2000)");
+
+        builder.Property(e => e.LastError)
+            .IsRequired(false)
+            .HasColumnType("nvarchar(2000)");
         
         builder.Property(e => e.Tries)
             .IsRequired(true);

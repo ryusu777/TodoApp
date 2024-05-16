@@ -27,7 +27,7 @@ public abstract class OutboxedCommandHandler<TRequest> : ICommandHandler<TReques
 
         if (result.IsFailure)
         {
-            outbox.IncrementTries();
+            outbox.Failure(_outboxDomainService.GetCommandResultInJson(result.Error));
         }
 
         if (result.IsSuccess)
@@ -65,7 +65,7 @@ public abstract class OutboxedCommandHandler<TRequest, TResponse> : ICommandHand
 
         if (result.IsFailure)
         {
-            outbox.IncrementTries();
+            outbox.Failure(_outboxDomainService.GetCommandResultInJson(result.Error));
         }
 
         if (result.IsSuccess)
