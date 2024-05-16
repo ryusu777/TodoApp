@@ -1,5 +1,5 @@
-using MassTransit;
 using MassTransitContracts.ProjectManagement.Assignments;
+using MassTransitContracts.Services;
 using MediatR;
 using ProjectManagement.Domain.Assignment.Events;
 
@@ -7,17 +7,17 @@ namespace ProjectManagement.Application.Assignment.Events;
 
 public class AssignmentCreatedPolicy : INotificationHandler<AssignmentCreated>
 {
-    private readonly IBus _messageBus;
+    private readonly IMassTransitService _messagingService;
 
-    public AssignmentCreatedPolicy(IBus messageBus)
+    public AssignmentCreatedPolicy(IMassTransitService messagingService)
     {
-        _messageBus = messageBus;
+        _messagingService = messagingService;
     }
 
     public Task Handle(AssignmentCreated notification, CancellationToken cancellationToken)
     {
-        return _messageBus
-            .Publish(new AssignmentCreatedMessage(
+        return _messagingService
+            .PublishEventAsync(new AssignmentCreatedMessage(
                 notification.UserId.Value,
                 notification.Assignment.Id.Value,
                 notification.Assignment.Title,
