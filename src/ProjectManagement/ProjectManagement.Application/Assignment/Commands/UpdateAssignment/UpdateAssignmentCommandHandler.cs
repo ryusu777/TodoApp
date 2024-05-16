@@ -28,6 +28,7 @@ public class UpdateAssignmentCommandHandler : ICommandHandler<UpdateAssignmentCo
 
         result.Value
             .Update(
+                UserId.Create(request.UserId),
                 request.Title, 
                 request.Description,
                 request.Assignees

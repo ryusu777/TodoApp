@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using FastEndpoints;
 using MediatR;
 using ProjectManagement.Application.Assignment.Commands.UpdateAssignments;
@@ -21,6 +22,8 @@ public class UpdateAssignmentEndpoint : Endpoint<UpdateAssignmentCommand, Update
 
     public override async Task HandleAsync(UpdateAssignmentCommand req, CancellationToken ct)
     {
+        var username = User.Claims.First(e => e.Type == JwtRegisteredClaimNames.Sub).Value;
+        req.UserId = username;
         if (Route<Guid>("assignment_id") != req.AssignmentId) 
         {
             await SendResultAsync(TypedResults.BadRequest());

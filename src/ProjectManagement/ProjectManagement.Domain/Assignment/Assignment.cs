@@ -132,6 +132,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
     }
 
     public Result Update(
+        UserId userId,
         string title, 
         string description,
         ICollection<UserId>? assignees,
@@ -155,7 +156,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         if (assignees is not null)
             Assignees = assignees;
 
-        RaiseDomainEvent(new AssignmentUpdated(this));
+        RaiseDomainEvent(new AssignmentUpdated(this, userId));
 
         return Result.Success();
     }
