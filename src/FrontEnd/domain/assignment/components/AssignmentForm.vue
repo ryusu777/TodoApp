@@ -4,6 +4,8 @@ import { useProject } from '~/domain/project/composable/useProject';
 import { useAssignmentForm } from '../composables/useAssignmentForm';
 import InputDate from '~/forms/components/InputDate.vue';
 import { useSubdomainTabs } from '~/domain/subdomain/composable/useSubdomainTabs';
+import SelectProjectRepository from '~/domain/gitea-integration/components/SelectProjectRepository.vue';
+import type { GiteaRepository } from '~/domain/gitea-integration/api/giteaIntegrationApi';
 
 const props = defineProps<{
   form: ReturnType<typeof useAssignmentForm>
@@ -23,6 +25,13 @@ const subdomainOptions = computed(() => subdomain.tabs.map(e => {
     title: e.subdomain.title
   }
 }));
+
+const selectedRepository = ref<GiteaRepository>();
+
+function setSelectedRepository(value: GiteaRepository) {
+  selectedRepository.value = value;
+  state.giteaRepositoryId = value.id;
+}
 
 const selectedSubdomain = ref(subdomainOptions.value.find(e => e.id === state.subdomainId));
 
@@ -51,8 +60,17 @@ function submit() {
     @submit="submit"
   >
     <div class="flex gap-x-2">
-      <UFormGroup label="Title" name="title">
+      <UFormGroup label="Title" name="title" class="w-full">
         <UInput v-model="state.title" placeholder="title.." />
+      </UFormGroup>
+    </div>
+    <div class="flex gap-x-2">
+      <UFormGroup label="Repository" name="giteaRepositoryId">
+        <SelectProjectRepository 
+          :project-id="form.projectId"
+          :selected="selectedRepository"
+          @update:selected="setSelectedRepository"
+        />
       </UFormGroup>
 
       <UFormGroup label="Deadline" name="deadline">

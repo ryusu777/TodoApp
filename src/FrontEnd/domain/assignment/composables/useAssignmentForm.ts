@@ -1,4 +1,4 @@
-import { array, object, string } from "yup";
+import { array, number, object, string } from "yup";
 import { CreateAssignment, UpdateAssignment, type Assignment } from "../api/assignmentApi";
 
 export function useAssignmentForm(projectId: string) {
@@ -12,11 +12,13 @@ export function useAssignmentForm(projectId: string) {
     reviewer: undefined as string | undefined,
     phaseId: undefined as string | undefined,
     subdomainId: undefined as string | undefined,
+    giteaRepositoryId: undefined as number | undefined,
     assignees: [] as string[],
   });
 
   const schema = object({
     title: string().required('Title is required'),
+    giteaRepositoryId: number().required('Please select repository'),
   });
 
   function update(newModel: Assignment) {
@@ -40,6 +42,7 @@ export function useAssignmentForm(projectId: string) {
     model.reviewer = undefined;
     model.phaseId = undefined;
     model.subdomainId = subdomainId;
+    model.giteaRepositoryId = undefined;
     model.assignees = [];
 
     show.value = true;
@@ -62,6 +65,7 @@ export function useAssignmentForm(projectId: string) {
         deadline: model.deadline,
         reviewer: model.reviewer,
         assignees: model.assignees,
+        giteaRepositoryId: model.giteaRepositoryId as number,
         projectId
       });
 
@@ -92,6 +96,7 @@ export function useAssignmentForm(projectId: string) {
     submit,
     create,
     update,
-    isSubmitting
+    isSubmitting,
+    projectId
   }
 }
