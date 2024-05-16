@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const toast = useToast();
 
-async function doDelete() {
+async function doDelete(closeDelete: () => any) {
   const error = await props.state.delete(props.assignment.id || '');
 
   if (error) {
@@ -26,6 +26,7 @@ async function doDelete() {
       description: 'Successfully deleted assignment'
     });
     props.form.closeForm();
+    closeDelete();
     await props.state.fetch(false);
   }
 }
@@ -60,7 +61,7 @@ async function doDelete() {
               color="white"
             />
 
-            <template #panel>
+            <template #panel="{ close: closeMenu }">
               <div class="flex gap-x-1">
                 <div class="p-1 flex flex-col gap-y-1 w-[175px]">
                   <UButton 
@@ -97,7 +98,7 @@ async function doDelete() {
                             color="red"
                             size="2xs"
                             class="px-2"
-                            @click="doDelete"
+                            @click="doDelete(closeMenu)"
                           />
                         </div>
                       </div>
