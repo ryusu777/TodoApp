@@ -16,6 +16,7 @@ services:
       dockerfile: ./ProjectManagement/Dockerfile
     environment:
       - ConnectionStrings__AppDbContext
+      - ConnectionStrings__MassTransitDbContext
       - JwtOptions__SecretKey
 
   integration-context:
