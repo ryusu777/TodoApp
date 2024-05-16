@@ -4,10 +4,11 @@ using IntegrationContext.Application.Auth.Messaging.GetAuthProviderUri;
 using IntegrationContext.Application.Auth.Models;
 using IntegrationContext.Application.CommandOutboxes;
 using IntegrationContext.Application.GiteaIssues;
-using IntegrationContext.Application.GiteaIssues.MessageConsumers.AssignmentCreated;
+using IntegrationContext.Application.GiteaIssues.MessageConsumers;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Infrastructure.Auth;
 using IntegrationContext.Infrastructure.CommandOutboxes;
+using IntegrationContext.Infrastructure.GiteaIssues;
 using IntegrationContext.Infrastructure.GiteaIssues.ApiService;
 using IntegrationContext.Infrastructure.GiteaRepositories;
 using IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
@@ -35,6 +36,7 @@ public static class InfrastructureInstaller
         services.AddScoped<IGiteaAuthenticationService, GiteaAuthenticationService>();
         services.AddScoped<IGiteaRepositoryApiService, GiteaRepositoryApiService>();
         services.AddScoped<IGiteaIssueApiService, GiteaIssueApiService>();
+        services.AddScoped<IGiteaIssueRepository, GiteaIssueRepository>();
         services.AddScoped<IGiteaRepositoryRepository, GiteaRepositoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
@@ -53,9 +55,13 @@ public static class InfrastructureInstaller
         services.AddMassTransit(bc => 
         {
             bc.SetKebabCaseEndpointNameFormatter();
+
             bc.AddConsumer<GetAuthProviderUriConsumer>();
             bc.AddConsumer<GrantAccessTokenConsumer>();
             bc.AddConsumer<AssignmentCreatedConsumer>();
+            bc.AddConsumer<AssignmentDeletedConsumer>();
+            bc.AddConsumer<AssignmentUpdatedConsumer>();
+
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>

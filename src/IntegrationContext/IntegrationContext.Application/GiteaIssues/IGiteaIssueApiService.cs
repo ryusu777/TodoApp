@@ -9,4 +9,10 @@ public interface IGiteaIssueApiService
 {
     public Task<Result<GiteaIssue>> CreateIssueAsync(
         JwtToken jwt, AssignmentCreatedMessage message, CancellationToken ct);
+
+    public Task<Result> UpdateIssueAsync(
+        JwtToken jwt, AssignmentUpdatedMessage message, CancellationToken ct);
+
+    public Task<Result<GiteaIssue>> DeleteIssueAsync(
+        JwtToken jwt, AssignmentDeletedMessage message, CancellationToken ct);
 }

@@ -13,7 +13,6 @@ public interface IGiteaRepositoryRepository
 
     public Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(
         GiteaRepositoryId id,
-        ProjectId projectId,
         CancellationToken ct
     );
 }

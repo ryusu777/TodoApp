@@ -31,11 +31,11 @@ public class GiteaRepositoryRepository : IGiteaRepositoryRepository
         return Result.Success(result);
     }
 
-    public async Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(GiteaRepositoryId id, ProjectId projectId, CancellationToken ct)
+    public async Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(GiteaRepositoryId id, CancellationToken ct)
     {
         var result = await _dbContext
             .GiteaRepositories
-            .Where(e => e.Id == id && e.ProjectId == projectId)
+            .Where(e => e.Id == id)
             .Select(e => new GiteaRepositoryDto(
                 e.Id.Value, 
                 e.RepoOwner.Value, 

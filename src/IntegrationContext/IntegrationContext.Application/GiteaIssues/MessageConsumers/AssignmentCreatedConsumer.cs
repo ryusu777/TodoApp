@@ -3,7 +3,7 @@ using MassTransit;
 using MassTransitContracts.ProjectManagement.Assignments;
 using MediatR;
 
-namespace IntegrationContext.Application.GiteaIssues.MessageConsumers.AssignmentCreated;
+namespace IntegrationContext.Application.GiteaIssues.MessageConsumers;
 
 public class AssignmentCreatedConsumer : IConsumer<AssignmentCreatedMessage>
 {

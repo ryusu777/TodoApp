@@ -6,4 +6,13 @@ public static class GiteaIssueDomainError
 {
     public static Error FailedToCreateIssue 
         => new(nameof(FailedToCreateIssue), "Failed to create issue to Gitea");
+
+    public static Error FailedToUpdateIssue 
+        => new(nameof(FailedToUpdateIssue), "Failed to update issue to Gitea");
+
+    public static Error FailedToDeleteIssue 
+        => new(nameof(FailedToDeleteIssue), "Failed to delete issue to Gitea");
+
+    public static Error IssueNotFound 
+        => new(nameof(IssueNotFound), "The issue is not found in this application");
 }

@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace IntegrationContext.Infrastructure.GiteaIssues.ApiService.Contracts.CreateIssue;
+namespace IntegrationContext.Infrastructure.GiteaIssues.ApiService.Contracts.UpdateIssue;
 
-public class CreateIssueRequest
+public class UpdateIssueRequest
 {
     [JsonPropertyName("assignees")]
     public required ICollection<string> Assignees { get; set; }
