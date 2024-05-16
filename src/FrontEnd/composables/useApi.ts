@@ -49,19 +49,22 @@ export const useApi = defineStore('api', () => {
   /**
    * Sends request on client side
    */
-  function $put<T>(endpoint: string, payload: any) {
+  function $put<T>(endpoint: string, payload: any, headers?: any) {
     return $fetch<IApiResponse<T>>(API_URL + endpoint, {
       method: 'PUT',
-      body: payload
+      body: payload,
+      headers
     });
   }
 
   /**
    * Sends request on client side
    */
-  function $delete<T>(endpoint: string) {
+  function $delete<T>(endpoint: string, payload?: any, headers?: any) {
     return $fetch<IApiResponse<T>>(API_URL + endpoint, {
-      method: 'DELETE'
+      method: 'DELETE',
+      query: payload,
+      headers
     });
   }
 
