@@ -65,7 +65,7 @@ function submit() {
       </UFormGroup>
     </div>
     <div class="flex gap-x-2">
-      <UFormGroup label="Repository" name="giteaRepositoryId">
+      <UFormGroup label="Repository" name="giteaRepositoryId" v-if="!state.id">
         <SelectProjectRepository 
           :project-id="form.projectId"
           :selected="selectedRepository"
