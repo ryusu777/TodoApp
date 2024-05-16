@@ -3,6 +3,7 @@ using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Domain.Assignment.Events;
 using ProjectManagement.Domain.Assignment.ValueObjects;
+using ProjectManagement.Domain.Common.ValueObjects;
 
 namespace ProjectManagement.Application.Assignment.Commands.DeleteAssignment;
 
@@ -30,6 +31,6 @@ public class DeleteAssignmentCommandHandler : ICommandHandler<DeleteAssignmentCo
         }
 
         return await _unitOfWork
-            .SaveChangesAsync(new AssignmentDeleted(result.Value), cancellationToken);
+            .SaveChangesAsync(new AssignmentDeleted(result.Value, UserId.Create(request.UserId)), cancellationToken);
     }
 }

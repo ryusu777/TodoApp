@@ -15,4 +15,4 @@ public record UpdateAssignmentCommand(
 {
     [JsonIgnore]
     public string UserId { get; set; } = "";
-};
+}

@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using FastEndpoints;
 using MediatR;
 using ProjectManagement.Application.Assignment.Commands.DeleteAssignment;
@@ -21,10 +22,13 @@ public class DeleteAssignmentEndpoint : Endpoint<DeleteAssignmentRequest, Delete
 
     public override async Task HandleAsync(DeleteAssignmentRequest req, CancellationToken ct)
     {
+        var username = User.Claims.First(e => e.Type == JwtRegisteredClaimNames.Sub).Value;
+        req.UserId = username;
         var result = await _sender
-            .Send(new DeleteAssignmentCommand(
-                req.AssignmentId
-            ), ct);
+            .Send(new DeleteAssignmentCommand(req.AssignmentId)
+            {
+                UserId = username
+            }, ct);
 
         if (result.IsFailure) 
         {
