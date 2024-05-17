@@ -17,6 +17,7 @@ using IntegrationContext.Infrastructure.Persistence;
 using IntegrationContext.Infrastructure.Persistence.Data;
 using IntegrationContext.Infrastructure.Persistence.Mediator;
 using MassTransit;
+using MassTransitContracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +53,7 @@ public static class InfrastructureInstaller
                 });
         });
 
+        services.AddMassTransitService(config);
         services.AddMassTransit(bc => 
         {
             bc.SetKebabCaseEndpointNameFormatter();
