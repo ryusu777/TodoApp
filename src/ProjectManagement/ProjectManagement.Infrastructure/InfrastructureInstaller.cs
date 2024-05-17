@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Assignment;
+using ProjectManagement.Application.Assignment.MessageConsumers;
 using ProjectManagement.Application.Project;
 using ProjectManagement.Application.Subdomain;
 using ProjectManagement.Infrastructure.Assignment.Repositories;
@@ -35,6 +36,7 @@ public static class InfrastructureInstaller
         services.AddMassTransit(bc => 
         {
             bc.SetKebabCaseEndpointNameFormatter();
+            bc.AddConsumer<IssueCreatedMessageConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>

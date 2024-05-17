@@ -67,6 +67,31 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 		);
         return result;
     }
+    
+    public static Assignment Create(
+        AssignmentId id,
+        string title, 
+        string description, 
+        ProjectId projectId,
+        ICollection<UserId> assignees,
+        SubdomainId? subdomainId = null,
+        DateTime? deadline = null,
+        PhaseId? phaseId = null,
+        UserId? reviewer = null)
+    {
+        var result = new Assignment(
+            id,
+            title,
+            description,
+            projectId,
+            assignees,
+            subdomainId,
+            deadline,
+            phaseId,
+            reviewer
+		);
+        return result;
+    }
 
     public Result Assign(UserId userId)
     {
