@@ -5,6 +5,7 @@ using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaIssues;
 using IntegrationContext.Domain.GiteaIssues.ValueObjects;
+using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using IntegrationContext.Infrastructure.GiteaIssues.ApiService.Contracts.CreateIssue;
 using Library.Models;
@@ -36,7 +37,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         if (repoResult.Value is null)
             return Result.Failure<GiteaIssue>(repoResult.Error);
 
-        GiteaRepositoryDto repository = repoResult.Value;
+        GiteaRepository repository = repoResult.Value;
 
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
@@ -68,7 +69,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             GiteaIssueId.Create(response.Id),
             IssueNumber.Create(response.IssueNumber),
             AssignmentId.Create(message.Id),
-            GiteaRepositoryId.Create(repository.Id)
+            repository.Id
         );
 
         return Result.Success(createdIssue);
@@ -92,7 +93,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         if (repoResult.Value is null)
             return Result.Failure<GiteaIssue>(repoResult.Error);
 
-        GiteaRepositoryDto repository = repoResult.Value;
+        GiteaRepository repository = repoResult.Value;
 
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
@@ -141,7 +142,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         if (repoResult.Value is null)
             return Result.Failure<GiteaIssue>(repoResult.Error);
 
-        GiteaRepositoryDto repository = repoResult.Value;
+        GiteaRepository repository = repoResult.Value;
 
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 

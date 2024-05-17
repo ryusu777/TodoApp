@@ -31,20 +31,16 @@ public class GiteaRepositoryRepository : IGiteaRepositoryRepository
         return Result.Success(result);
     }
 
-    public async Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(GiteaRepositoryId id, CancellationToken ct)
+    public async Task<Result<GiteaRepository>> GetProjectRepositoryByIdAsync(GiteaRepositoryId id, CancellationToken ct)
     {
         var result = await _dbContext
             .GiteaRepositories
             .Where(e => e.Id == id)
-            .Select(e => new GiteaRepositoryDto(
-                e.Id.Value, 
-                e.RepoOwner.Value, 
-                e.RepoName))
             .FirstOrDefaultAsync();
 
         if (result is null)
             return Result
-                .Failure<GiteaRepositoryDto>(GiteaRepositoryDomainError
+                .Failure<GiteaRepository>(GiteaRepositoryDomainError
                     .GiteaRepositoryNotFoundInTheProject);
 
         return Result.Success(result);

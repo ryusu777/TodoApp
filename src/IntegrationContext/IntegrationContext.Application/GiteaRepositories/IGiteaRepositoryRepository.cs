@@ -1,4 +1,5 @@
 using IntegrationContext.Application.GiteaRepositories.Dtos;
+using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Library.Models;
 
@@ -11,7 +12,7 @@ public interface IGiteaRepositoryRepository
         CancellationToken ct
     );
 
-    public Task<Result<GiteaRepositoryDto>> GetProjectRepositoryByIdAsync(
+    public Task<Result<GiteaRepository>> GetProjectRepositoryByIdAsync(
         GiteaRepositoryId id,
         CancellationToken ct
     );
