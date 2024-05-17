@@ -44,7 +44,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var result = await client.PostAsJsonAsync(
-            $"repos/{repository.RepoOwner}/{repository.RepoName}/issues", 
+            $"repos/{repository.RepoOwner.Value}/{repository.RepoName}/issues", 
             new CreateIssueRequest
             {
                 Assignees = message.Assignees,
@@ -100,7 +100,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var result = await client.PatchAsJsonAsync(
-            $"repos/{repository.RepoOwner}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
+            $"repos/{repository.RepoOwner.Value}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
             new CreateIssueRequest
             {
                 Assignees = message.Assignees,
@@ -149,11 +149,11 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var result = await client.DeleteAsync(
-            $"repos/{repository.RepoOwner}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
+            $"repos/{repository.RepoOwner.Value}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
             ct);
 
         if (!result.IsSuccessStatusCode)
-            return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToDeleteIssue);
+            return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToDeleteIssue(await result.Content.ReadAsStringAsync()));
 
         return Result.Success(issue);
     }
