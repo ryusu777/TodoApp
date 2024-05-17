@@ -27,6 +27,7 @@ services:
       dockerfile: ./IntegrationContext/Dockerfile
     environment:
       - ConnectionStrings__AppDbContext
+      - ConnectionStrings__MassTransitDbContext
       - ClientUrl
       - JwtOptions__SecretKey
 
