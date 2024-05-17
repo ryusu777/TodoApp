@@ -18,4 +18,8 @@ public class AssignmentId : ValueObject
     {
         return new(value);
     }
+    public static AssignmentId CreateUnique()
+    {
+        return new(Guid.NewGuid());
+    }
 }
