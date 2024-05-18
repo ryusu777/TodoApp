@@ -11,7 +11,7 @@ public class CommandOutboxDomainService : ICommandOutboxDomainService
     {
         string commandInJson = JsonConvert.SerializeObject(command, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.All
+            TypeNameHandling = TypeNameHandling.Objects
         });
 
         return CommandOutbox.Create(commandInJson);
@@ -21,7 +21,7 @@ public class CommandOutboxDomainService : ICommandOutboxDomainService
     {
         string commandInJson = JsonConvert.SerializeObject(command, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.All
+            TypeNameHandling = TypeNameHandling.Objects
         });
 
         return CommandOutbox.Create(commandInJson);
@@ -31,7 +31,7 @@ public class CommandOutboxDomainService : ICommandOutboxDomainService
     {
         string commandInJson = JsonConvert.SerializeObject(result, new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.All
+            TypeNameHandling = TypeNameHandling.Objects
         });
 
         return commandInJson;
