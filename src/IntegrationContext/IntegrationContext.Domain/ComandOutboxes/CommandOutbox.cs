@@ -16,6 +16,8 @@ public class CommandOutbox : AggregateRoot<CommandOutboxId>
     public int Tries { get; private set; } = 0;
     public int MaxTries { get; private set; }
     public DateTime? SuccessAt { get; private set; }
+    public DateTime LastExecutionAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public bool IsSuccess => SuccessAt is not null;
     public bool IsMaxTries => Tries >= MaxTries;

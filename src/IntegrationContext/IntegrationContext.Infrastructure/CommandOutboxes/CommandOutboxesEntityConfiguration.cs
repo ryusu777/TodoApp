@@ -33,6 +33,7 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
             .HasColumnType("nvarchar(2000)");
         
         builder.Property(e => e.Tries)
+            .HasColumnName("Retries")
             .IsRequired(true);
 
         builder.Property(e => e.MaxTries)
@@ -40,6 +41,14 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
 
         builder.Property(e => e.SuccessAt)
             .IsRequired(false);
+
+        builder.Property(e => e.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("(sysdatetime())");
+
+        builder.Property(e => e.LastExecutionAt)
+            .ValueGeneratedOnUpdate()
+            .HasDefaultValueSql("(sysdatetime())");
     }
 }
 
