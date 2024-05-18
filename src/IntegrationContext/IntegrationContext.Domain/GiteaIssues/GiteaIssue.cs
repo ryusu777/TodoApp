@@ -13,6 +13,7 @@ public class GiteaIssue : AggregateRoot<GiteaIssueId>
     public AssignmentId AssignmentId { get; private set; }
     public GiteaRepositoryId GiteaRepositoryId { get; private set; }
     public IssueNumber IssueNumber { get; private set; }
+    public string UpdatedAt { get; private set; }
 
     private GiteaIssue(
         GiteaIssueId id,
@@ -23,6 +24,7 @@ public class GiteaIssue : AggregateRoot<GiteaIssueId>
         AssignmentId = assignmentId;
         GiteaRepositoryId = giteaRepositoryId;
         IssueNumber = issueNumber;
+        UpdatedAt = DateTime.Now.ToString();
     }
 
     public static GiteaIssue Create(
@@ -32,5 +34,15 @@ public class GiteaIssue : AggregateRoot<GiteaIssueId>
         GiteaRepositoryId giteaRepositoryId)
     {
         return new(id, issueNumber, assignmentId, giteaRepositoryId);
+    }
+
+    public void Update(string updatedAt)
+    {
+        UpdatedAt = updatedAt;
+    }
+
+    public void Update()
+    {
+        UpdatedAt = DateTime.Now.ToString();
     }
 }

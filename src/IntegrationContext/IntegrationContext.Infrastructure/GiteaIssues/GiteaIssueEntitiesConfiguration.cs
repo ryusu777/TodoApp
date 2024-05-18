@@ -43,6 +43,10 @@ public class GiteaIssueEntitiesConfiguration : IEntityTypeConfiguration<GiteaIss
                 value => IssueNumber.Create(value)
             );
 
+        builder.Property(e => e.UpdatedAt)
+            .IsRequired(true)
+            .HasMaxLength(20);
+
         builder.HasOne<GiteaRepository>()
             .WithMany()
             .HasForeignKey(e => e.GiteaRepositoryId);
