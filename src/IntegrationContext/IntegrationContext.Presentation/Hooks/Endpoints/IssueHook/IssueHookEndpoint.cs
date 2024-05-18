@@ -21,15 +21,18 @@ public class IssueHookEndpoint : Endpoint<IssueHookRequest, object>
 
     public override async Task HandleAsync(IssueHookRequest req, CancellationToken ct)
     {
-        await _sender.Send(new HandleIssueCreateCommand(
-            req.Issue.Id,
-            req.IssueNumber,
-            req.Issue.Title,
-            req.Issue.Body,
-            req.Issue.Assignees ?? new List<string>(),
-            req.Issue.DueDate,
-            req.Repository.Id
-        ), ct);
+        if (req.Action == IssueHookRequest.IssueAction.Opened)
+            await _sender.Send(new HandleIssueCreateCommand(
+                req.Issue.Id,
+                req.IssueNumber,
+                req.Issue.Title,
+                req.Issue.Body,
+                req.Issue.Assignees
+                    ?.Select(e => e.Username)
+                    .ToList() ?? new List<string>(),
+                req.Issue.DueDate,
+                req.Repository.Id
+            ), ct);
 
         await SendNoContentAsync();
     }

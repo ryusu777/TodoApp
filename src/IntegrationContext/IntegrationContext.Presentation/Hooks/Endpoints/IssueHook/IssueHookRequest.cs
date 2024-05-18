@@ -4,6 +4,13 @@ namespace IntegrationContext.Presentation.Hooks.Endpoints.IssueHook;
 
 public class IssueHookRequest
 {
+    public static class IssueAction {
+        public const string Opened = "opened";
+        public const string Updated = "updated";
+        public const string Closed = "closed";
+        public const string Assigned = "assigned";
+    }
+
     [JsonPropertyName("action")]
     public required string Action { get; set; }
 
@@ -36,9 +43,14 @@ public class IssueHookRequest
         public required int CommentCount { get; set; }
 
         [JsonPropertyName("assignees")]
-        public ICollection<string>? Assignees { get; set; }
+        public ICollection<IssueAssignee>? Assignees { get; set; }
 
         [JsonPropertyName("due_date")]
         public DateTime? DueDate { get; set; }
+
+        public class IssueAssignee {
+            [JsonPropertyName("login")]
+            public required string Username { get; set; }
+        }
     }
 }
