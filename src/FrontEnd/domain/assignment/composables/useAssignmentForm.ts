@@ -30,6 +30,7 @@ export function useAssignmentForm(projectId: string) {
     model.phaseId = newModel.phaseId;
     model.subdomainId = newModel.subdomainId;
     model.assignees = newModel.assignees;
+    model.giteaRepositoryId = -1;
 
     show.value = true;
   }
