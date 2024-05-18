@@ -1,6 +1,7 @@
 using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.CommandOutboxes;
 using IntegrationContext.Application.CommandOutboxes.CommandHandler;
+using IntegrationContext.Application.GiteaIssues;
 using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Domain.GiteaIssues;
 using IntegrationContext.Domain.GiteaIssues.Events;
@@ -19,21 +20,27 @@ public class HandleIssueCreateCommandHandler : OutboxedCommandHandler<HandleIssu
     private IRequestClient<IssueCreatedMessage> _client;
     private IMassTransitService _massTransitService;
     private IGiteaRepositoryRepository _repoRepository;
+    private IGiteaIssueRepository _issueRepository;
 
     public HandleIssueCreateCommandHandler(
         IUnitOfWork unitOfWork,
         ICommandOutboxDomainService outboxDomainService,
         IRequestClient<IssueCreatedMessage> client,
         IMassTransitService massTransitService,
-        IGiteaRepositoryRepository repoRepository) : base(unitOfWork, outboxDomainService)
+        IGiteaRepositoryRepository repoRepository,
+        IGiteaIssueRepository issueRepository) : base(unitOfWork, outboxDomainService)
     {
         _client = client;
         _massTransitService = massTransitService;
         _repoRepository = repoRepository;
+        _issueRepository = issueRepository;
     }
 
     protected override async Task<Result> HandleInternal(HandleIssueCreateCommand request, CancellationToken cancellationToken)
     {
+        if (await _issueRepository.IssueExistsAsync(GiteaIssueId.Create(request.Id), cancellationToken))
+            return Result.Success();
+
         AssignmentId assignmentId = AssignmentId.CreateUnique();
 
         var repository = await _repoRepository

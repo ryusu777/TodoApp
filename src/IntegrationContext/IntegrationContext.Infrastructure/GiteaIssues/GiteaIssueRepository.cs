@@ -27,5 +27,12 @@ public class GiteaIssueRepository : IGiteaIssueRepository
 
         return Result.Success(result);
     }
+
+    public async Task<bool> IssueExistsAsync(GiteaIssueId id, CancellationToken ct)
+    {
+        return await _dbContext
+            .GiteaIssues
+            .AnyAsync(e => e.Id == id, ct);
+    }
 }
 
