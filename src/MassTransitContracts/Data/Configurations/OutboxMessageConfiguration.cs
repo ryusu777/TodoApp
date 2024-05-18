@@ -33,6 +33,14 @@ public class OutboxMessageConfiguration : IEntityTypeConfiguration<OutboxMessage
 
         builder.Property(e => e.PublishedAt)
             .IsRequired(false);
+
+        builder.Property(e => e.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("(sysdatetime())");
+
+        builder.Property(e => e.LastTryAt)
+            .ValueGeneratedOnUpdate()
+            .HasDefaultValueSql("(sysdatetime())");
     }
 }
 

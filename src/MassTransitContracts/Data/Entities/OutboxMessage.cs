@@ -8,4 +8,6 @@ public class OutboxMessage
     public int Tries { get; set; } = 0;
     public int MaxTries { get; set; } = 5;
     public DateTime? PublishedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime LastTryAt { get; set; } = DateTime.Now;
 }
