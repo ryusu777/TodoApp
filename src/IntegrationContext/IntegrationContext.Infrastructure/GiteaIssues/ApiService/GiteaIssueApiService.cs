@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using IntegrationContext.Application.GiteaIssues;
 using IntegrationContext.Application.GiteaRepositories;
-using IntegrationContext.Application.GiteaRepositories.Dtos;
 using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaIssues;
 using IntegrationContext.Domain.GiteaIssues.ValueObjects;
@@ -75,32 +74,20 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         return Result.Success(createdIssue);
     }
 
-    public async Task<Result> UpdateIssueAsync(JwtToken jwt, AssignmentUpdatedMessage message, CancellationToken ct)
+    public async Task<Result<string>> UpdateIssueAsync(
+        JwtToken jwt, 
+        AssignmentUpdatedMessage message, 
+        UserId repoOwner,
+        string repoName,
+        IssueNumber issueNumber,
+        CancellationToken ct)
     {
-        var issueResult = await _issueRepository
-            .GetIssueByAssignmentId(AssignmentId.Create(message.Id), ct);
-
-        if (issueResult.Value is null)
-            return Result.Failure<GiteaIssue>(issueResult.Error);
-
-        GiteaIssue issue = issueResult.Value;
-
-        var repoResult = await _repoRepository.GetProjectRepositoryByIdAsync(
-            issue.GiteaRepositoryId,
-            ct
-        );
-
-        if (repoResult.Value is null)
-            return Result.Failure<GiteaIssue>(repoResult.Error);
-
-        GiteaRepository repository = repoResult.Value;
-
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
         client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var result = await client.PatchAsJsonAsync(
-            $"repos/{repository.RepoOwner.Value}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
+            $"repos/{repoOwner.Value}/{repoName}/issues/{issueNumber.Value}", 
             new CreateIssueRequest
             {
                 Assignees = message.Assignees,
@@ -111,7 +98,7 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             ct);
 
         if (!result.IsSuccessStatusCode)
-            return Result.Failure(new Error(
+            return Result.Failure<string>(new Error(
                 GiteaIssueDomainError.FailedToUpdateIssue.Code,
                 await result.Content.ReadAsStringAsync()
             ));
@@ -119,42 +106,30 @@ public class GiteaIssueApiService : IGiteaIssueApiService
         var response = await result.Content.ReadFromJsonAsync<UpdateIssueResponse>();
 
         if (response is null)
-            return Result.Failure(GiteaIssueDomainError.FailedToUpdateIssue);
+            return Result.Failure<string>(GiteaIssueDomainError.FailedToUpdateIssue);
 
-        return Result.Success();
+        return Result.Success(response.UpdatedAt);
     }
 
-    public async Task<Result<GiteaIssue>> DeleteIssueAsync(JwtToken jwt, AssignmentDeletedMessage message, CancellationToken ct)
+    public async Task<Result> DeleteIssueAsync(
+        JwtToken jwt, 
+        AssignmentDeletedMessage message, 
+        UserId repoOwner,
+        string repoName,
+        IssueNumber issueNumber,
+        CancellationToken ct)
     {
-        var issueResult = await _issueRepository
-            .GetIssueByAssignmentId(AssignmentId.Create(message.Id), ct);
-
-        if (issueResult.Value is null)
-            return Result.Failure<GiteaIssue>(issueResult.Error);
-
-        GiteaIssue issue = issueResult.Value;
-
-        var repoResult = await _repoRepository.GetProjectRepositoryByIdAsync(
-            issue.GiteaRepositoryId,
-            ct
-        );
-
-        if (repoResult.Value is null)
-            return Result.Failure<GiteaIssue>(repoResult.Error);
-
-        GiteaRepository repository = repoResult.Value;
-
         var client = _httpFactory.CreateClient(CLIENT_NAME);
 
         client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
 
         var result = await client.DeleteAsync(
-            $"repos/{repository.RepoOwner.Value}/{repository.RepoName}/issues/{issue.IssueNumber.Value}", 
+            $"repos/{repoOwner.Value}/{repoName}/issues/{issueNumber.Value}", 
             ct);
 
         if (!result.IsSuccessStatusCode)
             return Result.Failure<GiteaIssue>(GiteaIssueDomainError.FailedToDeleteIssue(await result.Content.ReadAsStringAsync()));
 
-        return Result.Success(issue);
+        return Result.Success();
     }
 }

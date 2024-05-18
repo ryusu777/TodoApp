@@ -9,4 +9,7 @@ public class UpdateIssueResponse
 
     [JsonPropertyName("number")]
     public required int IssueNumber { get; set; }
+
+    [JsonPropertyName("updated_at")]
+    public required string UpdatedAt { get; set; }
 }

@@ -2,7 +2,12 @@ using IntegrationContext.Application.Abstractions.Data;
 using IntegrationContext.Application.Auth;
 using IntegrationContext.Application.CommandOutboxes;
 using IntegrationContext.Application.CommandOutboxes.CommandHandler;
+using IntegrationContext.Application.GiteaRepositories;
 using IntegrationContext.Domain.Auth.ValueObjects;
+using IntegrationContext.Domain.GiteaIssues;
+using IntegrationContext.Domain.GiteaIssues.Events;
+using IntegrationContext.Domain.GiteaIssues.ValueObjects;
+using IntegrationContext.Domain.GiteaRepositories;
 using Library.Models;
 
 namespace IntegrationContext.Application.GiteaIssues.Commands.UpdateIssue;
@@ -11,14 +16,21 @@ public class UpdateIssueCommandHandler : OutboxedCommandHandler<UpdateIssueComma
 {
     private readonly IGiteaIssueApiService _issueApi;
     private readonly IGiteaUserDomainService _userDomainService;
+    private readonly IGiteaIssueRepository _issueRepository;
+    private readonly IGiteaRepositoryRepository _repoRepository;
+
     public UpdateIssueCommandHandler(
         IUnitOfWork unitOfWork,
         ICommandOutboxDomainService outboxDomainService,
         IGiteaIssueApiService issueApi,
-        IGiteaUserDomainService userDomainService) : base(unitOfWork, outboxDomainService)
+        IGiteaUserDomainService userDomainService,
+        IGiteaIssueRepository issueRepository,
+        IGiteaRepositoryRepository repoRepository) : base(unitOfWork, outboxDomainService)
     {
         _issueApi = issueApi;
         _userDomainService = userDomainService;
+        _issueRepository = issueRepository;
+        _repoRepository = repoRepository;
     }
 
     protected override async Task<Result> HandleInternal(
@@ -30,11 +42,39 @@ public class UpdateIssueCommandHandler : OutboxedCommandHandler<UpdateIssueComma
         if (user.IsFailure || user.Value is null || user.Value.JwtToken is null)
             return user.Error;
 
-        var interfaceResult = await _issueApi
-            .UpdateIssueAsync(user.Value.JwtToken, request.Message, ct);
+        var issueResult = await _issueRepository
+            .GetIssueByAssignmentId(AssignmentId.Create(request.Message.Id), ct);
 
-        if (interfaceResult.IsFailure)
+        if (issueResult.Value is null)
+            return Result.Failure<string>(issueResult.Error);
+
+        GiteaIssue issue = issueResult.Value;
+
+        var repoResult = await _repoRepository.GetProjectRepositoryByIdAsync(
+            issue.GiteaRepositoryId,
+            ct
+        );
+
+        if (repoResult.Value is null)
+            return Result.Failure<string>(repoResult.Error);
+
+        GiteaRepository repository = repoResult.Value;
+
+        var interfaceResult = await _issueApi
+            .UpdateIssueAsync(
+                user.Value.JwtToken, 
+                request.Message, 
+                repository.RepoOwner,
+                repository.RepoName,
+                issue.IssueNumber,
+                ct);
+
+        if (interfaceResult.IsFailure || interfaceResult.Value is null)
             return interfaceResult;
+
+        issue.Update(interfaceResult.Value);
+
+        await _unitOfWork.SaveChangesAsync(new GiteaIssueUpdated(issue), ct);
 
         return Result.Success();
     }
