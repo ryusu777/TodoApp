@@ -35,7 +35,7 @@ public class IssueHookEndpoint : Endpoint<IssueHookRequest, object>
                 req.Repository.Id
             ), ct);
 
-        if (req.Action == IssueHookRequest.IssueAction.Edited &&
+        if (req.Action == IssueHookRequest.IssueAction.Edited ||
             req.Action == IssueHookRequest.IssueAction.Assigned)
             await _sender.Send(new HandleIssueUpdateCommand(
                 req.Issue.Id,
