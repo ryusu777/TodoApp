@@ -9,6 +9,7 @@ public class IssueHookRequest
         public const string Updated = "updated";
         public const string Closed = "closed";
         public const string Assigned = "assigned";
+        public const string Edited = "edited";
     }
 
     [JsonPropertyName("action")]
@@ -47,6 +48,9 @@ public class IssueHookRequest
 
         [JsonPropertyName("due_date")]
         public DateTime? DueDate { get; set; }
+            
+        [JsonPropertyName("updated_at")]
+        public required string UpdatedAt { get; set; }
 
         public class IssueAssignee {
             [JsonPropertyName("login")]

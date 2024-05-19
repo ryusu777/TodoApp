@@ -10,7 +10,7 @@ using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using IntegrationContext.Domain.Hooks;
 using Library.Models;
 using MassTransit;
-using MassTransitContracts.Hooks.Issue.IssueCreated;
+using MassTransitContracts.Hooks.Issue;
 using MassTransitContracts.Services;
 
 namespace IntegrationContext.Application.Hooks.Commands.HandleIssueCreate;

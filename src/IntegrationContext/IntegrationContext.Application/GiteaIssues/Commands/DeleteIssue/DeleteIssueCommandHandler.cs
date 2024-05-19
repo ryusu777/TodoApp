@@ -43,7 +43,7 @@ public class DeleteIssueCommandHandler : OutboxedCommandHandler<DeleteIssueComma
             return user.Error;
 
         var issueResult = await _issueRepository
-            .GetIssueByAssignmentId(AssignmentId.Create(request.Message.Id), ct);
+            .GetIssueByAssignmentIdAsync(AssignmentId.Create(request.Message.Id), ct);
 
         if (issueResult.Value is null)
             return Result.Failure<GiteaIssue>(issueResult.Error);

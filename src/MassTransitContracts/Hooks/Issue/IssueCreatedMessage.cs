@@ -1,4 +1,4 @@
-namespace MassTransitContracts.Hooks.Issue.IssueCreated;
+namespace MassTransitContracts.Hooks.Issue;
 
 public record IssueCreatedMessage(
     Guid AssignmentId,
