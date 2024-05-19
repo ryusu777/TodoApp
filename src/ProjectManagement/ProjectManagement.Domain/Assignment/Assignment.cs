@@ -185,4 +185,21 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
         return Result.Success();
     }
+    
+    public Result UpdateFromHook(
+        string title, 
+        string description,
+        ICollection<UserId>? assignees
+    )
+    {
+        Title = title;
+        Description = description;
+
+        if (assignees is not null)
+            Assignees = assignees;
+
+        RaiseDomainEvent(new AssignmentUpdatedFromHook(this));
+
+        return Result.Success();
+    }
 }

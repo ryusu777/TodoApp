@@ -1,5 +1,5 @@
 using MassTransit;
-using MassTransitContracts.Hooks.Issue.IssueCreated;
+using MassTransitContracts.Hooks.Issue;
 using MediatR;
 using ProjectManagement.Application.Assignment.Commands.CreateAssignmentFromHook;
 
