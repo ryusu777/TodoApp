@@ -1,4 +1,4 @@
-using MassTransitContracts.Hooks.Issue.IssueCreated;
+using MassTransitContracts.Hooks.Issue;
 using ProjectManagement.Application.Abstractions.Messaging;
 
 namespace ProjectManagement.Application.Assignment.Commands.CreateAssignmentFromHook;
