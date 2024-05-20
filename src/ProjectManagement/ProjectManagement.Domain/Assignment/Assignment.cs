@@ -148,6 +148,14 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
+    public Result CompleteFromHook()
+    {
+        Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
+        RaiseDomainEvent(new AssignmentCompleted(Id));
+
+        return Result.Success();
+    }
+
     public Result Renew()
     {
         Status = new AssignmentStatus(AssignmentStatusEnum.New);

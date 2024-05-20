@@ -38,6 +38,7 @@ public static class InfrastructureInstaller
             bc.SetKebabCaseEndpointNameFormatter();
             bc.AddConsumer<IssueCreatedMessageConsumer>();
             bc.AddConsumer<IssueUpdatedMessageConsumer>();
+            bc.AddConsumer<IssueClosedMessageConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
