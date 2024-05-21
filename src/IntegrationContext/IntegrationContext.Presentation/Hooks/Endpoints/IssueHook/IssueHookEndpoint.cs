@@ -1,6 +1,7 @@
 using FastEndpoints;
 using IntegrationContext.Application.Hooks.Commands.HandleIssueClosed;
 using IntegrationContext.Application.Hooks.Commands.HandleIssueCreate;
+using IntegrationContext.Application.Hooks.Commands.HandleIssueReopened;
 using IntegrationContext.Application.Hooks.Commands.HandleIssueUpdate;
 using MediatR;
 
@@ -51,6 +52,12 @@ public class IssueHookEndpoint : Endpoint<IssueHookRequest, object>
 
         if (req.Action == IssueHookRequest.IssueAction.Closed)
             await _sender.Send(new HandleIssueClosedCommand(
+                req.Issue.Id,
+                req.Issue.UpdatedAt
+            ), ct);
+
+        if (req.Action == IssueHookRequest.IssueAction.Reopened)
+            await _sender.Send(new HandleIssueReopenedCommand(
                 req.Issue.Id,
                 req.Issue.UpdatedAt
             ), ct);

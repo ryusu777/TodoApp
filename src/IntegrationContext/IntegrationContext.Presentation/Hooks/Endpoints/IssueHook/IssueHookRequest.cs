@@ -6,6 +6,7 @@ public class IssueHookRequest
 {
     public static class IssueAction {
         public const string Opened = "opened";
+        public const string Reopened = "reopened";
         public const string Updated = "updated";
         public const string Closed = "closed";
         public const string Assigned = "assigned";
