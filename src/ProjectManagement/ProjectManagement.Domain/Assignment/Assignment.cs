@@ -120,9 +120,6 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result WorkOn()
     {
-        if (Status.Value != AssignmentStatusEnum.New || Status.Value != AssignmentStatusEnum.WaitingReview)
-            return AssignmentDomainErrors.AssignmentIsNotAvailableToWorkOn;
-
         Status = new AssignmentStatus(AssignmentStatusEnum.OnProgress);
         RaiseDomainEvent(new AssignmentWorkedOn(Id));
 
@@ -131,9 +128,6 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result RequestReview()
     {
-        if (Status.Value == AssignmentStatusEnum.Completed)
-            return AssignmentDomainErrors.CannotRequestReviewOnCompleted;
-
         Status = new AssignmentStatus(AssignmentStatusEnum.WaitingReview);
         RaiseDomainEvent(new AssignmentReviewRequested(Id));
 
