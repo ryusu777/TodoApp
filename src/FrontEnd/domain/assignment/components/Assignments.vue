@@ -71,25 +71,25 @@ async function submit() {
     <KanbanBoard
       :state="state"
       :form="form"
-      type="Todo"
+      type="New"
       :assignments="filteredAssignments.New || []"
     />
     <KanbanBoard
       :state="state"
       :form="form"
-      type="In Progress"
+      type="OnProgress"
       :assignments="filteredAssignments.OnProgress || []"
     />
     <KanbanBoard
       :state="state"
       :form="form"
-      type="Waiting Review"
+      type="WaitingReview"
       :assignments="filteredAssignments.WaitingReview || []"
     />
     <KanbanBoard
       :state="state"
       :form="form"
-      type="Done"
+      type="Completed"
       :assignments="filteredAssignments.Completed || []"
     />
   </div>

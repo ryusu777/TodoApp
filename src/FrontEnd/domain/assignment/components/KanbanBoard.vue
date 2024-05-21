@@ -1,28 +1,55 @@
 <script setup lang="ts">
-import type { Assignment } from '../api/assignmentApi';
+import type { Assignment, AssignmentStatusEnum } from '../api/assignmentApi';
 import type { useAssignmentForm } from '../composables/useAssignmentForm';
 import type { useAssignmentState } from '../composables/useAssignmentState';
 import AssignmentVue from './Assignment.vue';
 
-defineProps<{
+const props = defineProps<{
   assignments: Assignment[];
-  type: string;
+  type: AssignmentStatusEnum;
   form: ReturnType<typeof useAssignmentForm>;
   state: ReturnType<typeof useAssignmentState>;
 }>();
+
+const label = computed(() => {
+  switch(props.type) {
+    case 'New':
+      return 'Open';
+    case 'Completed':
+      return 'Completed';
+    case 'WaitingReview':
+      return 'Waiting Review';
+    case 'OnProgress':
+      return 'In Progress';
+  }
+});
+
+const bgColor = computed(() => {
+  switch(props.type) {
+    case 'New':
+      return 'bg-red-400 dark:bg-red-400';
+    case 'Completed':
+      return 'bg-primary dark:bg-primary';
+    case 'WaitingReview':
+      return 'bg-yellow-400 dark:bg-yellow-400';
+    case 'OnProgress':
+      return 'bg-blue-400 dark:bg-blue-400';
+  }
+});
 
 </script>
 <template>
   <div class="w-[250px] flex flex-col gap-y-2">
     <UCard
       :ui="{
+        background: bgColor,
         body: {
-          padding: 'px-3 py-2 sm:px-3 sm:py-2'
+          padding: 'px-3 py-2 sm:px-3 sm:py-2',
         }
       }"
     >
-      <div class="flex justify-between items-center">
-        <p>{{ type }}</p>
+      <div class="flex justify-between items-center text-black">
+        <p>{{ label }}</p>
       </div>
     </UCard>
     <AssignmentVue 

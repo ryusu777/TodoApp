@@ -1,4 +1,4 @@
-import { DeleteAssignment, GetAssignments, type Assignment, type GetAssignmentsResponse } from "../api/assignmentApi";
+import { ChangeAssignmentStatus, DeleteAssignment, GetAssignments, type Assignment, type AssignmentStatusEnum, type GetAssignmentsResponse } from "../api/assignmentApi";
 
 export function useAssignmentState(projectId: string) {
   const assignments = ref<Assignment[]>([]);
@@ -14,8 +14,6 @@ export function useAssignmentState(projectId: string) {
         (response) => {},
         (error) => errorResult = error
       )
-
-    await fetch(false);
 
     return errorResult;
   }
@@ -51,10 +49,25 @@ export function useAssignmentState(projectId: string) {
       return errorDescription;
   }
 
+  async function setAssignmentStatus(assignmentId: string, assignmentStatus: AssignmentStatusEnum) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => ChangeAssignmentStatus({ assignmentId, assignmentStatus }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
   return {
     fetch,
     assignments: assignmentsComputed,
-    delete: doDelete
+    delete: doDelete,
+    setAssignmentStatus
   }
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Assignment } from '../api/assignmentApi';
+import type { Assignment, AssignmentStatusEnum } from '../api/assignmentApi';
 import type { useAssignmentForm } from '../composables/useAssignmentForm';
 import type { useAssignmentState } from '../composables/useAssignmentState';
 
@@ -30,6 +30,28 @@ async function doDelete(closeDelete: () => any) {
     await props.state.fetch(false);
   }
 }
+
+async function changeStatus(status: AssignmentStatusEnum) {
+  if (!props.assignment.id)
+    return;
+
+  const error = await props.state.setAssignmentStatus(props.assignment.id, status);
+
+  if (error) {
+    toast.add({
+      title: 'Error',
+      description: error,
+      color: 'red'
+    });
+  } else {
+    toast.add({
+      title: 'Success',
+      description: 'Successfully changed assignment'
+    });
+    await props.state.fetch(false);
+  }
+}
+
 </script>
 
 <template>
@@ -112,11 +134,51 @@ async function doDelete(closeDelete: () => any) {
       </div>
       <p class="text-sm">{{ assignment.description }}</p>
     </div>
-    <div>
-      <span class="text-xs text-gray-200">Reviewer</span>
-      <div class="flex gap-x-2 items-center">
-        <UAvatar :alt="assignment.reviewer" size="sm" />
-        <p class="text-sm">{{ assignment.reviewer }}</p>
+    <div class="flex flex-between items-end w-full">
+      <div v-if="assignment.reviewer" class="flex-1">
+        <span class="text-xs text-gray-200">Reviewer</span>
+        <div class="flex gap-x-2 items-center">
+          <UAvatar :alt="assignment.reviewer" size="sm" />
+          <p class="text-sm">{{ assignment.reviewer }}</p>
+        </div>
+      </div>
+
+      <div class="space-x-2">
+        <UTooltip text="Reopen" :popper="{ placement: 'top' }" v-if="assignment.status !== 'New'">
+          <UButton 
+            color="red"
+            icon="heroicons:backward-solid"
+            square
+            size="2xs"
+            @click="changeStatus('New')"
+          />
+        </UTooltip>
+        <UTooltip text="Work on" :popper="{ placement: 'top' }" v-if="assignment.status !== 'OnProgress'">
+          <UButton 
+            color="blue"
+            icon="heroicons:play-16-solid"
+            square
+            size="2xs"
+            @click="changeStatus('OnProgress')"
+          />
+        </UTooltip>
+        <UTooltip text="Request Review" :popper="{ placement: 'top' }" v-if="assignment.status !== 'WaitingReview'">
+          <UButton 
+            color="yellow"
+            icon="heroicons:paper-airplane-16-solid"
+            square
+            size="2xs"
+            @click="changeStatus('WaitingReview')"
+          />
+        </UTooltip>
+        <UTooltip text="Complete" :popper="{ placement: 'top' }" v-if="assignment.status !== 'Completed'">
+          <UButton 
+            icon="heroicons:check-badge-16-solid"
+            square
+            size="2xs"
+            @click="changeStatus('Completed')"
+          />
+        </UTooltip>
       </div>
     </div>
   </UCard>
