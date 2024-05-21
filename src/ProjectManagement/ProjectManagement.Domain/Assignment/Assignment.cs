@@ -151,7 +151,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
     public Result CompleteFromHook()
     {
         Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
-        RaiseDomainEvent(new AssignmentCompleted(Id));
+        RaiseDomainEvent(new AssignmentCompletedFromHook(Id));
 
         return Result.Success();
     }
@@ -160,6 +160,14 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
     {
         Status = new AssignmentStatus(AssignmentStatusEnum.New);
         RaiseDomainEvent(new AssignmentRenewed(Id));
+
+        return Result.Success();
+    }
+
+    public Result RenewFromHook()
+    {
+        Status = new AssignmentStatus(AssignmentStatusEnum.New);
+        RaiseDomainEvent(new AssignmentRenewedFromHook(Id));
 
         return Result.Success();
     }

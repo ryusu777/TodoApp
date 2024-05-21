@@ -39,6 +39,7 @@ public static class InfrastructureInstaller
             bc.AddConsumer<IssueCreatedMessageConsumer>();
             bc.AddConsumer<IssueUpdatedMessageConsumer>();
             bc.AddConsumer<IssueClosedMessageConsumer>();
+            bc.AddConsumer<IssueReopenedMessageConsumer>();
             bc.UsingRabbitMq((context, configurator) => 
             {
                 configurator.Host(new Uri(config["MessageBroker:Host"]!), h =>
