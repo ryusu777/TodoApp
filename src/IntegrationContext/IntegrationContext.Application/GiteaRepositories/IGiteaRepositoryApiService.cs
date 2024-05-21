@@ -29,4 +29,11 @@ public interface IGiteaRepositoryApiService
         Paging? page,
         CancellationToken ct
     );
+
+    public Task<Result<List<GiteaAssigneeDto>>> GetGiteaRepositoryAssigneesAsync(
+        JwtToken jwt,
+        UserId owner,
+        string repoName,
+        CancellationToken ct
+    );
 }

@@ -10,6 +10,9 @@ public static class GiteaRepositoryDomainError
     public static Error FailedToGetGiteaRepositories 
         => new(nameof(FailedToGetGiteaRepositories), "Failed to get Gitea repositories");
 
+    public static Error FailedToGetGiteaAssignees(string message)
+        => new(nameof(FailedToGetGiteaRepositories), "Failed to get Gitea repositories: " + message);
+
     public static Error GiteaRepositoryAlreadyAttached
         => new(nameof(GiteaRepositoryAlreadyAttached), "The gitea repository is already attached to the project");
 

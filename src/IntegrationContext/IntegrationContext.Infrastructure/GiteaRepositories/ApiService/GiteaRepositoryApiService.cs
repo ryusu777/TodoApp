@@ -9,6 +9,7 @@ using IntegrationContext.Domain.GiteaRepositories.Entities;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.CreateRepositoryWebhook;
 using IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.GetRepositories;
+using IntegrationContext.Infrastructure.GiteaRepositories.ApiService.Contracts.GetRepositoryAssignees;
 using Library.Models;
 using Microsoft.Extensions.Configuration;
 
@@ -98,6 +99,33 @@ public class GiteaRepositoryApiService : IGiteaRepositoryApiService
         return Result
             .Success(response.Data
                 .Select(e => new GiteaRepositoryDto(e.Id, e.RepoOwner, e.RepoName))
+                .ToList());
+    }
+
+    public async Task<Result<List<GiteaAssigneeDto>>> GetGiteaRepositoryAssigneesAsync(
+        JwtToken jwt, 
+        UserId owner, 
+        string repoName, 
+        CancellationToken ct)
+    {
+        var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
+
+        var response = await client
+            .GetAsync($"repos/{owner.Value}/{repoName}/assignees");
+
+        if (!response.IsSuccessStatusCode)
+            return Result.Failure<List<GiteaAssigneeDto>>(GiteaRepositoryDomainError.FailedToGetGiteaAssignees(await response.Content.ReadAsStringAsync()));
+
+        var data = await response.Content.ReadFromJsonAsync<List<GetRepositoryAssigneesResponse>>();
+
+        if (data is null)
+            return Result.Failure<List<GiteaAssigneeDto>>(GiteaRepositoryDomainError.FailedToGetGiteaAssignees(await response.Content.ReadAsStringAsync()));
+
+        return Result
+            .Success(data
+                .Select(e => new GiteaAssigneeDto(e.Username))
                 .ToList());
     }
 
