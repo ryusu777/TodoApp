@@ -63,6 +63,8 @@ public static class InfrastructureInstaller
             bc.AddConsumer<AssignmentCreatedConsumer>();
             bc.AddConsumer<AssignmentDeletedConsumer>();
             bc.AddConsumer<AssignmentUpdatedConsumer>();
+            bc.AddConsumer<AssignmentCompletedConsumer>();
+            bc.AddConsumer<AssignmentRenewedConsumer>();
 
             bc.UsingRabbitMq((context, configurator) => 
             {

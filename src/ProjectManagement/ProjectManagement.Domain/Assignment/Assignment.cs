@@ -134,10 +134,10 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
-    public Result Complete()
+    public Result Complete(UserId userId)
     {
         Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
-        RaiseDomainEvent(new AssignmentCompleted(Id));
+        RaiseDomainEvent(new AssignmentCompleted(Id, userId));
 
         return Result.Success();
     }
@@ -150,10 +150,10 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
-    public Result Renew()
+    public Result Renew(UserId userId)
     {
         Status = new AssignmentStatus(AssignmentStatusEnum.New);
-        RaiseDomainEvent(new AssignmentRenewed(Id));
+        RaiseDomainEvent(new AssignmentRenewed(Id, userId));
 
         return Result.Success();
     }

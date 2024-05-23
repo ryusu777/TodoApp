@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using FastEndpoints;
 using MediatR;
 using ProjectManagement.Application.Assignment.Commands.ChangeAssignmentStatus;
@@ -21,6 +22,8 @@ public class ChangeAssignmentStatusEndpoint : Endpoint<ChangeAssignmentStatusReq
 
     public override async Task HandleAsync(ChangeAssignmentStatusRequest req, CancellationToken ct)
     {
+        var username = User.Claims.First(e => e.Type == JwtRegisteredClaimNames.Sub).Value;
+        req.UserId = username;
         if (Route<Guid>("assignment_id") != req.AssignmentId)
         {
             await SendResultAsync(TypedResults.BadRequest());
@@ -31,7 +34,9 @@ public class ChangeAssignmentStatusEndpoint : Endpoint<ChangeAssignmentStatusReq
             .Send(new ChangeAssignmentStatusCommand(
                 req.AssignmentId,
                 req.AssignmentStatus
-            ), ct);
+            ) {
+                UserId = username
+            }, ct);
 
         if (result.IsFailure) 
         {

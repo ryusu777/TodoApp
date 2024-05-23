@@ -16,7 +16,7 @@ public class AssignmentRenewedPolicy : INotificationHandler<AssignmentRenewed>
 
     public Task Handle(AssignmentRenewed notification, CancellationToken cancellationToken)
     {
-        return _massTransitService.PublishEventAsync(new AssignmentRenewedMessage(notification.Id.Value), cancellationToken);
+        return _massTransitService.PublishEventAsync(new AssignmentRenewedMessage(notification.Id.Value, notification.UserId.Value), cancellationToken);
     }
 }
 

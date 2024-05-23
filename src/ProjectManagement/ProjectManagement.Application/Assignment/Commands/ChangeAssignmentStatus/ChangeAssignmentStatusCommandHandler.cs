@@ -4,6 +4,7 @@ using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Application.Assignment.Commands.ChangeAssignmentStatus;
 using ProjectManagement.Domain.Assignment.Enums;
 using ProjectManagement.Domain.Assignment.ValueObjects;
+using ProjectManagement.Domain.Common.ValueObjects;
 
 namespace ProjectManagement.Application.Assignment.Commands;
 
@@ -37,11 +38,11 @@ public class ChangeAssignmentStatusCommandHandler : ICommandHandler<ChangeAssign
         switch (statusResult.Value.Value)
         {
             case AssignmentStatusEnum.New:
-                changeStatusResult = result.Value.Renew();
+                changeStatusResult = result.Value.Renew(UserId.Create(request.UserId));
                 break;
 
             case AssignmentStatusEnum.Completed:
-                changeStatusResult = result.Value.Complete();
+                changeStatusResult = result.Value.Complete(UserId.Create(request.UserId));
                 break;
 
             case AssignmentStatusEnum.OnProgress:

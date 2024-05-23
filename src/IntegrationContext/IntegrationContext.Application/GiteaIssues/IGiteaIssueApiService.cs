@@ -26,4 +26,20 @@ public interface IGiteaIssueApiService
         string repoName,
         IssueNumber issueNumber,
         CancellationToken ct);
+
+    public Task<Result<string>> CloseIssueAsync(
+        JwtToken jwt, 
+        AssignmentCompletedMessage message, 
+        UserId repoOwner,
+        string repoName,
+        IssueNumber issueNumber,
+        CancellationToken ct);
+
+    public Task<Result<string>> ReopenIssueAsync(
+        JwtToken jwt, 
+        AssignmentRenewedMessage message, 
+        UserId repoOwner,
+        string repoName,
+        IssueNumber issueNumber,
+        CancellationToken ct);
 }

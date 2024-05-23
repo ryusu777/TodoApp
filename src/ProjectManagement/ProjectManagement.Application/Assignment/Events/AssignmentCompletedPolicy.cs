@@ -17,7 +17,7 @@ public class AssignmentCompletedPolicy : INotificationHandler<AssignmentComplete
     public Task Handle(AssignmentCompleted notification, CancellationToken cancellationToken)
     {
         return _messagingService
-            .PublishEventAsync(new AssignmentCompletedMessage(notification.Id.Value), cancellationToken);
+            .PublishEventAsync(new AssignmentCompletedMessage(notification.Id.Value, notification.UserId.Value), cancellationToken);
     }
 }
 

@@ -132,4 +132,42 @@ public class GiteaIssueApiService : IGiteaIssueApiService
 
         return Result.Success();
     }
+
+    public async Task<Result<string>> CloseIssueAsync(JwtToken jwt, AssignmentCompletedMessage message, UserId repoOwner, string repoName, IssueNumber issueNumber, CancellationToken ct)
+    {
+        var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
+
+        var result = await client.PatchAsJsonAsync(
+            $"repos/{repoOwner.Value}/{repoName}/issues/{issueNumber.Value}", 
+            new CloseIssueRequest(),
+            ct);
+
+        var response = await result.Content.ReadFromJsonAsync<UpdateIssueResponse>();
+
+        if (!result.IsSuccessStatusCode || response is null)
+            return Result.Failure<string>(GiteaIssueDomainError.FailedToCloseIssue(await result.Content.ReadAsStringAsync()));
+
+        return Result.Success(response.UpdatedAt);
+    }
+
+    public async Task<Result<string>> ReopenIssueAsync(JwtToken jwt, AssignmentRenewedMessage message, UserId repoOwner, string repoName, IssueNumber issueNumber, CancellationToken ct)
+    {
+        var client = _httpFactory.CreateClient(CLIENT_NAME);
+
+        client.DefaultRequestHeaders.Add("Authorization", "token " + jwt.Value);
+
+        var result = await client.PatchAsJsonAsync(
+            $"repos/{repoOwner.Value}/{repoName}/issues/{issueNumber.Value}", 
+            new ReopenIssueRequest(),
+            ct);
+
+        var response = await result.Content.ReadFromJsonAsync<UpdateIssueResponse>();
+
+        if (!result.IsSuccessStatusCode || response is null)
+            return Result.Failure<string>(GiteaIssueDomainError.FailedToCloseIssue(await result.Content.ReadAsStringAsync()));
+
+        return Result.Success(response.UpdatedAt);
+    }
 }

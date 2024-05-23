@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ProjectManagement.Application.Abstractions.Messaging;
 
 namespace ProjectManagement.Application.Assignment.Commands.ChangeAssignmentStatus;
@@ -5,5 +6,9 @@ namespace ProjectManagement.Application.Assignment.Commands.ChangeAssignmentStat
 public record ChangeAssignmentStatusCommand(
     Guid AssignmentId,
     string AssignmentStatus
-) : ICommand;
+) : ICommand
+{
+    [JsonIgnore]
+    public string UserId { get; set; } = "";
+};
 
