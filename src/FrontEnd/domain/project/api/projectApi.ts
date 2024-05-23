@@ -1,9 +1,11 @@
+import { useAuth } from "~/domain/auth/composables/useAuth";
 
 export const ProjectApiRoute = {
   Project: '/project',
   ProjectDetail: (id: string) => `/project/${id}`,
   GetProjectPages: '/project/pages',
   Members: (projectId: string) => `/project/${projectId}/members`,
+  SyncMembers: (projectId: string) => `/project/${projectId}/sync-members`,
   Phases: (projectId: string) => `/project/${projectId}/phases`
 };
 
@@ -97,6 +99,21 @@ type UpdateProjectMembersResponse = IApiResponse;
 export function UpdateProjectMembers(request: UpdateProjectMembersRequest) {
   const api = useApi();
   return api.$put(ProjectApiRoute.Members(request.projectId), request);
+}
+
+export type SyncProjectMembersRequest = {
+  projectId: string;
+}
+
+type SyncProjectMembersResponse = IApiResponse;
+
+export function SyncProjectMembers(request: SyncProjectMembersRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$post(ProjectApiRoute.SyncMembers(request.projectId), request,
+    {
+      'Authorization': 'Bearer ' + auth.jwtToken
+    });
 }
 
 export type UpdateProjectPhasesRequest = {

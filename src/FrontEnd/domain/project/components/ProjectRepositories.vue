@@ -9,7 +9,7 @@ const props = defineProps<{
 const repositories = useRepositories(props.projectId);
 const editable = ref(false);
 
-await useAsyncData(() => repositories.initialize());
+await repositories.initialize();
 </script>
 
 <template>

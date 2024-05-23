@@ -3,10 +3,8 @@ import { type Member } from "~/domain/project/api/projectApi";
 
 const props = defineProps<{
   member: Member;
-  editable?: boolean;
 }>();
 
-const emit = defineEmits(['update', 'delete']);
 </script>
 
 <template>
@@ -25,23 +23,6 @@ const emit = defineEmits(['update', 'delete']);
     <div class="flex flex-col">
       <div class="flex flex-row justify-between gap-3">
         <p class="text-bold text-xl">{{ props.member.username }}</p>
-        <div class="flex gap-1" :class="!editable ? 'invisible' : ''">
-          <UButton 
-            variant="solid" 
-            size="xs"
-            square
-            color="red"
-            @click="emit('delete')"
-            icon="heroicons:trash"
-          />
-          <UButton 
-            variant="solid" 
-            size="xs"
-            square
-            @click="emit('update')"
-            icon="heroicons:pencil"
-          />
-        </div>
       </div>
     </div>
   </UCard>

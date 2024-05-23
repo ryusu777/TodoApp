@@ -6,5 +6,6 @@ public static class ProjectEndpointRoutes
     public const string ProjectDetail = "/project/{id}";
     public const string GetProjectPages = "/project/pages";
     public const string Members = "/project/{id}/members";
+    public const string SyncMembers = "/project/{id}/sync-members";
     public const string Phases = "/project/{id}/phases";
 }

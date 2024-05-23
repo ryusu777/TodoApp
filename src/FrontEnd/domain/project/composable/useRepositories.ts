@@ -9,17 +9,10 @@ export function useRepositories(projectId: string) {
 
   const repositories = ref<GiteaRepository[]>([]);
 
-  function initialize(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      apiUtils.try(() => GetProjectRepository(projectId),
-        (response) => {
-          repositories.value = [...response.data!];
-          resolve();
-        }, 
-        (errorDescription) => {
-          reject(errorDescription);
-        });
-    })
+  async function initialize(): Promise<void> {
+    const result = await useAsyncData(() => GetProjectRepository(projectId));
+
+    repositories.value = [...result.data.value?.data!];
   }
 
   function refresh(): Promise<void> {

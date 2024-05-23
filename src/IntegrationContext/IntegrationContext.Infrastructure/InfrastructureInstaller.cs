@@ -6,6 +6,7 @@ using IntegrationContext.Application.CommandOutboxes;
 using IntegrationContext.Application.GiteaIssues;
 using IntegrationContext.Application.GiteaIssues.MessageConsumers;
 using IntegrationContext.Application.GiteaRepositories;
+using IntegrationContext.Application.GiteaRepositories.MessageConsumers;
 using IntegrationContext.Infrastructure.Auth;
 using IntegrationContext.Infrastructure.CommandOutboxes;
 using IntegrationContext.Infrastructure.GiteaIssues;
@@ -65,6 +66,7 @@ public static class InfrastructureInstaller
             bc.AddConsumer<AssignmentUpdatedConsumer>();
             bc.AddConsumer<AssignmentCompletedConsumer>();
             bc.AddConsumer<AssignmentRenewedConsumer>();
+            bc.AddConsumer<GetAllAssigneeConsumer>();
 
             bc.UsingRabbitMq((context, configurator) => 
             {
