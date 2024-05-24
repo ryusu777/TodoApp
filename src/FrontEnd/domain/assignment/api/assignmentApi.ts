@@ -2,6 +2,7 @@ import { useAuth } from "~/domain/auth/composables/useAuth";
 
 export const AssignmentApiRoute = {
   Assignments: (projectId: string) => `/project/${projectId}/assignment`,
+  GetAssignments: (projectId: string, subdomainId?: string) => `/project/${projectId}/assignment/${subdomainId || ''}`,
   DeleteAssignment: (assignmentId: string) => `/assignment/${assignmentId}`,
   AssignmentDetail: (assignmentId: string) => `/assignment/${assignmentId}`,
   Assigning: (assignmentId: string) => `/assignment/${assignmentId}/assign`,
@@ -26,6 +27,7 @@ export interface Assignment {
 
 export type GetAssignmentsRequest = {
   projectId: string;
+  subdomainId: string;
 }
 
 export type GetAssignmentsResponse = Assignment[];
@@ -34,7 +36,7 @@ export function GetAssignments(payload: GetAssignmentsRequest) {
   const api = useApi();
   const auth = useAuth();
   return api
-    .$get<GetAssignmentsResponse>(AssignmentApiRoute.Assignments(payload.projectId), null,
+    .$get<GetAssignmentsResponse>(AssignmentApiRoute.GetAssignments(payload.projectId, payload.subdomainId), null,
     {
       'Authorization': 'Bearer ' + auth.jwtToken
     });

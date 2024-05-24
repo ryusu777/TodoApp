@@ -1,6 +1,6 @@
 import { ChangeAssignmentStatus, DeleteAssignment, GetAssignments, type Assignment, type AssignmentStatusEnum, type GetAssignmentsResponse } from "../api/assignmentApi";
 
-export function useAssignmentState(projectId: string) {
+export function useAssignmentState(projectId: string, subdomainId: string) {
   const assignments = ref<Assignment[]>([]);
   const assignmentsComputed = computed(() => assignments.value);
 
@@ -23,7 +23,7 @@ export function useAssignmentState(projectId: string) {
     let errorDescription: string | null = null;
 
     if (server) {
-      const { data: response } = await useAsyncData(() => GetAssignments({ projectId }));
+      const { data: response } = await useAsyncData(() => GetAssignments({ projectId, subdomainId }));
 
       if (response.value?.data)
         data = response.value.data;
@@ -32,14 +32,13 @@ export function useAssignmentState(projectId: string) {
         errorDescription = response.value.errorDescription;
     } else {
       await apiUtil
-        .try(() => GetAssignments({ projectId }),
+        .try(() => GetAssignments({ projectId, subdomainId }),
           (response: IApiResponse<GetAssignmentsResponse>) => {
             data = response.data!;
           }, 
           (error: string) => {
             errorDescription = error;
-          }
-        );
+          });
     }
 
     if (data)

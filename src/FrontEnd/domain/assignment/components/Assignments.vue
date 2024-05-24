@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const toast = useToast();
 
-const state = useAssignmentState(props.projectId);
+const state = useAssignmentState(props.projectId, props.subdomainId);
 
 const form = useAssignmentForm(props.projectId);
 
@@ -24,14 +24,10 @@ defineExpose({
   ReuseTemplate: ReuseTemplate
 });
 
-await state.fetch(true);
-initial.value = false;
-
-onMounted(async () => {
-  if (!initial.value) {
-    await state.fetch(false);
-  }
-});
+if (initial.value) {
+  await state.fetch(true);
+  initial.value = false;
+}
 
 const filteredAssignments = computed(() => {
   return Object.groupBy(state.assignments.value, ({ status }) => status);

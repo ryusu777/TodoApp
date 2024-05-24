@@ -32,14 +32,13 @@ const AssignmentDefinedTemplate = computed(() =>
   assignmentRef.value?.ReuseTemplate as ReuseTemplateComponent<Record<string, any>, Record<"default", undefined>>);
 const KnowledgeDefinedTemplate = computed(() => 
   knowledgeRef.value?.ReuseTemplate as ReuseTemplateComponent<Record<string, any>, Record<"default", undefined>>);
-
 </script>
 
 <template>
   <div class="flex flex-col h-full">
     <div class="flex gap-x-3">
       <div class="max-w-[300px]">
-        <UTabs 
+        <UTabs
           :items="tabItems"
           v-model="selectedTab"
         />
