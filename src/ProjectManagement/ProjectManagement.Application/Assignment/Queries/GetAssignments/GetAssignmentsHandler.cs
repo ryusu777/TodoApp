@@ -17,7 +17,12 @@ public class GetAssignmentsHandler
     public async Task<Result<GetAssignmentsResult>> Handle(GetAssignmentsQuery request, CancellationToken cancellationToken)
     {
         var result = await _repo
-            .GetAssignments(ProjectId.Create(request.ProjectId), cancellationToken);
+            .GetAssignmentsBySubdomain(
+                ProjectId.Create(request.ProjectId), 
+                request.SubdomainId is not null 
+                    ? SubdomainId.Create((Guid)request.SubdomainId)
+                    : null,
+                cancellationToken);
 
         if (result.IsFailure || result.Value is null)
             return Result.Failure<GetAssignmentsResult>(result.Error);

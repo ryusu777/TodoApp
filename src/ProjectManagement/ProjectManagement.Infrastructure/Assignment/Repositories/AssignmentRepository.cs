@@ -78,4 +78,29 @@ public class AssignmentRepository : IAssignmentRepository
             GetReviewer(assignment.Reviewer),
             assignment.Deadline));
     }
+
+    public async Task<Result<IEnumerable<Application.Assignment.Dtos.Assignment>>> GetAssignmentsBySubdomain(ProjectId projectId, SubdomainId? subdomainId, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Assignments
+            .Where(e => e.ProjectId == projectId && e.SubdomainId == subdomainId)
+            .ToListAsync();
+
+		if (result is null)
+			return Result.Failure<IEnumerable<Application.Assignment.Dtos.Assignment>>(AssignmentInfrastructureError.AssignmentNotFound);
+
+		return Result.Success(result
+            .Select(assignment => new Application.Assignment.Dtos.Assignment(
+                assignment.Id.Value,
+                assignment.Title,
+                assignment.Description,
+                assignment.ProjectId.Value,
+                assignment.Status.Value.ToString(),
+                assignment.SubdomainId?.Value,
+                assignment.PhaseId?.Value,
+                assignment.Assignees.Select(e => e.Value).ToList(), 
+                GetReviewer(assignment.Reviewer),
+                assignment.Deadline
+            )));
+    }
 }

@@ -5,7 +5,7 @@ using ProjectManagement.Application.Assignment.Queries.GetAssignments;
 namespace ProjectManagement.Presentation.Assignment.Endpoints.GetAssignments;
 
 public class GetAssignmentsEndpoint 
-    : Endpoint<GetAssignmentsRequest, GetAssignmentsResponse>
+    : Endpoint<GetAssignmentsQuery, GetAssignmentsResponse>
 {
     private readonly ISender _sender;
 
@@ -16,14 +16,14 @@ public class GetAssignmentsEndpoint
 
     public override void Configure()
     {
-        Get(AssignmentEndpointRoutes.Assignments);
+        Get(AssignmentEndpointRoutes.GetAssignments);
         Group<AssignmentEndpointGroup>();
     }
 
-    public override async Task HandleAsync(GetAssignmentsRequest req, CancellationToken ct)
+    public override async Task HandleAsync(GetAssignmentsQuery req, CancellationToken ct)
     {
         var result = await _sender
-            .Send(new GetAssignmentsQuery(req.project_id), ct);
+            .Send(req, ct);
         
         if (result.IsFailure) 
         {

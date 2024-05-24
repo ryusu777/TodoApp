@@ -5,7 +5,7 @@ using ProjectManagement.Application.Assignment.Queries.GetAssignment;
 namespace ProjectManagement.Presentation.Assignment.Endpoints.GetAssignment;
 
 public class GetAssignmentEndpoint 
-    : Endpoint<GetAssignmentRequest, GetAssignmentResponse>
+    : Endpoint<GetAssignmentQuery, GetAssignmentResponse>
 {
     private readonly ISender _sender;
 
@@ -20,10 +20,10 @@ public class GetAssignmentEndpoint
         Group<AssignmentEndpointGroup>();
     }
 
-    public override async Task HandleAsync(GetAssignmentRequest req, CancellationToken ct)
+    public override async Task HandleAsync(GetAssignmentQuery req, CancellationToken ct)
     {
         var result = await _sender
-            .Send(new GetAssignmentQuery(req.assignment_id), ct);
+            .Send(req);
         
         if (result.IsFailure) 
         {
