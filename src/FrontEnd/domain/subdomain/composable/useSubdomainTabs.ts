@@ -16,7 +16,8 @@ export const useSubdomainTabs = defineStore('subdomain', () => {
       subdomain: {
         id: e.id,
         description: e.description,
-        title: e.title
+        title: e.title,
+        numOfOpenedAssignments: e.numOfOpenedAssignments
       }
     };
   }));

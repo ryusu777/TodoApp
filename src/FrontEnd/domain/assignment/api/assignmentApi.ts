@@ -2,7 +2,7 @@ import { useAuth } from "~/domain/auth/composables/useAuth";
 
 export const AssignmentApiRoute = {
   Assignments: (projectId: string) => `/project/${projectId}/assignment`,
-  GetAssignments: (projectId: string, subdomainId?: string) => `/project/${projectId}/assignment/${subdomainId || ''}`,
+  GetAssignments: (projectId: string, subdomainId?: string) => `/project/${projectId}/assignments/${subdomainId}`,
   DeleteAssignment: (assignmentId: string) => `/assignment/${assignmentId}`,
   AssignmentDetail: (assignmentId: string) => `/assignment/${assignmentId}`,
   Assigning: (assignmentId: string) => `/assignment/${assignmentId}/assign`,

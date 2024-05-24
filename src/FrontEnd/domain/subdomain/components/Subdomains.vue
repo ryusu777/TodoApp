@@ -216,6 +216,15 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
                 </template>
               </UPopover>
             </div>
+            <UBadge 
+              class="ml-2"
+              color="gray"
+              variant="solid"
+              size="xs"
+              v-else
+            >
+              {{ item.subdomain.numOfOpenedAssignments }}
+            </UBadge>
           </div>
         </template>
       </UTabs>

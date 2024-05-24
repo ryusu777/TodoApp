@@ -11,6 +11,7 @@ export interface Subdomain {
   title: string;
   projectId: string;
   knowledges?: SubdomainKnowledge[] | null;
+  numOfOpenedAssignments?: number;
 }
 
 export interface SubdomainKnowledge {
