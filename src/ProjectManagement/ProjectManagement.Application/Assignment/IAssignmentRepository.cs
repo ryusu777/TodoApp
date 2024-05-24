@@ -1,4 +1,5 @@
 ﻿using Library.Models;
+using ProjectManagement.Application.Assignment.Dtos;
 using ProjectManagement.Domain.Assignment.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
 
@@ -13,4 +14,8 @@ public interface IAssignmentRepository
         ProjectId projectId, 
         SubdomainId? subdomainId, 
         CancellationToken ct);
+	public Task<Result<int>> GetOpenedAssignmentsCountBySubdomain(
+        SubdomainId? subdomainId,
+        CancellationToken ct);
+    public Task<Result<IEnumerable<AssignmentCount>>> GetOpenedAssignmentCountPerSubdomain(IEnumerable<SubdomainId> subdomainIds, CancellationToken ct);
 }

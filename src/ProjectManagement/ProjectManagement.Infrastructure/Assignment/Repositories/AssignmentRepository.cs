@@ -1,6 +1,8 @@
 ﻿using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Assignment;
+using ProjectManagement.Application.Assignment.Dtos;
+using ProjectManagement.Domain.Assignment.Enums;
 using ProjectManagement.Domain.Assignment.ValueObjects;
 using ProjectManagement.Domain.Common.ValueObjects;
 using ProjectManagement.Domain.Project.ValueObjects;
@@ -102,5 +104,26 @@ public class AssignmentRepository : IAssignmentRepository
                 GetReviewer(assignment.Reviewer),
                 assignment.Deadline
             )));
+    }
+
+    public async Task<Result<IEnumerable<AssignmentCount>>> GetOpenedAssignmentCountPerSubdomain(IEnumerable<SubdomainId> subdomainIds, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Assignments
+            .Where(e => subdomainIds.Contains(e.SubdomainId) && e.Status != new AssignmentStatus(AssignmentStatusEnum.Completed))
+            .GroupBy(e => e.SubdomainId)
+            .Select(e => new AssignmentCount(e.Key!.Value, e.Count()))
+            .ToListAsync(ct);
+
+        return Result.Success(result.AsEnumerable());
+    }
+
+    public async Task<Result<int>> GetOpenedAssignmentsCountBySubdomain(SubdomainId? subdomainId, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Assignments
+            .CountAsync(e => e.SubdomainId == subdomainId && e.Status != new AssignmentStatus(AssignmentStatusEnum.Completed), ct);
+
+        return Result.Success(result);
     }
 }

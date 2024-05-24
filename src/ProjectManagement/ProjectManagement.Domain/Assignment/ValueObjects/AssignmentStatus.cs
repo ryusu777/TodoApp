@@ -3,7 +3,7 @@ using ProjectManagement.Domain.Assignment.Enums;
 
 namespace ProjectManagement.Domain.Assignment.ValueObjects;
 
-public record AssignmentStatus(AssignmentStatusEnum Value)
+public record AssignmentStatus(AssignmentStatusEnum Value) : IEquatable<AssignmentStatusEnum>
 {
     public static Result<AssignmentStatus> Create(string value) 
     {
@@ -16,5 +16,20 @@ public record AssignmentStatus(AssignmentStatusEnum Value)
                 );
 
         return Result.Success(new AssignmentStatus(enumResult));
+    }
+
+    public bool Equals(AssignmentStatusEnum other)
+    {
+        return Value == other;
+    }
+
+    public static bool operator==(AssignmentStatus left, AssignmentStatusEnum right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator!=(AssignmentStatus left, AssignmentStatusEnum right)
+    {
+        return !Equals(left, right);
     }
 }

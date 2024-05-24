@@ -3,7 +3,7 @@ namespace ProjectManagement.Presentation.Assignment;
 public static class AssignmentEndpointRoutes
 {
     public const string Assignments = "/project/{project_id}/assignment/";
-    public const string GetAssignments = "/project/{ProjectId}/assignment/{SubdomainId}";
+    public const string GetAssignments = "/project/{ProjectId}/assignments/{SubdomainId?}";
     public const string DeleteAssignment = "/assignment/{AssignmentId}";
     public const string AssignmentDetail = "/assignment/{assignment_id}";
     public const string Assigning = "/assignment/{assignment_id}/assign";

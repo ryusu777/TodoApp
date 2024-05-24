@@ -8,6 +8,8 @@ public record Subdomain(
     ICollection<SubdomainKnowledge> Knowledges
 ) 
 {
+    public int NumOfOpenedAssignments { get; set; } = 0;
+
     public static Subdomain FromDomain(Domain.Subdomain.Subdomain subdomain)
     {
         return new(
