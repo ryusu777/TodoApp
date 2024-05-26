@@ -28,8 +28,8 @@ export interface Project {
   status: number;
   projectMembers: string[];
   projectPhases: Phase[];
+  numOfNewAssignment?: number;
 }
-
 
 type GetProjectPagesResponse = {
   id: string;

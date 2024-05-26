@@ -36,6 +36,6 @@ function toDetail() {
   </div>
   <p>{{ state.project?.description }}</p>
   <div class="h-full">
-    <Subdomains :project-id="projectCode" />
+    <Subdomains :project-id="projectCode" :num-of-new-assignment="state.project?.numOfNewAssignment || 0" />
   </div>
 </template>

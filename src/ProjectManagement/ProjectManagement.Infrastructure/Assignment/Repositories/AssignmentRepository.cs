@@ -126,4 +126,13 @@ public class AssignmentRepository : IAssignmentRepository
 
         return Result.Success(result);
     }
+
+    public async Task<Result<int>> GetNewAssignmentCount(ProjectId projectId, CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Assignments
+            .CountAsync(e => e.ProjectId == projectId && e.SubdomainId == null);
+
+        return Result.Success(result);
+    }
 }

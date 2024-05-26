@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createReusableTemplate, type DefineTemplateComponent } from '@vueuse/core';
+import { createReusableTemplate } from '@vueuse/core';
 import { useAssignmentForm } from '../composables/useAssignmentForm';
 import { useAssignmentState } from '../composables/useAssignmentState';
 import KanbanBoard from './KanbanBoard.vue';

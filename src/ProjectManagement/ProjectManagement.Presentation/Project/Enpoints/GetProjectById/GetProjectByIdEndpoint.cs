@@ -35,14 +35,7 @@ public class GetProjectByIdEndpoint : Endpoint<GetProjectByIdRequest, GetProject
         var project = result.Value;
 
         await SendOkAsync(new GetProjectByIdResponse(
-            new GetProjectByIdResult(
-                project.Id,
-                project.Name,
-                project.Description,
-                project.Status,
-                project.ProjectPhases,
-                project.ProjectMembers
-            ), null));
+            project, null));
     }
 }
 

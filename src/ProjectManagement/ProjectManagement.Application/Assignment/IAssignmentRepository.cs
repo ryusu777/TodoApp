@@ -18,4 +18,6 @@ public interface IAssignmentRepository
         SubdomainId? subdomainId,
         CancellationToken ct);
     public Task<Result<IEnumerable<AssignmentCount>>> GetOpenedAssignmentCountPerSubdomain(IEnumerable<SubdomainId> subdomainIds, CancellationToken ct);
+
+    public Task<Result<int>> GetNewAssignmentCount(ProjectId projectId, CancellationToken ct);
 }

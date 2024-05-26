@@ -11,6 +11,8 @@ export function useAssignmentState(projectId: string, subdomainId: string) {
   const assignmentsComputed = computed(() => assignments.value);
   const isFetchingIssueNumber = ref(false);
   const isFetchingIssueNumberComputed = computed(() => isFetchingIssueNumber.value);
+  const isFetching = ref(false);
+  const isFetchingComputed = computed(() => isFetching.value);
 
   const apiUtil = useApiUtils();
 
@@ -100,7 +102,8 @@ export function useAssignmentState(projectId: string, subdomainId: string) {
     assignments: assignmentsComputed,
     delete: doDelete,
     setAssignmentStatus,
-    isFetchingIssueNumber: isFetchingIssueNumberComputed
+    isFetchingIssueNumber: isFetchingIssueNumberComputed,
+    isFetching: isFetchingComputed
   }
 }
 

@@ -50,15 +50,10 @@ export const useSubdomainTabs = defineStore('subdomain', () => {
         errorDescription = errorResponse;
     }
 
-    
     if (data) 
       subdomains.value = data;
     else
       return errorDescription || "Failed to fetch subdomain list";
-
-    if (subdomainId.value) {
-      selectedTab.value = subdomains.value.findIndex(e => e.id === subdomainId.value);
-    }
     
     if (selectedTab.value >= subdomains.value.length)
       selectedTab.value = 0;

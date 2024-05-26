@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import SubdomainForm from './SubdomainForm.vue';
+import NewGiteaIssueList from '~/domain/assignment/components/NewGiteaIssueList.vue';
 import { useSubdomainForm } from '../composable/useSubdomainForm';
 import { useSubdomainTabs } from '../composable/useSubdomainTabs';
 import { DeleteSubdomain, type Subdomain } from '../api/subdomainApi';
 
 const props = defineProps<{
   projectId: string;
+  numOfNewAssignment: number;
 }>();
 
 const route = useRoute();
@@ -133,11 +135,21 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
     }
   }
 }
+
+const isShowingNewAssignmentForm = ref(false);
+
+function showNewAssignmentForm() {
+  isShowingNewAssignmentForm.value = true;
+}
+
+function hideNewAssignmentForm() {
+  isShowingNewAssignmentForm.value = false;
+}
 </script>
 
 <template>
   <div class="py-5 h-full flex flex-col">
-    <div class="flex flex-row gap-x-3 items-end">
+    <div class="flex flex-row gap-x-3 items-center">
       <span class="text-md font-bold">Subdomain</span>
       <UButton 
         size="2xs"
@@ -155,6 +167,18 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
         icon="heroicons:x-mark-16-solid"
         v-if="editable"
       />
+      <UButton 
+        v-if="numOfNewAssignment > 0"
+        size="2xs"
+        color="white"
+        variant="ghost"
+        @click="showNewAssignmentForm"
+        label="New Assignment from Gitea"
+      >
+        <template #leading>
+          <UBadge color="white">{{ numOfNewAssignment }}</UBadge>
+        </template>
+      </UButton>
     </div>
     <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
       <UTabs 
@@ -262,5 +286,20 @@ async function doDelete({ subdomain }: { subdomain: Subdomain }, close: () => vo
     prevent-close
   >
     <SubdomainForm :form="form" @submit="submit" />
+  </UModal>
+
+  <UModal 
+    :model-value="isShowingNewAssignmentForm"
+    @update:model-value="hideNewAssignmentForm"
+    prevent-close
+    :ui="{
+      width: 'w-max sm:max-w-max'
+    }"
+  >
+    <NewGiteaIssueList 
+      :project-id="projectId"
+      @close="hideNewAssignmentForm"
+      :subdomain-tabs="tabs"
+    />
   </UModal>
 </template>

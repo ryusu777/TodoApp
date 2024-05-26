@@ -2,6 +2,7 @@
 import type { AssignmentStatusEnum } from '../api/assignmentApi';
 import type { useAssignmentForm } from '../composables/useAssignmentForm';
 import type { NumberedAssignment, useAssignmentState } from '../composables/useAssignmentState';
+import IssueNumber from './IssueNumber.vue';
 
 const props = defineProps<{
   assignment: NumberedAssignment;
@@ -134,9 +135,7 @@ async function changeStatus(status: AssignmentStatusEnum) {
       </div>
       <p class="text-sm">{{ assignment.description }}</p>
       <div class="text-sm" v-if="assignment.issueNumber">
-        <UTooltip :text="assignment.issueUrl" :popper="{ placement: 'top' }">
-          <a :href="assignment.issueUrl" target="_blank" class="text-primary underline">#{{ assignment.issueNumber }}</a>
-        </UTooltip>
+        <IssueNumber :assignment="assignment" />
       </div>
     </div>
     <div class="flex flex-between items-end w-full">
