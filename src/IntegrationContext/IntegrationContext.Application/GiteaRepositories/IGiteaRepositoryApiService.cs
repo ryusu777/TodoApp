@@ -36,4 +36,12 @@ public interface IGiteaRepositoryApiService
         string repoName,
         CancellationToken ct
     );
+
+    public Task<Result<List<GiteaActivitiesDto>>> GetGiteaRepositoryActivitiesAsync(
+        JwtToken jwt,
+        UserId owner,
+        string repoName,
+        string date,
+        CancellationToken ct
+    );
 }
