@@ -9,5 +9,6 @@ public record HandleIssueCreateCommand(
     string Body,
     ICollection<string> Assignees,
     DateTime? DueDate,
-    int GiteaRepositoryId
+    int GiteaRepositoryId,
+    string UpdateAt
 ) : ICommand;

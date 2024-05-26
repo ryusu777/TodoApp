@@ -34,7 +34,8 @@ public class IssueHookEndpoint : Endpoint<IssueHookRequest, object>
                     ?.Select(e => e.Username)
                     .ToList() ?? new List<string>(),
                 req.Issue.DueDate,
-                req.Repository.Id
+                req.Repository.Id,
+                req.Issue.UpdatedAt
             ), ct);
 
         if (req.Action == IssueHookRequest.IssueAction.Edited ||

@@ -68,7 +68,8 @@ public class GiteaIssueApiService : IGiteaIssueApiService
             GiteaIssueId.Create(response.Id),
             IssueNumber.Create(response.IssueNumber),
             AssignmentId.Create(message.Id),
-            repository.Id
+            repository.Id,
+            response.UpdateAt
         );
 
         return Result.Success(createdIssue);

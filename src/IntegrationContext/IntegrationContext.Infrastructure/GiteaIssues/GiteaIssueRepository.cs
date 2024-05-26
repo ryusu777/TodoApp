@@ -2,6 +2,7 @@ using IntegrationContext.Application.GiteaIssues;
 using IntegrationContext.Application.GiteaIssues.Dtos;
 using IntegrationContext.Domain.GiteaIssues;
 using IntegrationContext.Domain.GiteaIssues.ValueObjects;
+using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using IntegrationContext.Infrastructure.Persistence.Data;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +90,20 @@ public class GiteaIssueRepository : IGiteaIssueRepository
         return await _dbContext
             .GiteaIssues
             .AnyAsync(e => e.Id == id, ct);
+    }
+
+    public async Task<Result<string>> GetLastSyncedAssignmentDateAsync(GiteaRepositoryId repositoryId, CancellationToken ct)
+    {
+        var lastAssignment = await _dbContext
+            .GiteaIssues
+            .Where(e => e.GiteaRepositoryId == repositoryId)
+            .OrderByDescending(e => e.UpdatedAt)
+            .LastOrDefaultAsync();
+
+        if (lastAssignment is null)
+            return Result.Success<string>("");
+
+        return Result.Success(lastAssignment.UpdatedAt);
     }
 }
 

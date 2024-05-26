@@ -55,7 +55,8 @@ public class HandleIssueCreateCommandHandler : OutboxedCommandHandler<HandleIssu
                 GiteaIssueId.Create(request.Id),
                 IssueNumber.Create(request.IssueNumber),
                 assignmentId,
-                GiteaRepositoryId.Create(request.GiteaRepositoryId));
+                GiteaRepositoryId.Create(request.GiteaRepositoryId),
+                request.UpdateAt);
 
             await _unitOfWork.SaveChangesAsync(new GiteaIssueCreated(issue), cancellationToken);
         }

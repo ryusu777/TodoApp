@@ -19,21 +19,23 @@ public class GiteaIssue : AggregateRoot<GiteaIssueId>
         GiteaIssueId id,
         IssueNumber issueNumber,
         AssignmentId assignmentId,
-        GiteaRepositoryId giteaRepositoryId) : base(id)
+        GiteaRepositoryId giteaRepositoryId,
+        string updateAt) : base(id)
     {
         AssignmentId = assignmentId;
         GiteaRepositoryId = giteaRepositoryId;
         IssueNumber = issueNumber;
-        UpdatedAt = DateTime.Now.ToString();
+        UpdatedAt = updateAt;
     }
 
     public static GiteaIssue Create(
         GiteaIssueId id,
         IssueNumber issueNumber,
         AssignmentId assignmentId,
-        GiteaRepositoryId giteaRepositoryId)
+        GiteaRepositoryId giteaRepositoryId,
+        string updateAt)
     {
-        return new(id, issueNumber, assignmentId, giteaRepositoryId);
+        return new(id, issueNumber, assignmentId, giteaRepositoryId, updateAt);
     }
 
     public void Update(string updatedAt)
