@@ -1,8 +1,16 @@
 import { ChangeAssignmentStatus, DeleteAssignment, GetAssignments, type Assignment, type AssignmentStatusEnum, type GetAssignmentsResponse } from "../api/assignmentApi";
+import { GetAssignmentsIssueNumber, type GetAssignmentsIssueNumberResponse } from "../api/giteaIssueApi";
+
+export type NumberedAssignment = Assignment & {
+  issueNumber?: number;
+  issueUrl?: string;
+};
 
 export function useAssignmentState(projectId: string, subdomainId: string) {
-  const assignments = ref<Assignment[]>([]);
+  const assignments = ref<NumberedAssignment[]>([]);
   const assignmentsComputed = computed(() => assignments.value);
+  const isFetchingIssueNumber = ref(false);
+  const isFetchingIssueNumberComputed = computed(() => isFetchingIssueNumber.value);
 
   const apiUtil = useApiUtils();
 
@@ -46,6 +54,31 @@ export function useAssignmentState(projectId: string, subdomainId: string) {
 
     if (errorDescription)
       return errorDescription;
+
+    await fetchIssueNumber();
+  }
+
+  async function fetchIssueNumber() {
+    return new Promise<void>((resolve, reject) => {
+      apiUtil
+        .try(() => GetAssignmentsIssueNumber({ 
+            assignmentIds: assignments.value.map(e => e.id!)
+          }),
+          (response) => {
+            const assignmentNumbers = response.data!;
+            assignmentNumbers.forEach((e) => {
+              const foundAssignment = assignments.value.find(a => a.id === e.assignmentId);
+              if (foundAssignment) {
+                foundAssignment.issueNumber = e.issueNumber;
+                foundAssignment.issueUrl = e.issueUrl;
+              }
+            });
+            resolve();
+          }, 
+          (error: string) => {
+            reject(error);
+          });
+    });
   }
 
   async function setAssignmentStatus(assignmentId: string, assignmentStatus: AssignmentStatusEnum) {
@@ -66,7 +99,8 @@ export function useAssignmentState(projectId: string, subdomainId: string) {
     fetch,
     assignments: assignmentsComputed,
     delete: doDelete,
-    setAssignmentStatus
+    setAssignmentStatus,
+    isFetchingIssueNumber: isFetchingIssueNumberComputed
   }
 }
 

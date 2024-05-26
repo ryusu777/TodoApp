@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 //
-console.log(process.env.API_URL);
 export default defineNuxtConfig({
   devtools: { enabled: true },
   typescript: {

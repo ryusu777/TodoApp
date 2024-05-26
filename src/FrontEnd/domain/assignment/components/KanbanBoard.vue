@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Assignment, AssignmentStatusEnum } from '../api/assignmentApi';
+import type { AssignmentStatusEnum } from '../api/assignmentApi';
 import type { useAssignmentForm } from '../composables/useAssignmentForm';
-import type { useAssignmentState } from '../composables/useAssignmentState';
+import type { NumberedAssignment, useAssignmentState } from '../composables/useAssignmentState';
 import AssignmentVue from './Assignment.vue';
 
 const props = defineProps<{
-  assignments: Assignment[];
+  assignments: NumberedAssignment[];
   type: AssignmentStatusEnum;
   form: ReturnType<typeof useAssignmentForm>;
   state: ReturnType<typeof useAssignmentState>;
