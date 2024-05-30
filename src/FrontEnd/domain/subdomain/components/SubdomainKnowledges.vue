@@ -128,7 +128,14 @@ defineExpose({
 
 <template>
   <DefineTemplate>
-    <h1>Knowledge defined template</h1>
+    <div>
+      <UButton 
+        icon="heroicons:plus"
+        label="New Knowledge"
+        size="md"
+        @click="form.create()"
+      />
+    </div>
   </DefineTemplate>
   <div class="flex flex-row flex-grow pt-2">
     <div class="bg-gray-100 dark:bg-gray-800 rounded-lg">
@@ -148,58 +155,50 @@ defineExpose({
           },
         }"
         :key="refreshTabKey"
-        >
-          <template #default="{ item }">
-            <div class="flex flex-row w-full justify-between items-center">
-              <span>{{ item.label }}</span>
-              <div v-if="editable" class="gap-x-1 ml-2 flex">
-                <UPopover>
-                  <UButton 
-                    icon="heroicons:trash"
-                    square
-                    color="red"
-                    size="2xs"
-                    v-if="editable" 
-                  />
+      >
+        <template #default="{ item }">
+          <div class="flex flex-row w-full justify-between items-center">
+            <span>{{ item.label }}</span>
+            <div v-if="editable" class="gap-x-1 ml-2 flex">
+              <UPopover>
+                <UButton 
+                  icon="heroicons:trash"
+                  square
+                  color="red"
+                  size="2xs"
+                  v-if="editable" 
+                />
 
-                  <template #panel="{ close }">
-                    <div class="flex flex-col p-3 gap-y-2 text-white">
-                      <span>Are you sure want to delete this?</span>
-                      <div class="flex justify-end gap-x-1">
-                        <UButton 
-                          icon="heroicons:x-mark-16-solid"
-                          label="No"
-                          square
-                          size="2xs"
-                          class="px-2"
-                          @click="close"
-                        />
-                        <UButton 
-                          icon="heroicons:trash"
-                          label="Yes"
-                          square
-                          color="red"
-                          size="2xs"
-                          class="px-2"
-                          @click="doDelete(item, close)"
-                        />
-                      </div>
+                <template #panel="{ close }">
+                  <div class="flex flex-col p-3 gap-y-2 text-white">
+                    <span>Are you sure want to delete this?</span>
+                    <div class="flex justify-end gap-x-1">
+                      <UButton 
+                        icon="heroicons:x-mark-16-solid"
+                        label="No"
+                        square
+                        size="2xs"
+                        class="px-2"
+                        @click="close"
+                      />
+                      <UButton 
+                        icon="heroicons:trash"
+                        label="Yes"
+                        square
+                        color="red"
+                        size="2xs"
+                        class="px-2"
+                        @click="doDelete(item, close)"
+                      />
                     </div>
-                  </template>
-                </UPopover>
-              </div>
+                  </div>
+                </template>
+              </UPopover>
             </div>
-          </template>
-        </UTabs>
-      <div class="px-1 pb-1">
-        <UButton
-          size="sm"
-          variant="ghost"
-          icon="heroicons:plus"
-          color="white"
-          class="w-full justify-center"
-          @click="form.create()"
-        />
+          </div>
+        </template>
+      </UTabs>
+      <div class="px-1">
         <UButton 
           size="sm"
           variant="ghost"
