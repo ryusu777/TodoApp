@@ -35,14 +35,12 @@ namespace ProjectManagement.Infrastructure.Migrations
                 name: "ProjectHierarchyMember",
                 columns: table => new
                 {
-                    HierarchyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    HierarchyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectHierarchyMember", x => new { x.HierarchyId, x.Id });
+                    table.PrimaryKey("PK_ProjectHierarchyMember", x => new { x.HierarchyId, x.Username });
                     table.ForeignKey(
                         name: "FK_ProjectHierarchyMember_ProjectHierarchy_HierarchyId",
                         column: x => x.HierarchyId,

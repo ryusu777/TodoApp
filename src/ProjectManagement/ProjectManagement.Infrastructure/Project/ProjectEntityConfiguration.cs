@@ -129,6 +129,8 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
 
                     mb.WithOwner().HasForeignKey("HierarchyId");
 
+                    mb.HasKey("HierarchyId", "Value");
+
                     mb.Property(e => e.Value)
                         .HasColumnName("Username")
                         .ValueGeneratedNever()
