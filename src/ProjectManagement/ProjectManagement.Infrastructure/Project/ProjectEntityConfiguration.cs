@@ -12,6 +12,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
         ConfigureProjectTable(builder);
         ConfigureProjectPhaseTable(builder);
         ConfigureProjectMembersTable(builder);
+        ConfigureProjectHierarchyTable(builder);
     }
 
     private void ConfigureProjectTable(EntityTypeBuilder<Domain.Project.Project> builder)
@@ -92,5 +93,51 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
                 )
                 .HasMaxLength(50);
         });
+    }
+
+    private void ConfigureProjectHierarchyTable(EntityTypeBuilder<Domain.Project.Project> builder)
+    {
+        builder
+            .OwnsMany(e => e.Hierarchies, sb => 
+            {
+                sb.ToTable("ProjectHierarchy");
+
+                sb.WithOwner().HasForeignKey("ProjectId");
+
+                sb.HasKey("Id");
+                sb.HasIndex("ProjectId");
+                
+                sb.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasConversion(
+                        id => id.Value,
+                        value => HierarchyId.Create(value));
+
+                sb.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                sb.Property(e => e.SuperiorHierarchyId)
+                    .IsRequired(false)
+                    .ValueGeneratedNever()
+                    .HasConversion(
+                        id => id!.Value,
+                        value => HierarchyId.Create(value));
+
+                sb.OwnsMany(e => e.MemberUsernames, mb => {
+                    mb.ToTable("ProjectHierarchyMember");
+
+                    mb.WithOwner().HasForeignKey("HierarchyId");
+
+                    mb.Property(e => e.Value)
+                        .HasColumnName("Username")
+                        .ValueGeneratedNever()
+                        .HasConversion(
+                            username => username,
+                            value => UserId.Create(value).Value
+                        )
+                        .HasMaxLength(50);
+                });
+            });
     }
 }
