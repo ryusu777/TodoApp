@@ -27,7 +27,7 @@ public class CreateProjectHierarchyCommandHandler : ICommandHandler<CreateProjec
             return projectResult;
         }
 
-        var superiorHierarchyId = request.SuperiorId == Guid.Empty ? null : HierarchyId.Create(request.SuperiorId);
+        var superiorHierarchyId = request.SuperiorId.HasValue ? HierarchyId.Create(request.SuperiorId!.Value) : null;
         var memberUsernames = request.MemberUsernames.Select(x => UserId.Create(x)).ToList();
 
         var hierarchy = Hierarchy.Create(

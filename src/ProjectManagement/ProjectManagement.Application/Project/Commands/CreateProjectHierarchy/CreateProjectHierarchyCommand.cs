@@ -5,6 +5,6 @@ namespace ProjectManagement.Application.Project.Commands.CreateProjectHierarchy;
 public record CreateProjectHierarchyCommand(
     string ProjectId,
     string Name,
-    Guid SuperiorId,
+    Guid? SuperiorId,
     ICollection<string> MemberUsernames
 ) : ICommand;

@@ -26,12 +26,15 @@ public class UpdateProjectHierarchyMembersCommandHandler : ICommandHandler<Updat
             return projectResult;
         }
 
-        projectResult.Value
+        var result = projectResult.Value
             .UpdateProjectHierarchyMembers(
                 HierarchyId.Create(request.HierarchyId), 
                 request.MemberUsernames
                     .Select(x => UserId.Create(x))
                     .ToList());
+        
+        if (result.IsFailure)
+            return result;
 
         return await _unitOfWork.SaveChangesAsync(projectResult.Value.DomainEvents, cancellationToken);
     }
