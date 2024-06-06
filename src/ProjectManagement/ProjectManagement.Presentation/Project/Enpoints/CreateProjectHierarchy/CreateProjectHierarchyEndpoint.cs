@@ -14,8 +14,20 @@ public class CreateProjectHierarchyEndpoint : Endpoint<CreateProjectHierarchyCom
         _sender = sender;
     }
 
+    public override void Configure()
+    {
+        Post(ProjectEndpointRoutes.Hierarchies);
+        Group<ProjectEndpointGroup>();
+    }
+
     public override async Task HandleAsync(CreateProjectHierarchyCommand request, CancellationToken cancellationToken)
     {
+        if (Route<string>("id") != request.ProjectId) {
+            await SendResultAsync(TypedResults.BadRequest());
+
+            return;
+        }
+
         var response = await _sender.Send(request, cancellationToken);
         if (response.IsFailure)
             await SendResultAsync(TypedResults.BadRequest(

@@ -16,12 +16,21 @@ public class DeleteProjectHierarchyEndpoint : Endpoint<DeleteProjectHierarchyCom
         _sender = sender;
     }
 
+    public override void Configure()
+    {
+        Delete(ProjectEndpointRoutes.DeleteHierarchy);
+        Group<ProjectEndpointGroup>();
+    }
+
     public override async Task HandleAsync(DeleteProjectHierarchyCommand request, CancellationToken cancellationToken)
     {
         var response = await _sender.Send(request, cancellationToken);
-        if (response.IsFailure)
+        if (response.IsFailure) {
             await SendResultAsync(TypedResults
                 .BadRequest(new DeleteProjectHierarchyResponse(response.Error.Description)));
+
+            return;
+        }
 
         await SendNoContentAsync();
     }

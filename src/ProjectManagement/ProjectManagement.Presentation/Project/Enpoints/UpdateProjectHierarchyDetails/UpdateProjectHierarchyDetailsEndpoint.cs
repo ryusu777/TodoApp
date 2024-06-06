@@ -13,8 +13,21 @@ public class UpdateProjectHierarchyDetailsEndpoint : Endpoint<UpdateProjectHiera
         _sender = sender;
     }
 
+    public override void Configure()
+    {
+        Put(ProjectEndpointRoutes.HierarchyDetail);
+        Group<ProjectEndpointGroup>();
+    }
+
     public override async Task HandleAsync(UpdateProjectHierarchyDetailsCommand request, CancellationToken cancellationToken)
     {
+        if (Route<Guid>("hierarchyId") != request.HierarchyId || Route<string>("id") != request.ProjectId)
+        {
+            await SendResultAsync(TypedResults.BadRequest());
+
+            return;
+        }
+
         var response = await _sender.Send(request, cancellationToken);
         if (response.IsFailure)
             await SendResultAsync(TypedResults.BadRequest(
