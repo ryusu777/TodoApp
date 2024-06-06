@@ -18,14 +18,12 @@ public sealed class Project : AggregateRoot<ProjectId>
         string name,
         string description,
         ICollection<Hierarchy> projectHierarchies,
-        ICollection<UserId> projectMembers,
         ICollection<Phase> projectPhases,
         ProjectStatus status = ProjectStatus.Planning
     ) : base(code)
     {
         Name = name;
         Description = description;
-        ProjectMembers = projectMembers;
         Hierarchies = projectHierarchies;
         ProjectPhases = projectPhases;
         Status = status;
@@ -35,29 +33,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         string code, 
         string name,
         string description,
-        ICollection<UserId> projectMembers,
-        ICollection<Phase> projectPhases,
-        ProjectStatus status = ProjectStatus.Planning
-	) {
-        var result = new Project(
-            ProjectId.Create(code),
-            name,
-            description,
-            new List<Hierarchy>(),
-            projectMembers,
-            projectPhases,
-            status
-        );
-
-        return result;
-    }
-
-    public static Project Create(
-        string code, 
-        string name,
-        string description,
         ICollection<Hierarchy> projectHierarchies,
-        ICollection<UserId> projectMembers,
         ICollection<Phase> projectPhases,
         ProjectStatus status = ProjectStatus.Planning
 	) {
@@ -66,7 +42,6 @@ public sealed class Project : AggregateRoot<ProjectId>
             name,
             description,
             projectHierarchies,
-            projectMembers,
             projectPhases,
             status
         );
@@ -78,7 +53,6 @@ public sealed class Project : AggregateRoot<ProjectId>
     public string Description { get; private set; }
     public ProjectStatus Status { get; private set; }
     public ICollection<Phase> ProjectPhases { get; private set; }
-    public ICollection<UserId> ProjectMembers { get; private set; }
     public ICollection<Hierarchy> Hierarchies { get; private set; }
 
     public Result UpdateProjectHierarchyMembers(HierarchyId id, ICollection<UserId> memberUserNames)
@@ -100,6 +74,29 @@ public sealed class Project : AggregateRoot<ProjectId>
     public List<UserId> GetAllProjectMembers()
     {
         return Hierarchies.SelectMany(x => x.MemberUsernames).ToList();
+    }
+
+    public Result SyncProjectMembers(ICollection<UserId> usernames)
+    {
+        var defaultHierarchy = Hierarchies.FirstOrDefault(x => x.Name == Hierarchy.DefaultHierarchyName);
+
+        var allExistingMembers = GetAllProjectMembers();
+
+        var newMembers = usernames.Except(allExistingMembers).ToList();
+
+        if (defaultHierarchy is not null)
+        {
+            defaultHierarchy.UpdateMembers(newMembers);
+            RaiseDomainEvent(new ProjectHierarchyMembersUpdated(Id, defaultHierarchy.Id, newMembers));
+            return Result.Success();
+        }
+
+        defaultHierarchy = Hierarchy.CreateDefault();
+        defaultHierarchy.UpdateMembers(newMembers);
+        Hierarchies.Add(defaultHierarchy);
+        RaiseDomainEvent(new ProjectHierarchyCreated(Id, defaultHierarchy));
+
+        return Result.Success();
     }
 
     public Result UpdateProjectHierarchyDetail(HierarchyId id, string name, HierarchyId? superiorHierarchyId)
@@ -144,18 +141,6 @@ public sealed class Project : AggregateRoot<ProjectId>
         Hierarchies.Remove(hierarchy);
 
         RaiseDomainEvent(new ProjectHierarchyDeleted(Id, id));
-
-        return Result.Success();
-    }
-
-    /*
-     * This method is deprecated, use Project Hierarchy for members
-     * */
-    public Result UpdateProjectMembers(ICollection<UserId> userIds)
-    {
-        ProjectMembers = userIds;
-
-        RaiseDomainEvent(new ProjectMembersUpdated(Id, ProjectMembers));
 
         return Result.Success();
     }

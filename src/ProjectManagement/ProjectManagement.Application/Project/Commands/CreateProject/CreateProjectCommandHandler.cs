@@ -2,7 +2,6 @@
 using ProjectManagement.Application.Abstractions.Data;
 using ProjectManagement.Application.Abstractions.Messaging;
 using ProjectManagement.Application.Project.Events;
-using ProjectManagement.Domain.Common.ValueObjects;
 
 namespace ProjectManagement.Application.Project.Commands.CreateProject;
 
@@ -19,7 +18,7 @@ public sealed class CreateProjectCommandHandler : ICommandHandler<CreateProjectC
             request.Code,
             request.Name,
             request.Description,
-            request.ProjectMembers.Select(e => UserId.Create(e)).ToList(),
+            request.ProjectHierarchies.Select(e => e.ToDomain()).ToList(),
             request.ProjectPhases
                 .Select(e => e.ToDomain()).ToList());
 

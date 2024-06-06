@@ -4,7 +4,7 @@ using ProjectManagement.Application.Project.Commands.CreateProject;
 
 namespace ProjectManagement.Presentation.Project.Endpoints.CreateProject;
 
-public class CreateProjectEndpoint : Endpoint<CreateProjectRequest, CreateProjectResponse>
+public class CreateProjectEndpoint : Endpoint<CreateProjectCommand, CreateProjectResponse>
 {
     public ISender _sender;
 
@@ -19,10 +19,9 @@ public class CreateProjectEndpoint : Endpoint<CreateProjectRequest, CreateProjec
         Group<ProjectEndpointGroup>();
     }
 
-    public override async Task HandleAsync(CreateProjectRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CreateProjectCommand req, CancellationToken ct)
     {
-        CreateProjectCommand command = new CreateProjectCommand(req.Code, req.Name, req.Description, req.ProjectMembers, req.ProjectPhases); ;
-        var result = await _sender.Send(command, ct);
+        var result = await _sender.Send(req, ct);
 
         if (result.IsFailure) 
         {

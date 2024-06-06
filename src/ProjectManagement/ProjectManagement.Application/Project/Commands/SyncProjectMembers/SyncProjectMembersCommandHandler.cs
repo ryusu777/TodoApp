@@ -38,7 +38,7 @@ public class SyncProjectMembersCommandHandler : ICommandHandler<SyncProjectMembe
                     cancellationToken);
 
             project
-                .UpdateProjectMembers(response
+                .SyncProjectMembers(response
                     .Message
                     .Assignees
                     .Select(e => UserId.Create(e))

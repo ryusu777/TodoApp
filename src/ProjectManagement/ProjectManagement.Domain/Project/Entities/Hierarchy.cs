@@ -10,6 +10,8 @@ public class Hierarchy : Entity<HierarchyId>
 	private Hierarchy() { }
 #pragma warning restore CS8618
 
+    public const string DefaultHierarchyName = "Default";
+
     public string Name { get; private set; }
     public HierarchyId? SuperiorHierarchyId { get; private set; }
     public ICollection<UserId> MemberUsernames { get; private set; }
@@ -38,6 +40,11 @@ public class Hierarchy : Entity<HierarchyId>
         );
 
         return result;
+    }
+
+    public static Hierarchy CreateDefault()
+    {
+        return Create(DefaultHierarchyName, null, null);
     }
 
     public void UpdateMembers(ICollection<UserId> memberUsernames)
