@@ -12,6 +12,7 @@ public static class ProjectDomainErrors
     public static Error FailedToSyncMembers(string message) => new(nameof(FailedToSyncMembers), "Failed to sync project members with Gitea repository: " + message);
     public static Error HierarchyNotFound(HierarchyId id) => new(nameof(HierarchyNotFound), $"The hierarcy {id.Value.ToString()} are not found");
     public static Error HierarchiesAlreadyExists => new(nameof(HierarchiesAlreadyExists), "The hierarchies already exist in the project");
+    public static Error CannotDeleteHierarchyWithMembers(HierarchyId id) => new(nameof(CannotDeleteHierarchyWithMembers), $"Cannot delete hierarchy {id.Value} with members");
     public static Error MemberNotFoundInHierarchy(UserId userId, HierarchyId hierarchyId) 
         => new(nameof(MemberNotFoundInHierarchy), $"The member {userId.Value} is not found in the hierarchy {hierarchyId.Value}");
 }

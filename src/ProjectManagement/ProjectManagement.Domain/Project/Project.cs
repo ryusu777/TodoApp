@@ -136,6 +136,11 @@ public sealed class Project : AggregateRoot<ProjectId>
             return Result.Failure(ProjectDomainErrors.HierarchyNotFound(id));
         }
 
+        if (hierarchy.MemberUsernames.Any())
+        {
+            return Result.Failure(ProjectDomainErrors.CannotDeleteHierarchyWithMembers(id));
+        }
+
         Hierarchies.Remove(hierarchy);
 
         RaiseDomainEvent(new ProjectHierarchyDeleted(Id, id));
