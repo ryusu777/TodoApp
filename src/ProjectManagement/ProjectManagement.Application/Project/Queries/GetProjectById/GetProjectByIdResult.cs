@@ -9,6 +9,6 @@ public record GetProjectByIdResult
     string Description,
     int Status,
     ICollection<Phase> ProjectPhases,
-    ICollection<string> ProjectMembers,
+    ICollection<Hierarchy> ProjectHierarchies,
     int NumOfNewAssignment
 );
