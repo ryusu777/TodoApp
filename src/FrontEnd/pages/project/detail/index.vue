@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ProjectPhases from '~/domain/project/components/ProjectPhases.vue';
-import ProjectMembers from '~/domain/project/components/ProjectMembers.vue';
 import ProjectRepositories from '~/domain/project/components/ProjectRepositories.vue';
 import { useProject } from '~/domain/project/composable/useProject';
+import ProjectHierarchies from '~/domain/project/components/ProjectHierarchies.vue';
 
 definePageMeta({
   name: 'Detail',
@@ -23,11 +23,6 @@ async function onRefresh() {
 }
 
 const phases = computed(() => state.project?.projectPhases || []);
-const members = computed(() => state
-  .project
-  ?.projectMembers
-  .map(e => { return { username: e } }) || []);
-
 </script>
 
 <template>
@@ -44,10 +39,10 @@ const members = computed(() => state
     />
   </div>
   <div>
-    <ProjectMembers
-      :members="members" 
+    <ProjectHierarchies 
       :project-id="state.project?.id || ''"
       :pending="state.isFetching"
+      :hierarchies="state.project?.projectHierarchies || []"
       :refresh="onRefresh"
     />
   </div>

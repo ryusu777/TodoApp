@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { type Member } from "~/domain/project/api/projectApi";
-
 const props = defineProps<{
-  member: Member;
+  username: string;
 }>();
 
 </script>
@@ -22,7 +20,7 @@ const props = defineProps<{
   >
     <div class="flex flex-col">
       <div class="flex flex-row justify-between gap-3">
-        <p class="text-bold text-xl">{{ props.member.username }}</p>
+        <p class="text-bold text-xl">{{ props.username }}</p>
       </div>
     </div>
   </UCard>
