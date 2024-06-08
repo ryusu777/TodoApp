@@ -6,6 +6,9 @@ import InputDate from '~/forms/components/InputDate.vue';
 import { useSubdomainTabs } from '~/domain/subdomain/composable/useSubdomainTabs';
 import SelectProjectRepository from '~/domain/gitea-integration/components/SelectProjectRepository.vue';
 import type { GiteaRepository } from '~/domain/gitea-integration/api/giteaIntegrationApi';
+import { AssignmentFormTestIds as TestId } from '../tests/test-ids';
+import SelectAssignees from './SelectAssignees.vue';
+import type SelectAssigneesVue from './SelectAssignees.vue';
 
 const props = defineProps<{
   form: ReturnType<typeof useAssignmentForm>
@@ -61,12 +64,13 @@ function submit() {
   >
     <div class="flex gap-x-2">
       <UFormGroup label="Title" name="title" class="w-full">
-        <UInput v-model="state.title" placeholder="title.." />
+        <UInput v-model="state.title" placeholder="title.." :data-testid="TestId.title"/>
       </UFormGroup>
     </div>
     <div class="flex gap-x-2">
       <UFormGroup label="Repository" name="giteaRepositoryId" v-if="!state.id">
-        <SelectProjectRepository 
+        <SelectProjectRepository
+          :data-testid="TestId.giteaRepositoryId"
           :project-id="form.projectId"
           :selected="selectedRepository"
           @update:selected="setSelectedRepository"
@@ -74,7 +78,7 @@ function submit() {
       </UFormGroup>
 
       <UFormGroup label="Deadline" name="deadline">
-        <InputDate v-model="state.deadline" />
+        <InputDate v-model="state.deadline" :data-testid="TestId.deadline" />
       </UFormGroup>
 
       <UFormGroup label="Phase" name="phaseId" class="flex-grow">
@@ -82,16 +86,16 @@ function submit() {
           option-attribute="name"
           v-model="selectedPhase"
           :options="phaseOptions"
+          :data-testid="TestId.phaseId"
         />
       </UFormGroup>
     </div>
 
     <div class="flex gap-x-2">
       <UFormGroup label="Assignees" name="assignees" class="flex-1">
-        <USelectMenu 
+        <SelectAssignees 
           v-model="state.assignees"
-          :options="project.members"
-          multiple
+          :project-id="form.projectId"
         />
       </UFormGroup>
 
@@ -99,6 +103,7 @@ function submit() {
         <USelectMenu 
           v-model="state.reviewer"
           :options="project.members"
+          :data-testid="TestId.reviewer"
         />
       </UFormGroup>
 
@@ -107,6 +112,7 @@ function submit() {
           option-attribute="title"
           v-model="selectedSubdomain"
           :options="subdomainOptions"
+          :data-testid="TestId.subdomainId"
         />
       </UFormGroup>
     </div>
@@ -114,6 +120,8 @@ function submit() {
     <UFormGroup label="Description" name="description">
       <UTextarea 
         v-model="state.description"
+        placeholder="description.."
+        :data-testid="TestId.description"
       />
     </UFormGroup>
 
@@ -123,11 +131,13 @@ function submit() {
         label="Cancel" 
         icon="heroicons:x-circle-16-solid" 
         color = "red" 
+        :data-testid="TestId.cancelButton"
       />
       <UButton 
         type="submit" 
         label="Save" 
         icon="heroicons:paper-airplane-16-solid" 
+        :data-testid="TestId.submitButton"
       />
     </div>
   </UForm>

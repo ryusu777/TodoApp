@@ -10,6 +10,7 @@ export const ProjectApiRoute = {
   Hierarchy: (projectId: string) => `/project/${projectId}/hierarchies`,
   HierarchyDetail: (projectId: string, hierarchyId?: string) => `/project/${projectId}/hierarchies/${hierarchyId}`,
   HierarchyMembers: (projectId: string, hierarchyId?: string) => `/project/${projectId}/hierarchies/${hierarchyId}/members`,
+  GetAssignableHierarchies: (projectId: string) => `/project/${projectId}/assignable-hierarchies`,
 };
 
 export interface Phase {
@@ -203,3 +204,18 @@ export function GetAllProjectMembers(request: GetAllProjectMembersRequest) {
   const api = useApi();
   return api.$get<GetAllProjectMembersResponse>(ProjectApiRoute.Members(request.projectId));
 }
+
+export type GetAssignableHierarchiesResponse = {
+  projectId: string;
+  hierarchies: Hierarchy[];
+};
+
+export function GetAssignableHierarchies(projectId: string) {
+  const auth = useAuth();
+  const api = useApi();
+  return api.$get<GetAssignableHierarchiesResponse>(
+    ProjectApiRoute.GetAssignableHierarchies(projectId), null, {
+      'Authorization': 'Bearer ' + auth.jwtToken
+    });
+}
+
