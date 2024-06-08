@@ -15,4 +15,5 @@ public static class ProjectDomainErrors
     public static Error CannotDeleteHierarchyWithMembers(HierarchyId id) => new(nameof(CannotDeleteHierarchyWithMembers), $"Cannot delete hierarchy {id.Value} with members");
     public static Error MemberNotFoundInHierarchy(UserId userId, HierarchyId hierarchyId) 
         => new(nameof(MemberNotFoundInHierarchy), $"The member {userId.Value} is not found in the hierarchy {hierarchyId.Value}");
+    public static Error UserNotFound(UserId userId) => new(nameof(UserNotFound), $"The user {userId.Value} is not found");
 }

@@ -169,4 +169,40 @@ public sealed class Project : AggregateRoot<ProjectId>
 
         return Result.Success();
     }
+
+    public Result<List<Hierarchy>> GetAssignableHierarchies(UserId userId)
+    {
+        // select member from subordinates hierarchies
+        var hierarchy = Hierarchies.Where(x => x.MemberUsernames.Any(e => e == userId)).ToList();
+
+        if (hierarchy.Count == 0)
+        {
+            return Result.Failure<List<Hierarchy>>(ProjectDomainErrors.UserNotFound(userId));
+        }
+
+        var subordinates = new List<Hierarchy>();
+
+        foreach (var h in hierarchy)
+        {
+            subordinates.AddRange(GetSubordinateHierarchy(h, new List<Hierarchy>()));
+        }
+
+        return Result.Success(subordinates);
+    }
+
+    private List<Hierarchy> GetSubordinateHierarchy(Hierarchy hierarchy, List<Hierarchy> visitedHierarchies)
+    {
+        if (visitedHierarchies.Contains(hierarchy))
+        {
+            return visitedHierarchies;
+        }
+
+        foreach (var subHierarchy in Hierarchies.Where(x => x.SuperiorHierarchyId == hierarchy.Id))
+        {
+            visitedHierarchies.Add(subHierarchy);
+            visitedHierarchies = GetSubordinateHierarchy(subHierarchy, visitedHierarchies);
+        }
+
+        return visitedHierarchies;
+    }
 }

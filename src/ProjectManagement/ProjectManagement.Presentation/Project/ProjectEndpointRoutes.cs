@@ -12,4 +12,5 @@ public static class ProjectEndpointRoutes
     public const string HierarchyDetail = "/project/{id}/hierarchies/{hierarchyId}";
     public const string HierarchyMembers = "/project/{id}/hierarchies/{hierarchy-id}/members";
     public const string DeleteHierarchy = "/project/{ProjectId}/hierarchies/{HierarchyId}";
+    public const string GetAssignableHierarchies = "/project/{ProjectId}/assignable-hierarchies";
 }
