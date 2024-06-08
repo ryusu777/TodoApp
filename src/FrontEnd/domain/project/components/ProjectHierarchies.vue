@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useHierarchyForm } from '~/domain/project/composable/useHierarchyForm';
-import { DeleteProjectHierarchy, SyncProjectMembers, type Hierarchy, type Member } from '../api/projectApi';
+import { DeleteProjectHierarchy, SyncProjectMembers, type Hierarchy } from '../api/projectApi';
 import HierarchyForm from './HierarchyForm.vue';
+import ProjectHierarchy from './ProjectHierarchy.vue';
 
 // component definitions
 const props = defineProps<{
@@ -10,6 +11,19 @@ const props = defineProps<{
   pending: boolean;
   refresh: () => Promise<void>;
 }>();
+
+// component list
+const Components = computed(() => {
+  return props.hierarchies.map(hierarchy => h(ProjectHierarchy, {
+    hierarchy,
+    projectId: props.projectId,
+    pending: props.pending,
+    onRefresh: props.refresh,
+    key: hierarchy.id
+  }));
+});
+
+const ActiveHierarchy = computed(() => Components.value[selectedTab.value])
 
 // utils
 const apiUtils = useApiUtils();
@@ -191,6 +205,7 @@ const form = useHierarchyForm(props.projectId);
         />
       </div>
     </div>
+    <component :is="ActiveHierarchy" class="mt-3" />
   </div>
   <UModal 
     :model-value="form.show.value" 

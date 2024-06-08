@@ -189,3 +189,17 @@ export function DeleteProjectHierarchy(projectId: string, hierarchyId: string) {
   const api = useApi();
   return api.$delete(ProjectApiRoute.HierarchyDetail(projectId, hierarchyId));
 }
+
+export type GetAllProjectMembersRequest = {
+  projectId: string;
+};
+
+export type GetAllProjectMembersResponse = {
+  projectId: string;
+  memberUsernames: string[]
+};
+
+export function GetAllProjectMembers(request: GetAllProjectMembersRequest) {
+  const api = useApi();
+  return api.$get<GetAllProjectMembersResponse>(ProjectApiRoute.Members(request.projectId));
+}

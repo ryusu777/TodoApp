@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { createReusableTemplate } from '@vueuse/core';
 import { UpdateProjectHierarchyMembers, type Hierarchy } from '../api/projectApi';
+import Member from './Member.vue';
+import HierarchyMemberForm from './HierarchyMemberForm.vue';
+
+// component definition
+const emit = defineEmits(['refresh']);
 
 const props = defineProps<{
   hierarchy: Hierarchy;
@@ -8,35 +12,27 @@ const props = defineProps<{
   pending: boolean;
 }>();
 
+// utils
+const apiUtils = useApiUtils();
+const toast = useToast();
+
+// member functions
 const editable = ref(false);
-
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
-
 const memberUsernames = ref<string[]>([
   ...props.hierarchy.memberUsernames
 ]);
-
-defineExpose({
-  ReuseTemplate: ReuseTemplate
-});
 
 function revert() {
   memberUsernames.value = [...props.hierarchy.memberUsernames];
 }
 
+function add(username: string) {
+  memberUsernames.value.push(username);
+}
+
 function edit() {
   editable.value = true;
 }
-
-const emit = defineEmits(['refresh']);
-
-function refresh() {
-  emit('refresh');
-}
-
-const apiUtils = useApiUtils();
-
-const toast = useToast();
 
 async function persist() {
   await apiUtils.try(() => UpdateProjectHierarchyMembers({
@@ -57,44 +53,75 @@ function cancel() {
   editable.value = false;
   revert();
 }
+
+// api functions
+function refresh() {
+  emit('refresh');
+}
+
+// member form modal functions
+const showForm = ref(false);
+
+function onSubmit(username: string) {
+  add(username);
+  showForm.value = false;
+}
+
+function onShowForm() {
+  showForm.value = true;
+}
 </script>
 
 <template>
-  <DefineTemplate>
-    <div v-if="!editable">
+  <div class="flex flex-col" v-bind="$attrs">
+    <div class="flex gap-x-2 my-2">
+      <p class="text-lg">{{ hierarchy.name }} Members</p>
       <UButton 
+        v-if="!editable" 
+        @click="edit" 
+        color="gray" 
         icon="heroicons:pencil"
         size="xs"
-        color="white"
         variant="ghost"
-        @click="edit"
+      />
+      <UButton 
+        v-if="editable" 
+        @click="persist" 
+        color="green" 
+        size="xs"
+        label="Save Changes"
+      />
+      <UButton 
+        v-if="editable"
+        @click="cancel"
+        color="red"
+        size="xs"
+        label="Cancel"
       />
     </div>
-    <UButton 
-      size="xs"
-      color="red"
-      label="Cancel"
-      @click="cancel"
-      v-if="editable === true"
-      :ui="{
-        font: 'font-bold'
-      }"
-    />
-    <UButton 
-      size="xs"
-      label="Save Changes"
-      @click="persist"
-      v-if="editable === true"
-      :ui="{
-        font: 'font-bold'
-      }"
-    />
-  </DefineTemplate>
-  <div>
-    <MemberVue 
-      v-for="member in hierarchy.memberUsernames" 
-      :key="member" 
-      :username="member" 
-    />
+    <div class="flex gap-x-2 items-center">
+      <p class="text-gray-500" v-if="memberUsernames.length === 0">No members...</p>
+      <Member
+        v-for="member in memberUsernames" 
+        :key="member" 
+        :username="member" 
+      />
+      <UButton 
+        v-if="editable" 
+        @click="onShowForm"
+        color="gray" 
+        icon="heroicons:plus"
+        size="md"
+      />
+    </div>
   </div>
+  <UModal
+    v-model="showForm"
+  >
+    <HierarchyMemberForm 
+      :projectId="props.projectId" 
+      @submit="onSubmit" 
+      @close="showForm = false"
+    />
+  </UModal>
 </template>
