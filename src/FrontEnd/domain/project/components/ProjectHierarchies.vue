@@ -55,7 +55,7 @@ async function sync() {
     })
 }
 
-async function deleteHierarchy(item: typeof tabs.value[number]) {
+async function deleteHierarchy(item: typeof tabs.value[number], close: () => void) {
   await apiUtils.try(() => DeleteProjectHierarchy(props.projectId, item.id),
     () => {
       toast.add({
@@ -71,6 +71,8 @@ async function deleteHierarchy(item: typeof tabs.value[number]) {
         color: 'red'
       });
     });
+
+  close();
 }
 
 // tabs functions
@@ -154,7 +156,7 @@ const form = useHierarchyForm(props.projectId);
                         color="red"
                         size="2xs"
                         class="px-2"
-                        @click="deleteHierarchy(item)"
+                        @click="deleteHierarchy(item, close)"
                       />
                     </div>
                   </div>

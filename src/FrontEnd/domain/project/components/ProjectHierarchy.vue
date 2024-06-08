@@ -22,6 +22,10 @@ const memberUsernames = ref<string[]>([
   ...props.hierarchy.memberUsernames
 ]);
 
+function deleteMember(member: string) {
+  memberUsernames.value = memberUsernames.value.filter((username) => username !== member);
+}
+
 function revert() {
   memberUsernames.value = [...props.hierarchy.memberUsernames];
 }
@@ -105,6 +109,8 @@ function onShowForm() {
         v-for="member in memberUsernames" 
         :key="member" 
         :username="member" 
+        :editable="editable"
+        @delete="deleteMember(member)"
       />
       <UButton 
         v-if="editable" 

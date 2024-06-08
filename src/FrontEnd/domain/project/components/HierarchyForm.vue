@@ -49,7 +49,7 @@ async function submit() {
         <template #label>
           <div class="flex justify-between items-center w-full">
             <span v-if="state.superiorHierarchyId" class="truncate">{{ hierarchies.find(e => e.id === state.superiorHierarchyId)?.name }}</span>
-            <span v-else class="block truncate">Select people</span>
+            <span v-else class="block truncate">Select superior</span>
             <UButton 
               z-index="2"
               v-if="state.superiorHierarchyId" 
