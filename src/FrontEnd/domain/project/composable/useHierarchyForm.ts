@@ -52,6 +52,7 @@ export function useHierarchyForm(projectId: string) {
 
     const response = await UpdateProjectHierarchyDetail({
       projectId,
+      hierarchyId: model.id,
       name: model.name,
       superiorHierarchyId: model.superiorHierarchyId
     });

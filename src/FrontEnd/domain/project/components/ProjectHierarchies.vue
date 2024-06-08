@@ -111,6 +111,7 @@ const form = useHierarchyForm(props.projectId);
                 square
                 size="2xs"
                 v-if="editable" 
+                @click="form.update(hierarchies.find(e => e.id === item.id)!)"
               />
               <UPopover>
                 <UButton 
@@ -180,17 +181,12 @@ const form = useHierarchyForm(props.projectId);
       </div>
       <div class="space-x-2" v-if="editable">
         <UButton
-          size="sm"
-          icon="heroicons:check"
-          label="Save Changes"
-          color="green"
-          @click="editable = false"
-        />
-        <UButton
-          size="sm"
-          icon="heroicons:x-mark"
-          label="Cancel"
+          size="md"
+          icon="heroicons:x-mark-16-solid"
           color="red"
+          :ui="{
+            rounded: 'rounded-xl'
+          }"
           @click="editable = false"
         />
       </div>

@@ -8,7 +8,7 @@ export const ProjectApiRoute = {
   SyncMembers: (projectId: string) => `/project/${projectId}/sync-members`,
   Phases: (projectId: string) => `/project/${projectId}/phases`,
   Hierarchy: (projectId: string) => `/project/${projectId}/hierarchies`,
-  HierarchyDetail: (projectId: string, hierarchyId: string) => `/project/${projectId}/hierarchies/${hierarchyId}`,
+  HierarchyDetail: (projectId: string, hierarchyId?: string) => `/project/${projectId}/hierarchies/${hierarchyId}`,
   HierarchyMembers: (projectId: string, hierarchyId?: string) => `/project/${projectId}/hierarchies/${hierarchyId}/members`,
 };
 
@@ -144,7 +144,7 @@ export function UpdateProjectPhases(request: UpdateProjectPhasesRequest) {
 
 export type UpdateProjectHierarchyDetailRequest = {
   projectId: string;
-  hierarchyId?: string;
+  hierarchyId: string;
   name: string;
   superiorHierarchyId?: string;
 }
@@ -153,7 +153,7 @@ export type UpdateProjectHierarchyDetailResponse = IApiResponse;
 
 export function UpdateProjectHierarchyDetail(request: UpdateProjectHierarchyDetailRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.HierarchyMembers(request.projectId, request.hierarchyId), request);
+  return api.$put(ProjectApiRoute.HierarchyDetail(request.projectId, request.hierarchyId), request);
 }
 
 export type UpdateProjectHierarchyMembersRequest = {

@@ -26,6 +26,10 @@ async function submit() {
   }
   emit('refresh');
   closeForm();
+  toast.add({
+    title: 'Success',
+    description: 'Successfully saved hierarchy'
+  });
 }
 </script>
 
@@ -41,7 +45,23 @@ async function submit() {
         value-attribute="id"
         v-model="state.superiorHierarchyId"
         :options="selectableHierarchy"
-      />
+      >
+        <template #label>
+          <div class="flex justify-between items-center w-full">
+            <span v-if="state.superiorHierarchyId" class="truncate">{{ hierarchies.find(e => e.id === state.superiorHierarchyId)?.name }}</span>
+            <span v-else class="block truncate">Select people</span>
+            <UButton 
+              z-index="2"
+              v-if="state.superiorHierarchyId" 
+              @click.prevent="state.superiorHierarchyId = undefined" 
+              icon="heroicons:x-mark-16-solid" 
+              color="red" 
+              variant="ghost"
+              size="2xs"
+            />
+          </div>
+        </template>
+      </USelectMenu>
     </UFormGroup>
 
     <div class="flex justify-end gap-3">
