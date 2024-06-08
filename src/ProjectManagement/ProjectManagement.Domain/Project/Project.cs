@@ -73,7 +73,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public List<UserId> GetAllProjectMembers()
     {
-        return Hierarchies.SelectMany(x => x.MemberUsernames).ToList();
+        return Hierarchies.SelectMany(x => x.MemberUsernames).Distinct().ToList();
     }
 
     public Result SyncProjectMembers(ICollection<UserId> usernames)
