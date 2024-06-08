@@ -91,6 +91,11 @@ public sealed class Project : AggregateRoot<ProjectId>
             return Result.Success();
         }
 
+        if (newMembers.Count == 0)
+        {
+            return Result.Success();
+        }
+
         defaultHierarchy = Hierarchy.CreateDefault();
         defaultHierarchy.UpdateMembers(newMembers);
         Hierarchies.Add(defaultHierarchy);
