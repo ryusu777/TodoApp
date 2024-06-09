@@ -1,5 +1,3 @@
-import { isToken } from "typescript";
-
 export const useAuth = defineStore('auth', () => {
   const jwtToken = useCookie('jwt');
   const jwtComputed = computed(() => jwtToken.value);
@@ -9,6 +7,25 @@ export const useAuth = defineStore('auth', () => {
   function setTokens(jwt: string, refresh: string) {
     jwtToken.value = jwt;
     refreshToken.value = refresh;
+  }
+
+  function getUsername() {
+    if (!jwtToken.value)
+      return null;
+
+    const base64Url = jwtToken.value.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    const { sub } = JSON.parse(jsonPayload);
+    return sub;
   }
 
   function clearAuth() {
@@ -51,6 +68,7 @@ export const useAuth = defineStore('auth', () => {
     setTokens,
     isAuthenticated,
     isTokenExpired,
-    clearAuth
+    clearAuth,
+    getUsername
   };
 });

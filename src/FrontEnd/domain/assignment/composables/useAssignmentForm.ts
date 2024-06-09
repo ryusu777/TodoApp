@@ -1,15 +1,17 @@
-import { array, number, object, string } from "yup";
+import { number, object, string } from "yup";
 import { CreateAssignment, UpdateAssignment, type Assignment } from "../api/assignmentApi";
+import { useAuth } from "~/domain/auth/composables/useAuth";
 
 export function useAssignmentForm(projectId: string) {
   const show = ref(false);
+  const auth = useAuth();
 
   const model = reactive({
     id: undefined as string | undefined,
     description: '',
     title: '',
     deadline: undefined as string | undefined,
-    reviewer: undefined as string | undefined,
+    reviewer: auth.getUsername() as string | undefined,
     phaseId: undefined as string | undefined,
     subdomainId: undefined as string | undefined,
     giteaRepositoryId: undefined as number | undefined,
