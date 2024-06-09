@@ -59,4 +59,15 @@ public class Hierarchy : Entity<HierarchyId>
         Name = name;
         SuperiorHierarchyId = superiorHierarchyId;
     }
+
+    public Result RemoveMember(UserId userId)
+    {
+        if (!MemberUsernames.Contains(userId))
+        {
+            return Result.Failure(ProjectDomainErrors.MemberNotFoundInHierarchy(userId, Id));
+        }
+
+        MemberUsernames.Remove(userId);
+        return Result.Success();
+    }
 }

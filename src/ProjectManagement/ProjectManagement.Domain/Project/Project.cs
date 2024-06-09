@@ -74,13 +74,20 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public List<UserId> GetAllProjectMembers()
     {
-        return Hierarchies.SelectMany(x => x.MemberUsernames).Distinct().ToList();
+        return Members.ToList();
     }
 
     public Result SyncProjectMembers(ICollection<UserId> usernames)
     {
+        var deletedMembers = Members.Except(usernames).ToList();
         Members = usernames;
-        RaiseDomainEvent(new ProjectMembersSynced(Id, usernames));
+
+        foreach (var h in Hierarchies)
+        {
+            deletedMembers.ForEach(x => h.RemoveMember(x));
+        }
+
+        RaiseDomainEvent(new ProjectMembersSynced(this, usernames, deletedMembers));
         return Result.Success();
     }
 
