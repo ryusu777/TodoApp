@@ -5,12 +5,7 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true
   },
-  routeRules: {
-    '/api/**': {
-      proxy: { to: process.env.API_URL + '/api/**' }
-    }
-  },
-  modules: ['@nuxt/ui', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxt/test-utils/module'],
   css: ['~/public/css/main.css'],
   postcss: {
     plugins: {
@@ -21,4 +16,9 @@ export default defineNuxtConfig({
   ui: {
     icons: {}
   },
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.API_URL
+    }
+  }
 });

@@ -3,9 +3,9 @@ export interface IApiResponse<T=void> {
   data?: T;
 }
 
-const API_URL = "/api";
 
 export const useApi = defineStore('api', () => {
+  const API_URL = useRuntimeConfig().public.API_URL;
   /*
    * Sends request on client side
    */
