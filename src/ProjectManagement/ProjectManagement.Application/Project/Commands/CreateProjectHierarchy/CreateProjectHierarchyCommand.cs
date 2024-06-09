@@ -8,7 +8,7 @@ namespace ProjectManagement.Application.Project.Commands.CreateProjectHierarchy;
 public record CreateProjectHierarchyCommand(
     string ProjectId,
     string Name,
-    Guid? SuperiorId,
+    Guid? SuperiorHierarchyId,
     ICollection<string> MemberUsernames
 ) : ICommand
 {
@@ -17,7 +17,7 @@ public record CreateProjectHierarchyCommand(
         return Hierarchy
             .Create(
                 Name, 
-                SuperiorId is null ? null : HierarchyId.Create(SuperiorId.Value), 
+                SuperiorHierarchyId is null ? null : HierarchyId.Create(SuperiorHierarchyId.Value), 
                 MemberUsernames.Select(x => UserId.Create(x)).ToList());
     }
 };
