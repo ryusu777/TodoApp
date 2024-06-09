@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { useHierarchyForm } from '~/domain/project/composable/useHierarchyForm';
-import type { Hierarchy } from '../api/projectApi';
+import { useProject } from '../composable/useProject';
 
 const emit = defineEmits(['refresh']);
 const props = defineProps<{
   form: ReturnType<typeof useHierarchyForm>;
-  hierarchies: Hierarchy[];
 }>();
+
+const project = useProject();
 
 const toast = useToast();
 
-const selectableHierarchy = computed(() => props.hierarchies.filter(h => h.id !== props.form.model.id));
+const selectableHierarchy = computed(() => project.hierarchies!.filter(h => h.id !== props.form.model.id));
 
 const { schema, model: state, onSubmit, closeForm } = props.form;
 
@@ -48,7 +49,7 @@ async function submit() {
       >
         <template #label>
           <div class="flex justify-between items-center w-full">
-            <span v-if="state.superiorHierarchyId" class="truncate">{{ hierarchies.find(e => e.id === state.superiorHierarchyId)?.name }}</span>
+            <span v-if="state.superiorHierarchyId" class="truncate">{{ project.hierarchies!.find(e => e.id === state.superiorHierarchyId)?.name }}</span>
             <span v-else class="block truncate">Select superior</span>
             <UButton 
               z-index="2"

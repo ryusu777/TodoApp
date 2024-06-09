@@ -40,9 +40,7 @@ const phases = computed(() => state.project?.projectPhases || []);
   </div>
   <div>
     <ProjectHierarchies 
-      :project-id="state.project?.id || ''"
       :pending="state.isFetching"
-      :hierarchies="state.project?.projectHierarchies || []"
       :refresh="onRefresh"
     />
   </div>

@@ -2,15 +2,19 @@
 import { UpdateProjectHierarchyMembers, type Hierarchy } from '../api/projectApi';
 import Member from './Member.vue';
 import HierarchyMemberForm from './HierarchyMemberForm.vue';
+import { useProject } from '../composable/useProject';
 
 // component definition
 const emit = defineEmits(['refresh']);
 
 const props = defineProps<{
-  hierarchy: Hierarchy;
-  projectId: string;
+  hierarchyId: string;
   pending: boolean;
 }>();
+
+// project data
+const project = useProject();
+const hierarchy = computed(() => project.hierarchies?.find(h => h.id === props.hierarchyId));
 
 // utils
 const apiUtils = useApiUtils();
@@ -19,7 +23,7 @@ const toast = useToast();
 // member functions
 const editable = ref(false);
 const memberUsernames = ref<string[]>([
-  ...props.hierarchy.memberUsernames
+  ...hierarchy.value?.memberUsernames || []
 ]);
 
 function deleteMember(member: string) {
@@ -27,7 +31,7 @@ function deleteMember(member: string) {
 }
 
 function revert() {
-  memberUsernames.value = [...props.hierarchy.memberUsernames];
+  memberUsernames.value = [...hierarchy.value?.memberUsernames || []];
 }
 
 function add(username: string) {
@@ -40,8 +44,8 @@ function edit() {
 
 async function persist() {
   await apiUtils.try(() => UpdateProjectHierarchyMembers({
-      projectId: props.projectId,
-      hierarchyId: props.hierarchy.id,
+      projectId: project.project!.id,
+      hierarchyId: props.hierarchyId,
       memberUsernames: memberUsernames.value
     }), () => {
       toast.add({ title: 'Success', description: 'Successfully updated hierarchy members' });
@@ -79,7 +83,7 @@ function onShowForm() {
 <template>
   <div class="flex flex-col" v-bind="$attrs">
     <div class="flex gap-x-2 my-2">
-      <p class="text-lg">{{ hierarchy.name }} Members</p>
+      <p class="text-lg">{{ hierarchy?.name }} Members</p>
       <UButton 
         v-if="!editable" 
         @click="edit" 
@@ -125,8 +129,8 @@ function onShowForm() {
     v-model="showForm"
   >
     <HierarchyMemberForm 
-      :projectId="props.projectId" 
-      @submit="onSubmit" 
+      :projectId="project.project!.id"
+      @submit="onSubmit"
       @close="showForm = false"
     />
   </UModal>

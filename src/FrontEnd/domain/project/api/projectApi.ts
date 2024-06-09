@@ -39,6 +39,7 @@ export interface Project {
   status: number;
   projectPhases: Phase[];
   projectHierarchies: Hierarchy[];
+  projectMembers: string[];
   numOfNewAssignment?: number;
 }
 

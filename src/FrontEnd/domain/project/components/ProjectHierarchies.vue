@@ -3,23 +3,25 @@ import { useHierarchyForm } from '~/domain/project/composable/useHierarchyForm';
 import { DeleteProjectHierarchy, SyncProjectMembers, type Hierarchy } from '../api/projectApi';
 import HierarchyForm from './HierarchyForm.vue';
 import ProjectHierarchy from './ProjectHierarchy.vue';
+import { useProject } from '../composable/useProject';
+import NewMemberList from './NewMemberList.vue';
 
 // component definitions
 const props = defineProps<{
-  hierarchies: Hierarchy[];
-  projectId: string;
   pending: boolean;
   refresh: () => Promise<void>;
 }>();
 
+// project data
+const project = useProject();
+
 // component list
 const Components = computed(() => {
-  return props.hierarchies.map(hierarchy => h(ProjectHierarchy, {
-    hierarchy,
-    projectId: props.projectId,
+  return project.hierarchies!.map(hierarchy => h(ProjectHierarchy, {
+    hierarchyId: hierarchy.id,
     pending: props.pending,
     onRefresh: props.refresh,
-    key: hierarchy.id
+    key: hierarchy.memberUsernames.join('-')
   }));
 });
 
@@ -35,7 +37,7 @@ const syncing = ref(false);
 async function sync() {
   syncing.value = true;
   await apiUtils.try(() => SyncProjectMembers({
-      projectId: props.projectId
+      projectId: project.project!.id
     }),
     () => {
       syncing.value = false;
@@ -56,7 +58,7 @@ async function sync() {
 }
 
 async function deleteHierarchy(item: typeof tabs.value[number], close: () => void) {
-  await apiUtils.try(() => DeleteProjectHierarchy(props.projectId, item.id),
+  await apiUtils.try(() => DeleteProjectHierarchy(project.project!.id, item.id),
     () => {
       toast.add({
         title: 'Success',
@@ -72,12 +74,13 @@ async function deleteHierarchy(item: typeof tabs.value[number], close: () => voi
       });
     });
 
+  selectedTab.value = 0;
   close();
 }
 
 // tabs functions
 const tabs = computed(() => {
-  return props.hierarchies.map(hierarchy => {
+  return project.hierarchies!.map(hierarchy => {
     return {
       label: hierarchy.name,
       id: hierarchy.id,
@@ -90,7 +93,19 @@ const selectedTab = ref(0);
 
 // form functions
 const editable = ref(false);
-const form = useHierarchyForm(props.projectId);
+const form = useHierarchyForm(project.project!.id);
+
+
+// unassigned member role functions
+const showingAssignMembersRoleForm = ref(false);
+const unassignedMember = computed(() => project
+  .members!
+  .filter(username => !project.hierarchies!
+    .some(hierarchy => hierarchy.memberUsernames.includes(username))));
+
+function showAssignMembersRoleForm() {
+  showingAssignMembersRoleForm.value = true;
+}
 </script>
 
 <template>
@@ -103,6 +118,18 @@ const form = useHierarchyForm(props.projectId);
         @click="sync"
         :loading="syncing"
       />
+      <UButton 
+        v-if="unassignedMember.length > 0"
+        size="2xs"
+        color="white"
+        variant="ghost"
+        @click="showAssignMembersRoleForm"
+        label="New member that don't have roles"
+      >
+        <template #leading>
+          <UBadge color="white">{{ unassignedMember.length }}</UBadge>
+        </template>
+      </UButton>
     </div>
     <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
       <UTabs
@@ -127,7 +154,7 @@ const form = useHierarchyForm(props.projectId);
                 square
                 size="2xs"
                 v-if="editable" 
-                @click="form.update(hierarchies.find(e => e.id === item.id)!)"
+                @click="form.update(project.hierarchies!.find(e => e.id === item.id)!)"
               />
               <UPopover>
                 <UButton 
@@ -216,7 +243,16 @@ const form = useHierarchyForm(props.projectId);
   >
     <HierarchyForm 
       :form="form"
-      :hierarchies="hierarchies"
+      @refresh="props.refresh"
+    />
+  </UModal>
+  <UModal
+    v-model="showingAssignMembersRoleForm"
+    prevent-close
+  >
+    <NewMemberList
+      :unassigned-members="unassignedMember"
+      @close="showingAssignMembersRoleForm = false"
       @refresh="props.refresh"
     />
   </UModal>

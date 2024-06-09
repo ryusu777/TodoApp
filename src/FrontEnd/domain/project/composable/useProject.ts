@@ -8,7 +8,8 @@ export const useProject = defineStore('project', () => {
   const isFetching = ref(false);
   const $isFetching = computed(() => isFetching.value);
   const phases = computed(() => project.value?.projectPhases);
-  const members = computed(() => project.value?.projectHierarchies.flatMap(e => e.memberUsernames.map(e => e)));
+  const members = computed(() => project.value?.projectMembers);
+  const hierarchies = computed(() => project.value?.projectHierarchies);
 
   async function fetch(projectId: string, server: boolean) {
     let data: Project | undefined = undefined;
@@ -47,6 +48,7 @@ export const useProject = defineStore('project', () => {
     fetch,
     isFetching: $isFetching,
     phases,
-    members
+    members,
+    hierarchies
   }
 });
