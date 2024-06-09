@@ -10,5 +10,6 @@ public record GetProjectByIdResult
     int Status,
     ICollection<Phase> ProjectPhases,
     ICollection<Hierarchy> ProjectHierarchies,
+    ICollection<string> ProjectMembers,
     int NumOfNewAssignment
 );

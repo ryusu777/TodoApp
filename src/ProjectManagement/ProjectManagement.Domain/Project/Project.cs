@@ -54,6 +54,7 @@ public sealed class Project : AggregateRoot<ProjectId>
     public ProjectStatus Status { get; private set; }
     public ICollection<Phase> ProjectPhases { get; private set; }
     public ICollection<Hierarchy> Hierarchies { get; private set; }
+    public ICollection<UserId> Members { get; private set; } = new List<UserId>();
 
     public Result UpdateProjectHierarchyMembers(HierarchyId id, ICollection<UserId> memberUserNames)
     {
@@ -78,29 +79,8 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public Result SyncProjectMembers(ICollection<UserId> usernames)
     {
-        var defaultHierarchy = Hierarchies.FirstOrDefault(x => x.Name == Hierarchy.DefaultHierarchyName);
-
-        var allExistingMembers = GetAllProjectMembers();
-
-        var newMembers = usernames.Except(allExistingMembers).ToList();
-
-        if (defaultHierarchy is not null)
-        {
-            defaultHierarchy.UpdateMembers(newMembers);
-            RaiseDomainEvent(new ProjectHierarchyMembersUpdated(Id, defaultHierarchy.Id, newMembers));
-            return Result.Success();
-        }
-
-        if (newMembers.Count == 0)
-        {
-            return Result.Success();
-        }
-
-        defaultHierarchy = Hierarchy.CreateDefault();
-        defaultHierarchy.UpdateMembers(newMembers);
-        Hierarchies.Add(defaultHierarchy);
-        RaiseDomainEvent(new ProjectHierarchyCreated(Id, defaultHierarchy));
-
+        Members = usernames;
+        RaiseDomainEvent(new ProjectMembersSynced(Id, usernames));
         return Result.Success();
     }
 
@@ -199,8 +179,8 @@ public sealed class Project : AggregateRoot<ProjectId>
 
         foreach (var subHierarchy in Hierarchies.Where(x => x.SuperiorHierarchyId == hierarchy.Id))
         {
-            visitedHierarchies.Add(subHierarchy);
             visitedHierarchies = GetSubordinateHierarchy(subHierarchy, visitedHierarchies);
+            visitedHierarchies.Add(subHierarchy);
         }
 
         return visitedHierarchies;

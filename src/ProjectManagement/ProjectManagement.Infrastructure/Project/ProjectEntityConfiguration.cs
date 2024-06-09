@@ -11,6 +11,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
     {
         ConfigureProjectTable(builder);
         ConfigureProjectPhaseTable(builder);
+        ConfigureProjectMemberTable(builder);
         ConfigureProjectHierarchyTable(builder);
     }
 
@@ -70,6 +71,28 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
 
                 sb.Property(e => e.EndDate)
                     .IsRequired(true);
+            });
+    }
+
+    private void ConfigureProjectMemberTable(EntityTypeBuilder<Domain.Project.Project> builder)
+    {
+        builder
+            .OwnsMany(e => e.Members, sb =>
+            {
+                sb.ToTable("ProjectMember");
+
+                sb.WithOwner().HasForeignKey("ProjectId");
+
+                sb.HasKey("ProjectId", "Value");
+
+                sb.Property(e => e.Value)
+                    .HasColumnName("Username")
+                    .ValueGeneratedNever()
+                    .HasConversion(
+                        username => username,
+                        value => UserId.Create(value).Value
+                    )
+                    .HasMaxLength(50);
             });
     }
 
