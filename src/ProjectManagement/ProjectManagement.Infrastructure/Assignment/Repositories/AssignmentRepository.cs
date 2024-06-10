@@ -39,6 +39,7 @@ public class AssignmentRepository : IAssignmentRepository
         var result = await _dbContext
             .Assignments
             .Where(e => e.ProjectId == id)
+            .AsNoTracking()
             .ToListAsync();
 
 		if (result is null)

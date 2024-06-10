@@ -17,7 +17,17 @@ public class ProjectRepository : IProjectRepository
 		_dbContext = dbContext;
 	}
 
-	public async Task<Result<Domain.Project.Project>> GetProjectById(ProjectId id, CancellationToken ct)
+    public async Task<Result<List<Domain.Project.Project>>> GetActiveProjects(CancellationToken ct)
+    {
+        var result = await _dbContext
+            .Projects
+            .Where(e => e.Status != ProjectStatus.Inactive)
+            .ToListAsync(ct);
+
+        return Result.Success(result);
+    }
+
+    public async Task<Result<Domain.Project.Project>> GetProjectById(ProjectId id, CancellationToken ct)
 	{
 		var result = await _dbContext
 			.Projects

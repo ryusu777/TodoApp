@@ -8,4 +8,5 @@ public interface IProjectRepository
 {
 	public Task<Result<Domain.Project.Project>> GetProjectById(ProjectId id, CancellationToken ct);
     public Task<Result<IEnumerable<GetProjectPagesResult>>> GetProjectPages(CancellationToken ct);
+    public Task<Result<List<Domain.Project.Project>>> GetActiveProjects(CancellationToken ct);
 }
