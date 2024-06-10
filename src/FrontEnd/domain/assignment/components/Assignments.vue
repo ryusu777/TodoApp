@@ -4,6 +4,7 @@ import { useAssignmentForm } from '../composables/useAssignmentForm';
 import { useAssignmentState } from '../composables/useAssignmentState';
 import KanbanBoard from './KanbanBoard.vue';
 import AssignmentForm from './AssignmentForm.vue';
+import RejectCompletionForm from './RejectCompletionForm.vue';
 
 const props = defineProps<{
   projectId: string;
@@ -32,6 +33,8 @@ if (initial.value) {
 const filteredAssignments = computed(() => {
   return Object.groupBy(state.assignments.value, ({ status }) => status);
 });
+
+const openAssignments = computed(() => (filteredAssignments.value.New || []).concat(filteredAssignments.value.Revised || []));
 
 async function submit() {
   const error = await form.submit();
@@ -68,7 +71,7 @@ async function submit() {
       :state="state"
       :form="form"
       type="New"
-      :assignments="filteredAssignments.New || []"
+      :assignments="openAssignments"
     />
     <KanbanBoard
       :state="state"
@@ -94,6 +97,12 @@ async function submit() {
     @update:model-value="form.closeForm"
   >
     <AssignmentForm 
+      :form="form" 
+      @submit="submit"
+    />
+  </UModal>
+  <UModal>
+    <RejectCompletionForm
       :form="form" 
       @submit="submit"
     />

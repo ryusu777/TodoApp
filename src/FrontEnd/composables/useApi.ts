@@ -46,6 +46,21 @@ export const useApi = defineStore('api', () => {
     });
   }
 
+  function $patch<T>(endpoint: string, payload: any, headers?: any) {
+    return $fetch<IApiResponse<T>>(API_URL + endpoint, {
+      method: 'PATCH',
+      body: payload,
+      headers
+    });
+  }
+
+  function patch<T>(endpoint: string, payload: any) {
+    return useFetch<IApiResponse<T>>(API_URL + endpoint, {
+      method: 'PATCH',
+      body: payload,
+    });
+  }
+
   /**
    * Sends request on client side
    */
@@ -84,6 +99,8 @@ export const useApi = defineStore('api', () => {
     post,
     $put,
     $delete,
-    delete: deleteFun
+    delete: deleteFun,
+    $patch,
+    patch
   }
 });

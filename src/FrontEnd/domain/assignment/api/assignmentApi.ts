@@ -7,10 +7,22 @@ export const AssignmentApiRoute = {
   AssignmentDetail: (assignmentId: string) => `/assignment/${assignmentId}`,
   Assigning: (assignmentId: string) => `/assignment/${assignmentId}/assign`,
   RemoveAssignee: (assignmentId: string) => `/assignment/${assignmentId}/remove-assignee`,
-  AssignmentStatus: (assignmentId: string) => `/assignment/${assignmentId}/status`
+  AssignmentStatus: (assignmentId: string) => `/assignment/${assignmentId}/status`,
+  WorkOnAssignment: (assignmentId: string) => `/assignment/${assignmentId}/work-on`,
+  RequestAssignmentReview: (assignmentId: string) => `/assignment/${assignmentId}/request-review`,
+  ApproveAssignmentReview: (assignmentId: string) => `/assignment/${assignmentId}/approve-review`,
+  RejectAssignmentReview: (assignmentId: string) => `/assignment/${assignmentId}/reject-review`,
+  ReopenAssignment: (assignmentId: string) => `/assignment/${assignmentId}/reopen`,
 };
 
-export type AssignmentStatusEnum = 'New' | 'OnProgress' | 'WaitingReview' | 'Completed';
+export type AssignmentStatusEnum = 'Revised' | 'New' | 'OnProgress' | 'WaitingReview' | 'Completed';
+
+export interface Review {
+  reviewer: string;
+  status: 'New' | 'Approved' | 'Rejected';
+  description: string;
+  rejectionNotes: string;
+}
 
 export interface Assignment {
   id?: string;
@@ -23,6 +35,7 @@ export interface Assignment {
   subdomainId?: string;
   deadline?: string;
   reviewer?: string;
+  lastReview: Review;
 }
 
 export type GetAssignmentsRequest = {
@@ -155,6 +168,78 @@ export function UpdateAssignment(payload: UpdateAssignmentRequest) {
   const api = useApi();
   const auth = useAuth();
   return api.$put(AssignmentApiRoute.AssignmentDetail(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}
+
+export type WorkOnAssignmentRequest = {
+  assignmentId: string;
+};
+
+export type WorkOnAssignmentResponse = {};
+
+export function WorkOnAssignment(payload: WorkOnAssignmentRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$patch(AssignmentApiRoute.WorkOnAssignment(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}
+
+export type RequestAssignmentReviewRequest = {
+  assignmentId: string;
+  description: string;
+};
+
+export type RequestAssignmentReviewResponse = {};
+
+export function RequestAssignmentReview(payload: RequestAssignmentReviewRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$patch(AssignmentApiRoute.RequestAssignmentReview(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}
+
+export type ApproveAssignmentReviewRequest = {
+  assignmentId: string;
+};
+
+export type ApproveAssignmentReviewResponse = {};
+
+export function ApproveAssignmentReview(payload: ApproveAssignmentReviewRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$patch(AssignmentApiRoute.ApproveAssignmentReview(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}
+
+export type RejectAssignmentReviewRequest = {
+  assignmentId: string;
+  rejectionNotes: string;
+};
+
+export type RejectAssignmentReviewResponse = {};
+
+export function RejectAssignmentReview(payload: RejectAssignmentReviewRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$patch(AssignmentApiRoute.RejectAssignmentReview(payload.assignmentId), payload, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}
+
+export type ReopenAssignmentRequest = {
+  assignmentId: string;
+};
+
+export type ReopenAssignmentResponse = {};
+
+export function ReopenAssignment(payload: ReopenAssignmentRequest) {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$patch(AssignmentApiRoute.ReopenAssignment(payload.assignmentId), payload, {
     'Authorization': 'Bearer ' + auth.jwtToken
   });
 }

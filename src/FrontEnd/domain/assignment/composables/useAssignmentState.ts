@@ -1,4 +1,4 @@
-import { ChangeAssignmentStatus, DeleteAssignment, GetAssignments, type Assignment, type AssignmentStatusEnum, type GetAssignmentsResponse } from "../api/assignmentApi";
+import { ApproveAssignmentReview, ChangeAssignmentStatus, DeleteAssignment, GetAssignments, RejectAssignmentReview, ReopenAssignment, RequestAssignmentReview, WorkOnAssignment, type Assignment, type AssignmentStatusEnum, type GetAssignmentsResponse } from "../api/assignmentApi";
 import { GetAssignmentsIssueNumber, type GetAssignmentsIssueNumberResponse } from "../api/giteaIssueApi";
 
 export type NumberedAssignment = Assignment & {
@@ -97,13 +97,89 @@ export function useAssignmentState(projectId: string, subdomainId: string) {
     return errorResult;
   }
 
+  async function workOnAssignment(assignmentId: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => WorkOnAssignment({ assignmentId }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
+  async function requestAssignmentReview(assignmentId: string, description: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => RequestAssignmentReview({ assignmentId, description }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
+  async function approveAssignmentReview(assignmentId: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => ApproveAssignmentReview({ assignmentId }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
+  async function rejectAssignmentReview(assignmentId: string, rejectionNotes: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => RejectAssignmentReview({ assignmentId, rejectionNotes }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
+  async function reopenAssignment(assignmentId: string) {
+    let errorResult: string | undefined;
+    await apiUtil
+      .try(
+        () => ReopenAssignment({ assignmentId }),
+        (response) => {},
+        (error) => errorResult = error
+      )
+
+    await fetch(false);
+
+    return errorResult;
+  }
+
+
   return {
     fetch,
     assignments: assignmentsComputed,
     delete: doDelete,
     setAssignmentStatus,
     isFetchingIssueNumber: isFetchingIssueNumberComputed,
-    isFetching: isFetchingComputed
+    isFetching: isFetchingComputed,
+    workOnAssignment,
+    requestAssignmentReview,
+    approveAssignmentReview,
+    rejectAssignmentReview,
+    reopenAssignment
   }
 }
 

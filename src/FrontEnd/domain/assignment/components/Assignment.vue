@@ -1,43 +1,80 @@
 <script setup lang="ts">
+import { object, string } from 'yup';
 import type { AssignmentStatusEnum } from '../api/assignmentApi';
 import type { useAssignmentForm } from '../composables/useAssignmentForm';
 import type { NumberedAssignment, useAssignmentState } from '../composables/useAssignmentState';
 import IssueNumber from './IssueNumber.vue';
 
+// component definitions
 const props = defineProps<{
   assignment: NumberedAssignment;
   form: ReturnType<typeof useAssignmentForm>;
   state: ReturnType<typeof useAssignmentState>;
 }>();
 
+// utils
+const apiUtils = useApiUtils();
 const toast = useToast();
 
+const isReopened = computed(() => props.assignment.status === 'New' && props.assignment.lastReview?.status === 'Approved');
+
+// reject and requesting approval form state
+const requestReviewForm = {
+  state: reactive({
+    reviewDescription: ''
+  }),
+  schema: object().shape({
+    reviewDescription: string().required('Please enter description..')
+  })
+};
+
+const rejectionForm = {
+  state: reactive({
+    rejectionNotes: ''
+  }),
+  schema: object().shape({
+    rejectionNotes: string().required('Please enter rejection notes..')
+  })
+}
+
+// api methods
 async function doDelete(closeDelete: () => any) {
   const error = await props.state.delete(props.assignment.id || '');
 
-  if (error) {
-    toast.add({
-      title: 'Error',
-      description: error,
-      color: 'red'
-    });
-  } else {
-    toast.add({
-      title: 'Success',
-      description: 'Successfully deleted assignment'
-    });
-    props.form.closeForm();
-    closeDelete();
-    await props.state.fetch(false);
-  }
+  handleResult(error, 'Successfully deleted assignment');
 }
 
-async function changeStatus(status: AssignmentStatusEnum) {
-  if (!props.assignment.id)
-    return;
+async function workOn() {
+  const result = await props.state.workOnAssignment(props.assignment.id || '');
 
-  const error = await props.state.setAssignmentStatus(props.assignment.id, status);
+  handleResult(result);
+}
 
+async function requestReview() {
+  const result = await props.state.requestAssignmentReview(props.assignment.id || '', requestReviewForm.state.reviewDescription);
+
+  handleResult(result);
+}
+
+async function approve() {
+  const result = await props.state.approveAssignmentReview(props.assignment.id || '');
+
+  handleResult(result);
+}
+
+async function reject() {
+  const result = await props.state.rejectAssignmentReview(props.assignment.id || '', rejectionForm.state.rejectionNotes);
+
+  handleResult(result);
+}
+
+async function reopen() {
+  const result = await props.state.reopenAssignment(props.assignment.id || '');
+
+  handleResult(result);
+}
+
+async function handleResult(error?: string, successMessage?: string) {
   if (error) {
     toast.add({
       title: 'Error',
@@ -47,7 +84,7 @@ async function changeStatus(status: AssignmentStatusEnum) {
   } else {
     toast.add({
       title: 'Success',
-      description: 'Successfully changed assignment'
+      description: successMessage || 'Successfully modified assignment status'
     });
     await props.state.fetch(false);
   }
@@ -68,7 +105,7 @@ async function changeStatus(status: AssignmentStatusEnum) {
   >
     <div class="flex flex-col gap-y-1">
       <div class="flex justify-between">
-        <p class="text-lg">{{ assignment.title }}</p>
+        <p class="text-lg">{{ assignment.title }} <span class="text-sm text-red-400" v-if="isReopened">(Reopened)</span></p>
         <div class="flex gap-x-2">
           <UAvatarGroup size="sm" :max="2">
             <UAvatar 
@@ -145,44 +182,101 @@ async function changeStatus(status: AssignmentStatusEnum) {
           <UAvatar :alt="assignment.reviewer" size="sm" />
           <p class="text-sm">{{ assignment.reviewer }}</p>
         </div>
+        <div>
+          <p v-if="assignment.lastReview?.rejectionNotes" class="text-xs">
+            Revision Notes: <br />{{ assignment.lastReview.rejectionNotes }}
+          </p>
+        </div>
       </div>
 
-      <div class="space-x-2">
-        <UTooltip text="Reopen" :popper="{ placement: 'top' }" v-if="assignment.status !== 'New'">
-          <UButton 
-            color="red"
-            icon="heroicons:backward-solid"
-            square
-            size="2xs"
-            @click="changeStatus('New')"
-          />
-        </UTooltip>
-        <UTooltip text="Work on" :popper="{ placement: 'top' }" v-if="assignment.status !== 'OnProgress'">
-          <UButton 
-            color="blue"
-            icon="heroicons:play-16-solid"
-            square
-            size="2xs"
-            @click="changeStatus('OnProgress')"
-          />
-        </UTooltip>
-        <UTooltip text="Request Review" :popper="{ placement: 'top' }" v-if="assignment.status !== 'WaitingReview'">
+      <div class="space-x-2 flex">
+        <UButton 
+          color="red"
+          icon="heroicons:backward-solid"
+          label="Reopen"
+          size="2xs"
+          @click="reopen"
+          v-if="assignment.status === 'Completed'"
+        />
+        <UButton 
+          v-if="assignment.status === 'New' || assignment.status === 'Revised'"
+          color="blue"
+          icon="heroicons:play-16-solid"
+          label="Start"
+          size="2xs"
+          @click="workOn"
+        />
+        <UPopover
+            v-if="assignment.status === 'OnProgress'"
+        >
           <UButton 
             color="yellow"
             icon="heroicons:paper-airplane-16-solid"
-            square
+            label="Request Review"
             size="2xs"
-            @click="changeStatus('WaitingReview')"
           />
-        </UTooltip>
-        <UTooltip text="Complete" :popper="{ placement: 'top' }" v-if="assignment.status !== 'Completed'">
+
+          <template #panel>
+            <UForm 
+              class="p-3 flex flex-col gap-y-2"
+              :state="requestReviewForm.state"
+              :schema="requestReviewForm.schema"
+              @submit="requestReview"
+            >
+              <UFormGroup label="Description" name="reviewDescription">
+                <UTextarea
+                  v-model="requestReviewForm.state.reviewDescription"
+                  placeholder="describe the work you've done.."
+                />
+              </UFormGroup>
+              <UButton 
+                block
+                icon="heroicons:paper-airplane-16-solid"
+                label="Send"
+                size="2xs"
+                type="submit"
+              />
+            </UForm>
+          </template>
+        </UPopover>
+        <UPopover
+            v-if="assignment.status === 'WaitingReview'"
+        >
           <UButton 
-            icon="heroicons:check-badge-16-solid"
-            square
+            color="red"
+            label="Reject"
             size="2xs"
-            @click="changeStatus('Completed')"
           />
-        </UTooltip>
+
+          <template #panel>
+            <UForm 
+              class="p-3 flex flex-col gap-y-2"
+              :state="rejectionForm.state"
+              :schema="rejectionForm.schema"
+              @submit="reject"
+            >
+              <UFormGroup label="Rejection Notes" name="rejectionNotes">
+                <UTextarea
+                  v-model="rejectionForm.state.rejectionNotes"
+                  placeholder="describe the revision needed.."
+                />
+              </UFormGroup>
+              <UButton 
+                block
+                icon="heroicons:paper-airplane-16-solid"
+                label="Send"
+                size="2xs"
+                type="submit"
+              />
+            </UForm>
+          </template>
+        </UPopover>
+        <UButton 
+          v-if="assignment.status === 'WaitingReview'"
+          label="Complete"
+          size="2xs"
+          @click="approve"
+        />
       </div>
     </div>
   </UCard>
