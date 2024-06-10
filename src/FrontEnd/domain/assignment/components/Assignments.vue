@@ -4,7 +4,6 @@ import { useAssignmentForm } from '../composables/useAssignmentForm';
 import { useAssignmentState } from '../composables/useAssignmentState';
 import KanbanBoard from './KanbanBoard.vue';
 import AssignmentForm from './AssignmentForm.vue';
-import RejectCompletionForm from './RejectCompletionForm.vue';
 
 const props = defineProps<{
   projectId: string;
@@ -97,12 +96,6 @@ async function submit() {
     @update:model-value="form.closeForm"
   >
     <AssignmentForm 
-      :form="form" 
-      @submit="submit"
-    />
-  </UModal>
-  <UModal>
-    <RejectCompletionForm
       :form="form" 
       @submit="submit"
     />
