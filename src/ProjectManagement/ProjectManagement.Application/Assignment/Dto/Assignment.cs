@@ -1,5 +1,3 @@
-using ProjectManagement.Domain.Assignment.Entities;
-
 namespace ProjectManagement.Application.Assignment.Dtos;
 
 public record Assignment(

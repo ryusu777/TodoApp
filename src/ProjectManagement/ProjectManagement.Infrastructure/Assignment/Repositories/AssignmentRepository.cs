@@ -56,7 +56,7 @@ public class AssignmentRepository : IAssignmentRepository
                 assignment.Assignees.Select(e => e.Value).ToList(), 
                 GetReviewer(assignment.Reviewer),
                 assignment.Deadline,
-                assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault()
+                Application.Assignment.Dtos.Review.FromDomain(assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault())
             )));
     }
 
@@ -80,7 +80,7 @@ public class AssignmentRepository : IAssignmentRepository
             assignment.Assignees.Select(e => e.Value).ToList(),
             GetReviewer(assignment.Reviewer),
             assignment.Deadline,
-            assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault()));
+            Application.Assignment.Dtos.Review.FromDomain(assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault())));
     }
 
     public async Task<Result<IEnumerable<Application.Assignment.Dtos.Assignment>>> GetAssignmentsBySubdomain(ProjectId projectId, SubdomainId? subdomainId, CancellationToken ct)
@@ -105,7 +105,7 @@ public class AssignmentRepository : IAssignmentRepository
                 assignment.Assignees.Select(e => e.Value).ToList(), 
                 GetReviewer(assignment.Reviewer),
                 assignment.Deadline,
-                assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault()
+                Application.Assignment.Dtos.Review.FromDomain(assignment.Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault())
             )));
     }
 
