@@ -15,7 +15,7 @@ public class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest, DeleteProjec
 
     public override void Configure()
     {
-        Delete(ProjectEndpointRoutes.ProjectDetail);
+        Delete(ProjectEndpointRoutes.DeleteProject);
         Group<ProjectEndpointGroup>();
     }
 
