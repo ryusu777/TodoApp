@@ -16,6 +16,7 @@ using IntegrationContext.Infrastructure.GiteaRepositories.ApiService;
 using IntegrationContext.Infrastructure.GiteaUsers;
 using IntegrationContext.Infrastructure.Persistence;
 using IntegrationContext.Infrastructure.Persistence.Data;
+using IntegrationContext.Infrastructure.Persistence.Interceptors;
 using IntegrationContext.Infrastructure.Persistence.Mediator;
 using MassTransit;
 using MassTransitContracts;
@@ -43,15 +44,17 @@ public static class InfrastructureInstaller
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
         services.AddScoped<ICommandOutboxDomainService, CommandOutboxDomainService>();
-        services.AddDbContext<AppDbContext>(opt =>
+        services.AddDbContext<AppDbContext>((sp, opt) =>
         {
             //opt.UseInMemoryDatabase("InMemoryDb");
+            var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
             opt.UseSqlServer(
                 config.GetConnectionString("AppDbContext"),
                 o => 
                 {
                     o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
-                });
+                })
+                .AddInterceptors(auditableIntercepter);
         });
 
         services.AddMassTransitService(config);

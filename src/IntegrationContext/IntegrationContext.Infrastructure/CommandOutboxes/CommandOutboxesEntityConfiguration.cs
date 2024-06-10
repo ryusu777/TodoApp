@@ -49,6 +49,20 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
         builder.Property(e => e.LastExecutionAt)
             .ValueGeneratedOnUpdate()
             .HasDefaultValueSql("(sysdatetime())");
+
+        builder.Property(e => e.CreatedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ModifiedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.ModifiedAt)
+            .IsRequired(false);
     }
 }
 

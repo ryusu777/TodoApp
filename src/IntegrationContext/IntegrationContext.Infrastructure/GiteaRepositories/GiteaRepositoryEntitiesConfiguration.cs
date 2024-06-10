@@ -47,6 +47,20 @@ public class GiteaRepositoryEntitiesConfiguration : IEntityTypeConfiguration<Git
                 id => id.Value,
                 value => ProjectId.Create(value)
             );
+
+        builder.Property(e => e.CreatedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ModifiedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.ModifiedAt)
+            .IsRequired(false);
     }
     
     private void ConfigureHookTable(EntityTypeBuilder<GiteaRepository> builder)
@@ -79,6 +93,20 @@ public class GiteaRepositoryEntitiesConfiguration : IEntityTypeConfiguration<Git
 
             hb.Property(e => e.Active)
                 .HasDefaultValue(true);
+
+            hb.Property(e => e.CreatedBy)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            hb.Property(e => e.ModifiedBy)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            hb.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            hb.Property(e => e.ModifiedAt)
+                .IsRequired(false);
         });
     }
 

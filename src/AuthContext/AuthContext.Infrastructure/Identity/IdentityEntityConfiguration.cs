@@ -37,6 +37,20 @@ public class IdentityEntityConfiguration : IEntityTypeConfiguration<AppIdentityU
 
             rb.Property(e => e.ExpiresAt)
                 .IsRequired(true);
+
+            rb.Property(e => e.CreatedBy)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            rb.Property(e => e.ModifiedBy)
+                .IsRequired(false)
+                .HasMaxLength(50);
+
+            rb.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            rb.Property(e => e.ModifiedAt)
+                .IsRequired(false);
         });
     }
 }

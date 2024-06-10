@@ -8,6 +8,7 @@ using AuthContext.Infrastructure.Identity;
 using AuthContext.Infrastructure.Identity.Entities;
 using AuthContext.Infrastructure.Persistence;
 using AuthContext.Infrastructure.Persistence.Data;
+using AuthContext.Infrastructure.Persistence.Interceptors;
 using AuthContext.Infrastructure.Persistence.Mediator;
 using AuthContext.Infrastructure.User;
 using MassTransit;
@@ -31,8 +32,9 @@ public static class InfrastructureInstaller
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAuthenticationService, AuthenticationService>();
 		services.AddScoped<IEmailService, EmailService>();
-		services.AddDbContext<AppDbContext>(opt =>
+		services.AddDbContext<AppDbContext>((s, opt) =>
 		{
+            var interceptor = s.GetService<AuditableEntityInterceptor>()!;
 			//opt.UseInMemoryDatabase("InMemoryDb");
 			opt.UseSqlServer(
                 config.GetConnectionString("AppDbContext"),
@@ -40,6 +42,8 @@ public static class InfrastructureInstaller
                 {
                     o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "auth");
                 });
+
+            opt.AddInterceptors(interceptor);
 		});
 
         var authenticatorProviderType = typeof(AuthenticatorTokenProvider<>).MakeGenericType(typeof(AppIdentityUser));

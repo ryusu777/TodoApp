@@ -42,5 +42,19 @@ public class GiteaUserEntitiesConfiguration : IEntityTypeConfiguration<GiteaUser
                 token => token!.Value,
                 value => RefreshToken.Create(value)
             );
+
+        builder.Property(e => e.CreatedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ModifiedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.ModifiedAt)
+            .IsRequired(false);
     }
 }

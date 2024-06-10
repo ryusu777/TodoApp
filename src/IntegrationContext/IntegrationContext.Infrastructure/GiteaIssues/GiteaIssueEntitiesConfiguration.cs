@@ -50,6 +50,20 @@ public class GiteaIssueEntitiesConfiguration : IEntityTypeConfiguration<GiteaIss
         builder.HasOne<GiteaRepository>()
             .WithMany()
             .HasForeignKey(e => e.GiteaRepositoryId);
+
+        builder.Property(e => e.CreatedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ModifiedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.ModifiedAt)
+            .IsRequired(false);
     }
 }
 
