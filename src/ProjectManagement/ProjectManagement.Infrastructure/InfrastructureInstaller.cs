@@ -10,6 +10,7 @@ using ProjectManagement.Application.Subdomain;
 using ProjectManagement.Infrastructure.Assignment.Repositories;
 using ProjectManagement.Infrastructure.Persistence;
 using ProjectManagement.Infrastructure.Persistence.Data;
+using ProjectManagement.Infrastructure.Persistence.Interceptors;
 using ProjectManagement.Infrastructure.Persistence.Mediator;
 using ProjectManagement.Infrastructure.Project.Repositories;
 using ProjectManagement.Infrastructure.Subdomain.Repositories;
@@ -24,10 +25,14 @@ public static class InfrastructureInstaller
 			.AddPersistMediator();
 
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
-		services.AddDbContext<AppDbContext>(opt =>
+		services.AddDbContext<AppDbContext>((sp, opt) =>
 		{
 			//opt.UseInMemoryDatabase("InMemoryDb");
-			opt.UseSqlServer(config.GetConnectionString("AppDbContext"));
+            //
+            var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
+			opt
+                .UseSqlServer(config.GetConnectionString("AppDbContext"))
+                .AddInterceptors(auditableIntercepter);
 		});
 		services.AddScoped<IProjectRepository, ProjectRepository>();
 		services.AddScoped<IAssignmentRepository, AssignmentRepository>();
