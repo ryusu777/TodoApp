@@ -39,6 +39,20 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
         builder.Property(e => e.Status)
             .IsRequired()
             .HasColumnType("varchar(10)");
+
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.ModifiedAt)
+            .IsRequired(false);
+
+        builder.Property(e => e.CreatedBy)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.ModifiedBy)
+            .IsRequired()
+            .HasMaxLength(50);
     }
 
     private void ConfigureProjectPhaseTable(EntityTypeBuilder<Domain.Project.Project> builder)
@@ -71,6 +85,20 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
 
                 sb.Property(e => e.EndDate)
                     .IsRequired(true);
+
+                sb.Property(e => e.CreatedAt)
+                    .IsRequired();
+
+                sb.Property(e => e.ModifiedAt)
+                    .IsRequired(false);
+
+                sb.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                sb.Property(e => e.ModifiedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
     }
 
@@ -141,6 +169,20 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
                         )
                         .HasMaxLength(50);
                 });
+
+                sb.Property(e => e.CreatedAt)
+                    .IsRequired();
+
+                sb.Property(e => e.ModifiedAt)
+                    .IsRequired(false);
+
+                sb.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                sb.Property(e => e.ModifiedBy)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
     }
 }

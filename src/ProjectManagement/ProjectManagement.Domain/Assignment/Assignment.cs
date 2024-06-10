@@ -1,4 +1,5 @@
 using Library.Models;
+using ProjectManagement.Domain.Assignment.Entities;
 using ProjectManagement.Domain.Assignment.Enums;
 using ProjectManagement.Domain.Assignment.Events;
 using ProjectManagement.Domain.Assignment.ValueObjects;
@@ -43,6 +44,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
     public ICollection<UserId> Assignees { get; private set; } = new List<UserId>();
     public UserId? Reviewer { get; private set; }
     public DateTime? Deadline { get; private set; }
+    public ICollection<Review> Reviews { get; private set; } = new List<Review>();
 
     public static Assignment Create(
         string title, 
@@ -126,10 +128,49 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
-    public Result RequestReview()
+    public Result RequestReview(string description)
     {
+        if (Reviewer is null)
+        {
+            return Result.Failure(AssignmentDomainErrors.CannotRequestReviewWithEmptyReviewer);
+        }
         Status = new AssignmentStatus(AssignmentStatusEnum.WaitingReview);
+        Reviews.Add(Review.Create(description, Reviewer));
         RaiseDomainEvent(new AssignmentReviewRequested(Id));
+
+        return Result.Success();
+    }
+
+    public Result ApproveCompletion()
+    {
+        if (Status != AssignmentStatusEnum.WaitingReview)
+            return AssignmentDomainErrors.CannotReviewANonWaitingReviewAssignment;
+
+        Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
+        var currentReview = Reviews.OrderBy(e => e.CreatedAt).FirstOrDefault();
+
+        if (currentReview is null)
+            return AssignmentDomainErrors.TheAssignmentDoesNotHaveReviewRequest;
+
+        currentReview.Approve();
+        RaiseDomainEvent(new AssignmentReviewApproved(this, currentReview));
+
+        return Result.Success();
+    }
+
+    public Result RejectCompletion(string rejectionNotes)
+    {
+        if (Status != AssignmentStatusEnum.WaitingReview)
+            return AssignmentDomainErrors.CannotReviewANonWaitingReviewAssignment;
+
+        Status = new AssignmentStatus(AssignmentStatusEnum.Revised);
+        var currentReview = Reviews.OrderBy(e => e.CreatedAt).FirstOrDefault();
+
+        if (currentReview is null)
+            return AssignmentDomainErrors.TheAssignmentDoesNotHaveReviewRequest;
+
+        currentReview.Reject(rejectionNotes);
+        RaiseDomainEvent(new AssignmentReviewRejected(this, currentReview, rejectionNotes));
 
         return Result.Success();
     }

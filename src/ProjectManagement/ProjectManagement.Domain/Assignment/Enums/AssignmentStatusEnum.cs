@@ -3,6 +3,7 @@
 public enum AssignmentStatusEnum
 {
 	New,
+    Revised,
 	OnProgress,
 	WaitingReview,
 	Completed
