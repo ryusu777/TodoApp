@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Library.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +58,11 @@ public class UnitOfWork : IUnitOfWork
         {
             return Result
                 .Failure(new Error("DbUpdateException", e.InnerException?.Message ?? e.Message));
+        }
+        catch (Exception e)
+        {
+            return Result
+                .Failure(new Error("DbSaveException", e.Message));
         }
     }
 
