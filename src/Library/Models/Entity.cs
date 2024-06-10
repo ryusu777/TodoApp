@@ -1,8 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Library.Models;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>
+public abstract class Entity<TId> : AuditableEntity, IEquatable<Entity<TId>>
     where TId : notnull
 {
     private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
