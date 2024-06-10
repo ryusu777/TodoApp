@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { useAuth } from '~/domain/auth/composables/useAuth';
 import { GetProjectPages } from '~/domain/project/api/projectApi';
 
 const projectPages = await GetProjectPages();
+
+const auth = useAuth();
+
+const username = computed(() => auth.getUsername());
 
 const pagesLink = computed(() => projectPages.data.value?.data?.map(e => {
     return {
@@ -12,11 +17,11 @@ const pagesLink = computed(() => projectPages.data.value?.data?.map(e => {
 
 const links = computed(() => [
   [{
-    label: 'Profile',
+    label: username.value,
     avatar: {
       src: 'https://avatars.githubusercontent.com/u/739984?v=4'
     },
-    badgeIcon: 'material-symbols:settings-rounded'
+    disabled: true
   },{
     label: 'Project',
     badge: '1',
