@@ -49,10 +49,6 @@ public class ChangeAssignmentStatusCommandHandler : ICommandHandler<ChangeAssign
                 changeStatusResult = result.Value.WorkOn();
                 break;
 
-            case AssignmentStatusEnum.WaitingReview:
-                changeStatusResult = result.Value.RequestReview();
-                break;
-
             default:
                 changeStatusResult = Result.Failure(Error.None);
                 break;

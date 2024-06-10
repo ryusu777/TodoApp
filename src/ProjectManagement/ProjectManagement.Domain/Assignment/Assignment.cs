@@ -95,33 +95,11 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return result;
     }
 
-    public Result Assign(UserId userId)
-    {
-        if (Assignees.Any(e => e == userId))
-            return AssignmentDomainErrors.AssigneeAlreadyExists;
-
-        Assignees.Add(userId);
-
-        RaiseDomainEvent(new AssignmentAssigned(Id, userId));
-
-        return Result.Success();
-    }
-
-    public Result RemoveAssignee(UserId userId)
-    {
-        UserId? assignee = Assignees.FirstOrDefault(e => e == userId);
-        if (assignee is null)
-            return AssignmentDomainErrors.AssigneeNotFound;
-
-        Assignees.Remove(assignee);
-
-        RaiseDomainEvent(new AssigneeRemoved(Id, userId));
-
-        return Result.Success();
-    }
-
     public Result WorkOn()
     {
+        if (Status != AssignmentStatusEnum.New && Status != AssignmentStatusEnum.Revised)
+            return AssignmentDomainErrors.AssignmentIsNotAvailableToWorkOn;
+
         Status = new AssignmentStatus(AssignmentStatusEnum.OnProgress);
         RaiseDomainEvent(new AssignmentWorkedOn(Id));
 
@@ -141,7 +119,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
         return Result.Success();
     }
 
-    public Result ApproveCompletion()
+    public Result ApproveCompletion(UserId userId)
     {
         if (Status != AssignmentStatusEnum.WaitingReview)
             return AssignmentDomainErrors.CannotReviewANonWaitingReviewAssignment;
@@ -154,6 +132,8 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
         currentReview.Approve();
         RaiseDomainEvent(new AssignmentReviewApproved(this, currentReview));
+
+        Complete(userId);
 
         return Result.Success();
     }

@@ -1,3 +1,5 @@
+using ProjectManagement.Domain.Assignment.Entities;
+
 namespace ProjectManagement.Application.Assignment.Dtos;
 
 public record Assignment(
@@ -10,6 +12,7 @@ public record Assignment(
     Guid? PhaseId,
     ICollection<string> Assignees,
     string? Reviewer,
-    DateTime? Deadline
+    DateTime? Deadline,
+    Review? LastReview
 );
 
