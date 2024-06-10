@@ -61,7 +61,10 @@ type GetProjectPagesResponse = {
 
 export function GetProjectPages() {
   const api = useApi();
-  return api.get<GetProjectPagesResponse[]>(ProjectApiRoute.GetProjectPages);
+  const auth = useAuth();
+  return api.get<GetProjectPagesResponse[]>(ProjectApiRoute.GetProjectPages, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type CreateProjectRequest = {
@@ -85,21 +88,30 @@ type CreateProjectResponse = {};
 
 export function CreateProject(request: CreateProjectRequest) {
   const api = useApi();
-  return api.$post<CreateProjectResponse>(ProjectApiRoute.Project, request);
+  const auth = useAuth();
+  return api.$post<CreateProjectResponse>(ProjectApiRoute.Project, request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 type DeleteProjectResponse = {};
 
 export function DeleteProject(projectId: string) {
   const api = useApi();
-  return api.$delete<DeleteProjectResponse>(ProjectApiRoute.ProjectDetail(projectId));
+  const auth = useAuth();
+  return api.$delete<DeleteProjectResponse>(ProjectApiRoute.ProjectDetail(projectId), null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type GetProjectByIdResponse = Project;
 
 export function GetProjectById(projectId: string) {
   const api = useApi();
-  return api.$get<GetProjectByIdResponse>(ProjectApiRoute.ProjectDetail(projectId));
+  const auth = useAuth();
+  return api.$get<GetProjectByIdResponse>(ProjectApiRoute.ProjectDetail(projectId), null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type UpdateProjectRequest = {
@@ -113,7 +125,10 @@ type UpdateProjectResponse = IApiResponse;
 
 export function UpdateProject(request: UpdateProjectRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.ProjectDetail(request.projectId), request);
+  const auth = useAuth();
+  return api.$put(ProjectApiRoute.ProjectDetail(request.projectId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type UpdateProjectMembersRequest = {
@@ -125,7 +140,10 @@ type UpdateProjectMembersResponse = IApiResponse;
 
 export function UpdateProjectMembers(request: UpdateProjectMembersRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.Members(request.projectId), request);
+  const auth = useAuth();
+  return api.$put(ProjectApiRoute.Members(request.projectId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type SyncProjectMembersRequest = {
@@ -152,7 +170,10 @@ type UpdateProjectPhasesResponse = IApiResponse;
 
 export function UpdateProjectPhases(request: UpdateProjectPhasesRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.Phases(request.projectId), request);
+  const auth = useAuth();
+  return api.$put(ProjectApiRoute.Phases(request.projectId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type UpdateProjectHierarchyDetailRequest = {
@@ -166,7 +187,10 @@ export type UpdateProjectHierarchyDetailResponse = IApiResponse;
 
 export function UpdateProjectHierarchyDetail(request: UpdateProjectHierarchyDetailRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.HierarchyDetail(request.projectId, request.hierarchyId), request);
+  const auth = useAuth();
+  return api.$put(ProjectApiRoute.HierarchyDetail(request.projectId, request.hierarchyId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type UpdateProjectHierarchyMembersRequest = {
@@ -179,7 +203,10 @@ export type UpdateProjectHierarchyMembersResponse = IApiResponse;
 
 export function UpdateProjectHierarchyMembers(request: UpdateProjectHierarchyMembersRequest) {
   const api = useApi();
-  return api.$put(ProjectApiRoute.HierarchyMembers(request.projectId, request.hierarchyId), request);
+  const auth = useAuth();
+  return api.$put(ProjectApiRoute.HierarchyMembers(request.projectId, request.hierarchyId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type CreateProjectHierarchyRequest = {
@@ -193,14 +220,20 @@ export type CreateProjectHierarchyResponse = IApiResponse;
 
 export function CreateProjectHierarchy(request: CreateProjectHierarchyRequest) {
   const api = useApi();
-  return api.$post(ProjectApiRoute.Hierarchy(request.projectId), request);
+  const auth = useAuth();
+  return api.$post(ProjectApiRoute.Hierarchy(request.projectId), request, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type DeleteProjectHierarchyResponse = IApiResponse;
 
 export function DeleteProjectHierarchy(projectId: string, hierarchyId: string) {
   const api = useApi();
-  return api.$delete(ProjectApiRoute.HierarchyDetail(projectId, hierarchyId));
+  const auth = useAuth();
+  return api.$delete(ProjectApiRoute.HierarchyDetail(projectId, hierarchyId), null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type GetAllProjectMembersRequest = {
@@ -214,7 +247,10 @@ export type GetAllProjectMembersResponse = {
 
 export function GetAllProjectMembers(request: GetAllProjectMembersRequest) {
   const api = useApi();
-  return api.$get<GetAllProjectMembersResponse>(ProjectApiRoute.Members(request.projectId));
+  const auth = useAuth();
+  return api.$get<GetAllProjectMembersResponse>(ProjectApiRoute.Members(request.projectId), null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
 }
 
 export type GetAssignableHierarchiesResponse = {

@@ -19,9 +19,10 @@ export const useApi = defineStore('api', () => {
   /**
    * Sends request on server side before hydration
    */
-  function get<T>(endpoint: string) {
+  function get<T>(endpoint: string, headers?: any) {
     return useFetch<IApiResponse<T>>(API_URL + endpoint, {
-      server: true
+      server: true,
+      headers: headers
     });
   }
 
