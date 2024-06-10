@@ -10,8 +10,5 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
-    <h1 class="mb-2">Dashboard</h1>
-    <ProjectList />
-  </div>
+  <ProjectList />
 </template>
