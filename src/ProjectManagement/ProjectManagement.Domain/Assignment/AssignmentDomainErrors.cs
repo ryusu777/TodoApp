@@ -14,5 +14,6 @@ public static class AssignmentDomainErrors
     public static Error CannotReviewACompletedAssignment => new(nameof(CannotReviewACompletedAssignment), "The assignment is already complete");
     public static Error CannotReviewANonWaitingReviewAssignment => new(nameof(CannotReviewANonWaitingReviewAssignment), "Cannot review an assignment that is not waiting for review");
     public static Error CannotRequestReviewWithEmptyReviewer => new(nameof(CannotRequestReviewWithEmptyReviewer), "Please set the reviewer first");
+    public static Error CannotRequestReviewWithNonOnProgressAssignment => new(nameof(CannotRequestReviewWithNonOnProgressAssignment), "The assignment is not yet worked");
     public static Error TheAssignmentDoesNotHaveReviewRequest => new(nameof(TheAssignmentDoesNotHaveReviewRequest), "The assignment does not have a review request");
 }

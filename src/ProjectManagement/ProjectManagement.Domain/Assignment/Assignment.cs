@@ -97,7 +97,7 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result WorkOn()
     {
-        if (Status != AssignmentStatusEnum.New && Status != AssignmentStatusEnum.Revised)
+        if (Status.Value != AssignmentStatusEnum.New && Status.Value != AssignmentStatusEnum.Revised)
             return AssignmentDomainErrors.AssignmentIsNotAvailableToWorkOn;
 
         Status = new AssignmentStatus(AssignmentStatusEnum.OnProgress);
@@ -108,6 +108,9 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result RequestReview(string description)
     {
+        if (Status.Value != AssignmentStatusEnum.OnProgress)
+            return AssignmentDomainErrors.CannotRequestReviewWithNonOnProgressAssignment;
+
         if (Reviewer is null)
         {
             return Result.Failure(AssignmentDomainErrors.CannotRequestReviewWithEmptyReviewer);
@@ -121,11 +124,11 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result ApproveCompletion(UserId userId)
     {
-        if (Status != AssignmentStatusEnum.WaitingReview)
+        if (Status.Value != AssignmentStatusEnum.WaitingReview)
             return AssignmentDomainErrors.CannotReviewANonWaitingReviewAssignment;
 
         Status = new AssignmentStatus(AssignmentStatusEnum.Completed);
-        var currentReview = Reviews.OrderBy(e => e.CreatedAt).FirstOrDefault();
+        var currentReview = Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault();
 
         if (currentReview is null)
             return AssignmentDomainErrors.TheAssignmentDoesNotHaveReviewRequest;
@@ -140,11 +143,11 @@ public sealed class Assignment : AggregateRoot<AssignmentId>
 
     public Result RejectCompletion(string rejectionNotes)
     {
-        if (Status != AssignmentStatusEnum.WaitingReview)
+        if (Status.Value != AssignmentStatusEnum.WaitingReview)
             return AssignmentDomainErrors.CannotReviewANonWaitingReviewAssignment;
 
         Status = new AssignmentStatus(AssignmentStatusEnum.Revised);
-        var currentReview = Reviews.OrderBy(e => e.CreatedAt).FirstOrDefault();
+        var currentReview = Reviews.OrderByDescending(e => e.CreatedAt).FirstOrDefault();
 
         if (currentReview is null)
             return AssignmentDomainErrors.TheAssignmentDoesNotHaveReviewRequest;
