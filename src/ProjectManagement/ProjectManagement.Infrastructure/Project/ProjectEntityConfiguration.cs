@@ -51,7 +51,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
             .HasMaxLength(50);
 
         builder.Property(e => e.ModifiedBy)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
     }
 
@@ -97,7 +97,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
                     .HasMaxLength(50);
 
                 sb.Property(e => e.ModifiedBy)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(50);
             });
     }
@@ -181,7 +181,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
                     .HasMaxLength(50);
 
                 sb.Property(e => e.ModifiedBy)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(50);
             });
     }

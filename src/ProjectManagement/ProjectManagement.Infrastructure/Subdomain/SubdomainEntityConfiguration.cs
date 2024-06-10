@@ -55,7 +55,7 @@ public class SubdomainEntityConfiguration : IEntityTypeConfiguration<Domain.Subd
             .HasMaxLength(50);
 
         builder.Property(e => e.ModifiedBy)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 	}
 
@@ -101,7 +101,7 @@ public class SubdomainEntityConfiguration : IEntityTypeConfiguration<Domain.Subd
                 .HasMaxLength(50);
 
             kb.Property(e => e.ModifiedBy)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(50);
             });
 	}

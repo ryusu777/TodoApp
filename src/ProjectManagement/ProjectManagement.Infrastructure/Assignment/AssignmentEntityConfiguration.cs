@@ -94,7 +94,7 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
             .HasMaxLength(50);
 
         builder.Property(e => e.ModifiedBy)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 	}
 
@@ -162,7 +162,7 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
                 .HasMaxLength(50);
 
             sb.Property(e => e.ModifiedBy)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(50);
         });
     }
