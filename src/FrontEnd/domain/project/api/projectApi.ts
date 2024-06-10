@@ -1,3 +1,4 @@
+import type { a } from "vitest/dist/reporters-yx5ZTtEV.js";
 import { useAuth } from "~/domain/auth/composables/useAuth";
 
 export const ProjectApiRoute = {
@@ -41,6 +42,16 @@ export interface Project {
   projectHierarchies: Hierarchy[];
   projectMembers: string[];
   numOfNewAssignment?: number;
+}
+
+export interface ProjectItem {
+  code: string;
+  name: string;
+  description: string;
+  numOfOpenAssignment: number;
+  numOfWaitingReviewAssignment: number;
+  numOfCompletedAssignment: number;
+  numOfWorkingAssignment: number;
 }
 
 type GetProjectPagesResponse = {
@@ -220,3 +231,14 @@ export function GetAssignableHierarchies(projectId: string) {
     });
 }
 
+export type GetProjectDashboardResponse = {
+  projects: ProjectItem[];
+};
+
+export function GetProjectDashboard() {
+  const api = useApi();
+  const auth = useAuth();
+  return api.$get<GetProjectDashboardResponse>(ProjectApiRoute.Project, null, {
+    'Authorization': 'Bearer ' + auth.jwtToken
+  });
+}

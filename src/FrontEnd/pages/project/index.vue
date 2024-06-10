@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import ProjectList from '~/domain/project/components/ProjectList.vue';
+
 definePageMeta({
-  name: 'Project List',
+  name: 'Dashboard',
   icon: 'heroicons:document-duplicate-20-solid',
   middleware: 'authorization'
-})
+});
+
 </script>
 
 <template>
-  <h1>Project List</h1>
+  <div>
+    <h1 class="mb-2">Dashboard</h1>
+    <ProjectList />
+  </div>
 </template>
