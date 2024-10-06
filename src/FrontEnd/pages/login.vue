@@ -122,6 +122,13 @@ async function submit() {
               <img src="/public/gitea-logo.svg" class="h-[24px]" />
             </template>
           </UButton>
+
+          <ULink 
+            class="text-sm text-gray-400"
+            to="/request-change-password"
+          >
+            Forgot password?
+          </ULink>
         </div>
       </UForm>
     </UCard>

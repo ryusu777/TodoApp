@@ -551,3 +551,9 @@ C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagemen
 C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\obj\Debug\net8.0\ProjectManagement.Presentation.Test.pdb
 C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\obj\Debug\net8.0\ProjectManagement.Presentation.Test.genruntimeconfig.cache
 C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\obj\Debug\net8.0\ref\ProjectManagement.Presentation.Test.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\MassTransit.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\MassTransit.Abstractions.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\MassTransit.RabbitMqTransport.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\RabbitMQ.Client.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\MassTransitContracts.dll
+C:\Users\inter\Documents\Projects\TodoApp\src\ProjectManagement\ProjectManagement.Presentation.Test\bin\Debug\net8.0\MassTransitContracts.pdb

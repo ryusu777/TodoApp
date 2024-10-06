@@ -56,7 +56,7 @@ public class GiteaIssueEntitiesConfiguration : IEntityTypeConfiguration<GiteaIss
             .HasMaxLength(50);
 
         builder.Property(e => e.ModifiedBy)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(50);
 
         builder.Property(e => e.CreatedAt)

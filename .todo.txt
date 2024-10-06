@@ -1,0 +1,57 @@
+===Assignments===
+[ ] add a view that minimizes the sizes of kanbans
+[ ] modify assignment form so that it can be modified using WYSIWYG editor and 
+    adds feature to upload attachments to gitea
+    [ ] needs research about how to upload an attachments
+[ ] Creating assignment, assignee should refer to which repository is selected
+    if integration context or gitea is offline, 
+        repository should be null and selecting assignee is free
+    [ ] Change GetAssignableHierarchies to include repository
+        - if repository defined in query, requests assignee list to gitea
+        - query to project data store for getting assignable hierarchies
+        - if repository defined in query, filters the result of assignable hierarchies
+        - returns the result
+
+===Hydration error when rendering Project page===
+
+===Dashboards project page, project subdomain page===
+
+===Creating assignment, repository should be not mandatory, needs feature to give assignment to a repository===
+
+===Assigning repository to an assignment feature===
+
+[ ] setup authorization code (use Guid for simplicity)
+
+===Outbox Pattern===
+[X] Create LastErrorDescription field for command
+[ ] Messaging outbox From field (tracks which service sends the request)
+
+===Outbox Monitoring===
+[ ] Interfacing outbox monitoring
+[ ] Inbox monitoring (incoming gitea requests)
+
+===Mitigation if Gitea Server is down===
+[ ] What happen if user requests something to gitea
+[ ] What happen if user tries to login with gitea
+[ ] What happen if deleted gitea / disabled gitea 
+    user sign in to this application
+
+===Http client===
+[ ] Should check every response possibility (401, 404, etc)
+
+===Refresh Issues Command===
+- IntegrationContext
+[ ] application layer
+    [ ] RefreshIssueCommand
+    [ ] Publish Issue Updated event
+    [ ] Publish Issue Deleted event
+    [ ] Publish Issue Created event
+[ ] infrastructure layer
+    [ ] GetIssueList(repoOwner, repoName)
+
+- ProjectManagementContext
+
+===Data conflict handling===
+- What happens if updating is conflicted 
+    (Gitea Updates, does not hook & 
+    TodoApp Updates, does not hook too)

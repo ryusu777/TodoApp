@@ -43,7 +43,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -96,7 +95,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -138,7 +136,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -171,7 +168,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -240,7 +236,6 @@ namespace IntegrationContext.Infrastructure.Migrations
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("ModifiedBy")
-                                .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 

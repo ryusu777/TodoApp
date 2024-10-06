@@ -42,13 +42,11 @@ services:
       - JwtOptions__SecretKey
 
   api-gateway:
-    depends_on:
-      - project-management
-      - integration-context
-      - auth-context
     build:
       context: .
       dockerfile: ./ApiGateway/Dockerfile
+    ports:
+      - "8081:80"
 
   rabbit-mq:
     image: rabbitmq:management
