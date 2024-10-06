@@ -148,25 +148,9 @@ function hideNewAssignmentForm() {
 </script>
 
 <template>
-  <div class="py-5 h-full flex flex-col">
+  <div class="py-5 h-full flex flex-col h-full">
     <div class="flex flex-row gap-x-3 items-center">
-      <span class="text-md font-bold">Subdomain</span>
-      <UButton 
-        size="2xs"
-        variant="ghost"
-        color="white"
-        @click="enableEdit"
-        icon="heroicons:pencil"
-        v-if="!editable"
-      />
-      <UButton 
-        size="2xs"
-        variant="ghost"
-        color="red"
-        @click="disableEdit"
-        icon="heroicons:x-mark-16-solid"
-        v-if="editable"
-      />
+      <span class="text-md font-bold">Features</span>
       <UButton 
         v-if="numOfNewAssignment > 0"
         size="2xs"
@@ -179,32 +163,66 @@ function hideNewAssignmentForm() {
           <UBadge color="white">{{ numOfNewAssignment }}</UBadge>
         </template>
       </UButton>
+      <div>
+        <UButton
+          size="md"
+          icon="heroicons:plus"
+          @click="add"
+          color="gray"
+          :ui="{
+            rounded: 'rounded-xl'
+          }"
+        />
+      </div>
+      <div>
+        <UButton 
+          icon="heroicons:arrow-path-rounded-square"
+          size="xs"
+          color="white"
+          variant="ghost"
+          @click="onRefresh"
+          :loading="isFetching"
+        />
+      </div>
     </div>
-    <div class="flex flex-row flex-wrap gap-x-3 items-center mt-1">
+    <div class="mt-1 flex flex-1 gap-x-2">
       <UTabs 
+        orientation="vertical"
         v-if="tabs.tabs.length > 0"
         :model-value="tabs.selectedTab" 
         @update:model-value="navigate"
         :items="tabs.tabs"
+        style="max-width: 300px;"
         :ui="{
           wrapper: 'space-y-0',
           list: {
+            base: 'h-full',
             tab: {
-              base: 'justify-start disabled:cursor-default disabled:opacity-100'
+              base: 'justify-start disabled:cursor-default disabled:opacity-100',
+              padding: 'pl-2 pr-2'
             }
           }
         }"
       >
         <template #default="{ item }">
           <div class="flex flex-row w-full justify-between items-center">
-            <span>{{ item.label }}</span>
-            <div v-if="editable" class="gap-x-1 ml-2 flex">
+            <div class="flex">
+              <UBadge 
+                color="gray"
+                variant="solid"
+                size="xs"
+                class="mr-2"
+              >
+                {{ item.subdomain.numOfOpenedAssignments }}
+              </UBadge>
+              <span>{{ item.label }}</span>
+            </div>
+            <div class="gap-x-1 ml-2 flex">
               <UButton 
                 icon="heroicons:pencil"
                 square
                 size="2xs"
                 @click="edit(item)"
-                v-if="editable" 
               />
               <UPopover>
                 <UButton 
@@ -212,7 +230,6 @@ function hideNewAssignmentForm() {
                   square
                   color="red"
                   size="2xs"
-                  v-if="editable" 
                 />
                 <template #panel="{ close }">
                   <div class="flex flex-col p-3 gap-y-2 text-white">
@@ -240,43 +257,12 @@ function hideNewAssignmentForm() {
                 </template>
               </UPopover>
             </div>
-            <UBadge 
-              class="ml-2"
-              color="gray"
-              variant="solid"
-              size="xs"
-              v-else
-            >
-              {{ item.subdomain.numOfOpenedAssignments }}
-            </UBadge>
           </div>
         </template>
       </UTabs>
-      <div>
-        <UButton
-          size="md"
-          icon="heroicons:plus"
-          @click="add"
-          color="gray"
-          :ui="{
-            rounded: 'rounded-xl'
-          }"
-        />
+      <div class="flex-grow">
+        <NuxtPage :key="refreshKey" />
       </div>
-      <div>
-        <UButton 
-          icon="heroicons:arrow-path-rounded-square"
-          size="xs"
-          color="white"
-          variant="ghost"
-          @click="onRefresh"
-          :loading="isFetching"
-        />
-      </div>
-    </div>
-
-    <div class="mt-3 flex-grow">
-      <NuxtPage :key="refreshKey" />
     </div>
   </div>
 
