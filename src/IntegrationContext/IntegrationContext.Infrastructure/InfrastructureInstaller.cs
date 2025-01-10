@@ -44,18 +44,29 @@ public static class InfrastructureInstaller
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
         services.AddScoped<ICommandOutboxDomainService, CommandOutboxDomainService>();
-        services.AddDbContext<AppDbContext>((sp, opt) =>
-        {
-            //opt.UseInMemoryDatabase("InMemoryDb");
+        // services.AddDbContext<AppDbContext>((sp, opt) =>
+        // {
+        //     //opt.UseInMemoryDatabase("InMemoryDb");
+        //     var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
+        //     opt.UseSqlServer(
+        //         config.GetConnectionString("AppDbContext"),
+        //         o => 
+        //         {
+        //             o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
+        //         })
+        //         .AddInterceptors(auditableIntercepter);
+        // });
+		services.AddDbContext<AppDbContext>((sp, opt) =>
+		{
             var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
-            opt.UseSqlServer(
-                config.GetConnectionString("AppDbContext"),
+			opt
+                .UseNpgsql(config.GetConnectionString("PostgreContext"),
                 o => 
                 {
                     o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
                 })
                 .AddInterceptors(auditableIntercepter);
-        });
+		});
 
         services.AddMassTransitService(config);
         services.AddMassTransit(bc => 

@@ -28,7 +28,7 @@ public class IdentityEntityConfiguration : IEntityTypeConfiguration<AppIdentityU
                 );
 
             rb.Property(e => e.RefreshToken)
-                .HasColumnType("varchar(250)")
+                .HasMaxLength(250)
                 .IsRequired(true)
                 .HasConversion(
                     id => id.Value,

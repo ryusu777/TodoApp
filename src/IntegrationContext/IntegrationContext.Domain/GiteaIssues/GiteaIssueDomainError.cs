@@ -18,4 +18,7 @@ public static class GiteaIssueDomainError
 
     public static Error IssueNotFound 
         => new(nameof(IssueNotFound), "The issue is not found in this application");
+
+    public static Error RepositoryIdIsEmpty 
+        => new(nameof(RepositoryIdIsEmpty), "Repository Id is empty");
 }

@@ -28,8 +28,11 @@ public class GiteaIssueApiService : IGiteaIssueApiService
 
     public async Task<Result<GiteaIssue>> CreateIssueAsync(JwtToken jwt, AssignmentCreatedMessage message, CancellationToken ct)
     {
+        if (message.GiteaRepositoryId is null)
+            return Result.Failure<GiteaIssue>(GiteaIssueDomainError.RepositoryIdIsEmpty);
+
         var repoResult = await _repoRepository.GetProjectRepositoryByIdAsync(
-            GiteaRepositoryId.Create(message.GiteaRepositoryId),
+            GiteaRepositoryId.Create(message.GiteaRepositoryId ?? 0),
             ct
         );
 

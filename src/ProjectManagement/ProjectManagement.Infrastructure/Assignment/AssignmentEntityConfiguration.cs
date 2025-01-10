@@ -34,7 +34,7 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 				value => AssignmentStatus.Create(value.ToString()).Value!
 			)
 			.IsRequired()
-			.HasColumnType("varchar(20)");
+            .HasMaxLength(20);
 
 		builder.Property(e => e.Title)
 			.IsRequired()
@@ -141,11 +141,11 @@ public class AssignmentEntityConfiguration : IEntityTypeConfiguration<Domain.Ass
 
             sb.Property(e => e.Status)
                 .IsRequired()
-                .HasColumnType("varchar(20)");
+                .HasMaxLength(20);
 
             sb.Property(e => e.Reviewer)
                 .IsRequired()
-                .HasColumnType("varchar(50)")
+                .HasMaxLength(50)
                 .HasConversion(
                     id => id.Value,
                     value => UserId.Create(value)

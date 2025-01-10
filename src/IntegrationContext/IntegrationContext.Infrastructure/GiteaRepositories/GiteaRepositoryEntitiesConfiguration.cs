@@ -2,6 +2,7 @@ using IntegrationContext.Domain.Auth.ValueObjects;
 using IntegrationContext.Domain.GiteaRepositories;
 using IntegrationContext.Domain.GiteaRepositories.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IntegrationContext.Infrastructure.Gitea;
@@ -83,12 +84,15 @@ public class GiteaRepositoryEntitiesConfiguration : IEntityTypeConfiguration<Git
                 .HasMaxLength(100);
 
             hb.Property(e => e.Events)
-                .HasColumnType("varchar")
                 .HasMaxLength(100)
                 .HasConversion(
                     events => events.Aggregate("",
-                        (total, next) => total + "," + next.Value),
-                    value => SplitHook(value)
+                        (total, next) => total + "," + next.Value).TrimStart(','),  // Added TrimStart to remove leading comma
+                    value => SplitHook(value),
+                    new ValueComparer<IEnumerable<HookEvent>>(
+                        (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+                        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                        c => c.ToList())
                 );
 
             hb.Property(e => e.Active)

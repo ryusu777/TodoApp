@@ -37,8 +37,7 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Domain.Projec
             .HasMaxLength(200);
 
         builder.Property(e => e.Status)
-            .IsRequired()
-            .HasColumnType("varchar(10)");
+            .IsRequired();
 
         builder.Property(e => e.CreatedAt)
             .IsRequired();

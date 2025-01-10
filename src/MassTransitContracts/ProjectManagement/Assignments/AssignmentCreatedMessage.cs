@@ -8,5 +8,5 @@ public record AssignmentCreatedMessage(
     string ProjectId,
     ICollection<string> Assignees,
     DateTime? Deadline,
-    int GiteaRepositoryId
+    int? GiteaRepositoryId
 );

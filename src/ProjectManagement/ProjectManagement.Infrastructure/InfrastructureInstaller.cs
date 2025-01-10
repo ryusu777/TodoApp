@@ -25,13 +25,20 @@ public static class InfrastructureInstaller
 			.AddPersistMediator();
 
 		services.AddScoped<IUnitOfWork, UnitOfWork>();
-		services.AddDbContext<AppDbContext>((sp, opt) =>
-		{
+		// services.AddDbContext<AppDbContext>((sp, opt) =>
+		// {
 			//opt.UseInMemoryDatabase("InMemoryDb");
             //
+            // var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
+			// opt
+                // .UseSqlServer(config.GetConnectionString("AppDbContext"))
+                // .AddInterceptors(auditableIntercepter);
+		// });
+		services.AddDbContext<AppDbContext>((sp, opt) =>
+		{
             var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
 			opt
-                .UseSqlServer(config.GetConnectionString("AppDbContext"))
+                .UseNpgsql(config.GetConnectionString("PostgreContext"))
                 .AddInterceptors(auditableIntercepter);
 		});
 		services.AddScoped<IProjectRepository, ProjectRepository>();

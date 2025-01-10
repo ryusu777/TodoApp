@@ -1,4 +1,3 @@
-using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Domain.Project.Entities;
 using ProjectManagement.Domain.Subdomain.Entities;
@@ -15,6 +14,11 @@ public class AppDbContext : DbContext
     public required virtual DbSet<SubdomainKnowledge> SubdomainKnowledges { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) 
+        : base(options)
+    {
+    }
+
+    protected AppDbContext(DbContextOptions options) 
         : base(options)
     {
     }

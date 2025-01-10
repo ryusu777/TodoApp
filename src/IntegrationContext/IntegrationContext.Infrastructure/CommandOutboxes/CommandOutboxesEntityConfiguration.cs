@@ -22,15 +22,15 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
 
         builder.Property(e => e.CommandDetail)
             .IsRequired(true)
-            .HasColumnType("nvarchar(2000)");
+            .HasMaxLength(2000);
 
         builder.Property(e => e.CommandResult)
             .IsRequired(false)
-            .HasColumnType("nvarchar(2000)");
+            .HasMaxLength(2000);
 
         builder.Property(e => e.LastError)
             .IsRequired(false)
-            .HasColumnType("nvarchar(2000)");
+            .HasMaxLength(2000);
         
         builder.Property(e => e.Tries)
             .HasColumnName("Retries")
@@ -42,13 +42,8 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
         builder.Property(e => e.SuccessAt)
             .IsRequired(false);
 
-        builder.Property(e => e.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasDefaultValueSql("(sysdatetime())");
-
         builder.Property(e => e.LastExecutionAt)
-            .ValueGeneratedOnUpdate()
-            .HasDefaultValueSql("(sysdatetime())");
+            .ValueGeneratedOnUpdate();
 
         builder.Property(e => e.CreatedBy)
             .IsRequired()
@@ -59,7 +54,8 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
             .HasMaxLength(50);
 
         builder.Property(e => e.CreatedAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValue(DateTime.Now);
 
         builder.Property(e => e.ModifiedAt)
             .IsRequired(false);

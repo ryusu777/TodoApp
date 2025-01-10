@@ -32,18 +32,15 @@ public static class InfrastructureInstaller
 		services.AddScoped<IUserRepository, UserRepository>();
 		services.AddScoped<IAuthenticationService, AuthenticationService>();
 		services.AddScoped<IEmailService, EmailService>();
-		services.AddDbContext<AppDbContext>((s, opt) =>
+		services.AddDbContext<AppDbContext>((sp, opt) =>
 		{
-            var interceptor = s.GetService<AuditableEntityInterceptor>()!;
-			//opt.UseInMemoryDatabase("InMemoryDb");
-			opt.UseSqlServer(
-                config.GetConnectionString("AppDbContext"),
+            var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
+			opt
+                .UseNpgsql(config.GetConnectionString("PostgreContext"),
                 o => 
                 {
                     o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "auth");
-                });
-
-            opt.AddInterceptors(interceptor);
+                }).AddInterceptors(auditableIntercepter);
 		});
 
         var authenticatorProviderType = typeof(AuthenticatorTokenProvider<>).MakeGenericType(typeof(AppIdentityUser));

@@ -9,7 +9,7 @@ public record CreateAssignmentCommand(
 	string ProjectId,
     string[] Assignees,
     DateTime? Deadline,
-    int GiteaRepositoryId,
+    int? GiteaRepositoryId = null,
     string? Reviewer = null,
     Guid? SubdomainId = null,
     Guid? PhaseId = null

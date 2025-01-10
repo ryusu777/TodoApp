@@ -16,6 +16,9 @@ public class AssignmentCreatedConsumer : IConsumer<AssignmentCreatedMessage>
 
     public async Task Consume(ConsumeContext<AssignmentCreatedMessage> context)
     {
+        if (context.Message.GiteaRepositoryId is null)
+            return;
+
         await _sender.Send(new CreateIssueCommand(context.Message), context.CancellationToken);
     }
 }
