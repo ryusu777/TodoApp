@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MassTransitContracts.Migrations
 {
     /// <inheritdoc />
-    public partial class MessageOutbox : Migration
+    public partial class InitPgSql : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,12 +19,14 @@ namespace MassTransitContracts.Migrations
                 schema: "messaging",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventDetail = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    ErrorMessage = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    Tries = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    MaxTries = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
-                    PublishedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EventDetail = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    ErrorMessage = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
+                    Tries = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    MaxTries = table.Column<int>(type: "integer", nullable: false, defaultValue: 5),
+                    PublishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastTryAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

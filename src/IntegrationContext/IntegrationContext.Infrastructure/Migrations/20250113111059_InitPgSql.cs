@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IntegrationContext.Infrastructure.MigrationsPgSql
+namespace IntegrationContext.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitPgSql : Migration
@@ -27,7 +27,7 @@ namespace IntegrationContext.Infrastructure.MigrationsPgSql
                     MaxTries = table.Column<int>(type: "integer", nullable: false),
                     SuccessAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastExecutionAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2025, 1, 10, 12, 4, 1, 312, DateTimeKind.Local).AddTicks(4558)),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)

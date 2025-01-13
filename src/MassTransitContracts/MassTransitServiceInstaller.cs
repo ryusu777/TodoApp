@@ -15,7 +15,7 @@ public static class MassTransitServiceInstaller
 		services.AddDbContext<MassTransitDbContext>(opt =>
 		{
 			//opt.UseInMemoryDatabase("InMemoryDb");
-			opt.UseSqlServer(
+			opt.UseNpgsql(
                 config.GetConnectionString("MassTransitDbContext"),
                 o => 
                 {
@@ -23,6 +23,8 @@ public static class MassTransitServiceInstaller
                 });
 		});
         services.AddScoped<IMassTransitService, MassTransitService>();
+
+        services.Migrate().GetAwaiter().GetResult();
         return services;
     }
 }

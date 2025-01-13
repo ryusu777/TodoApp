@@ -15,30 +15,30 @@ services:
       context: .
       dockerfile: ./ProjectManagement/Dockerfile
     environment:
-      - ConnectionStrings__AppDbContext
+      - ConnectionStrings__PostgreContext
       - ConnectionStrings__MassTransitDbContext
       - JwtOptions__SecretKey
 
   integration-context:
     depends_on: 
-      - rabbit-mq
+      - auth-context
     build:
       context: .
       dockerfile: ./IntegrationContext/Dockerfile
     environment:
-      - ConnectionStrings__AppDbContext
+      - ConnectionStrings__PostgreContext
       - ConnectionStrings__MassTransitDbContext
       - ClientUrl
       - JwtOptions__SecretKey
 
   auth-context:
     depends_on: 
-      - rabbit-mq
+      - project-management
     build:
       context: .
       dockerfile: ./AuthContext/Dockerfile
     environment:
-      - ConnectionStrings__AppDbContext
+      - ConnectionStrings__PostgreContext
       - JwtOptions__SecretKey
 
   api-gateway:

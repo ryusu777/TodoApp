@@ -44,29 +44,6 @@ public static class InfrastructureInstaller
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IGiteaUserDomainService, GiteaUserDomainService>();
         services.AddScoped<ICommandOutboxDomainService, CommandOutboxDomainService>();
-        // services.AddDbContext<AppDbContext>((sp, opt) =>
-        // {
-        //     //opt.UseInMemoryDatabase("InMemoryDb");
-        //     var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
-        //     opt.UseSqlServer(
-        //         config.GetConnectionString("AppDbContext"),
-        //         o => 
-        //         {
-        //             o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
-        //         })
-        //         .AddInterceptors(auditableIntercepter);
-        // });
-		services.AddDbContext<AppDbContext>((sp, opt) =>
-		{
-            var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
-			opt
-                .UseNpgsql(config.GetConnectionString("PostgreContext"),
-                o => 
-                {
-                    o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
-                })
-                .AddInterceptors(auditableIntercepter);
-		});
 
         services.AddMassTransitService(config);
         services.AddMassTransit(bc => 
@@ -94,6 +71,19 @@ public static class InfrastructureInstaller
             });
         });
 
+		services.AddDbContext<AppDbContext>((sp, opt) =>
+		{
+            var auditableIntercepter = sp.GetService<AuditableEntityInterceptor>()!;
+			opt
+                .UseNpgsql(config.GetConnectionString("PostgreContext"),
+                o => 
+                {
+                    o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "integration");
+                })
+                .AddInterceptors(auditableIntercepter);
+		});
+
+
         services.AddHttpClient(GiteaAuthenticationService.CLIENT_NAME, (serviceProvider, httpClient) =>
         {
             httpClient.BaseAddress = new Uri(config["GiteaUrl"]!);
@@ -107,6 +97,8 @@ public static class InfrastructureInstaller
         services.AddHttpContextAccessor();
 
         services.Configure<GiteaClientCredentials>(config.GetSection(GiteaClientCredentials.OptionSection));
+
+        services.Migrate().GetAwaiter().GetResult();
 
         return services;
     }

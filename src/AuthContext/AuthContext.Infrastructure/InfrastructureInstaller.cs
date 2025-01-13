@@ -73,6 +73,7 @@ public static class InfrastructureInstaller
 
         services.Configure<JwtOptions>(config.GetSection(JwtOptions.OptionSection));
 
+        services.Migrate().GetAwaiter().GetResult();
         return services;
     }
 }

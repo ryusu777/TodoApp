@@ -14,18 +14,21 @@ public class AppDbContext : DbContext
     {
     }
 
-    public virtual required DbSet<GiteaUser> GiteaUsers { get; set; }
+    protected AppDbContext(DbContextOptions options) 
+        : base(options)
+    {
+    }
 
-    public virtual required DbSet<GiteaRepository> GiteaRepositories { get; set; }
+    public required virtual DbSet<GiteaUser> GiteaUsers { get; set; }
 
-    public virtual required DbSet<GiteaIssue> GiteaIssues { get; set; }
+    public required virtual DbSet<GiteaRepository> GiteaRepositories { get; set; }
 
-    public virtual required DbSet<CommandOutbox> CommandOutboxes { get; set; }
+    public required virtual DbSet<GiteaIssue> GiteaIssues { get; set; }
+
+    public required virtual DbSet<CommandOutbox> CommandOutboxes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
-
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.HasDefaultSchema("integration");

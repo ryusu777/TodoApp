@@ -54,8 +54,7 @@ public class CommandOutboxesEntityConfiguration : IEntityTypeConfiguration<Comma
             .HasMaxLength(50);
 
         builder.Property(e => e.CreatedAt)
-            .IsRequired()
-            .HasDefaultValue(DateTime.Now);
+            .IsRequired();
 
         builder.Property(e => e.ModifiedAt)
             .IsRequired(false);

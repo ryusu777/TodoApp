@@ -41,6 +41,7 @@ public static class InfrastructureInstaller
                 .UseNpgsql(config.GetConnectionString("PostgreContext"))
                 .AddInterceptors(auditableIntercepter);
 		});
+
 		services.AddScoped<IProjectRepository, ProjectRepository>();
 		services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 		services.AddScoped<ISubdomainRepository, SubdomainRepository>();
@@ -63,6 +64,8 @@ public static class InfrastructureInstaller
                 configurator.ConfigureEndpoints(context);
             });
         });
+
+        services.Migrate().GetAwaiter().GetResult();
 
 		return services;
 	}

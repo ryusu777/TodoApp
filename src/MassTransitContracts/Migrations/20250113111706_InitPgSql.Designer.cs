@@ -3,17 +3,17 @@ using System;
 using MassTransitContracts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace MassTransitContracts.Migrations
 {
     [DbContext(typeof(MassTransitDbContext))]
-    [Migration("20240518145250_MessageOutboxTimeStamps")]
-    partial class MessageOutboxTimeStamps
+    [Migration("20250113111706_InitPgSql")]
+    partial class InitPgSql
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,45 +22,43 @@ namespace MassTransitContracts.Migrations
             modelBuilder
                 .HasDefaultSchema("messaging")
                 .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("MassTransitContracts.Data.Entities.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(sysdatetime())");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ErrorMessage")
                         .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("EventDetail")
                         .IsRequired()
                         .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("LastTryAt")
                         .ValueGeneratedOnUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(sysdatetime())");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MaxTries")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(5);
 
                     b.Property<DateTime?>("PublishedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Tries")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
