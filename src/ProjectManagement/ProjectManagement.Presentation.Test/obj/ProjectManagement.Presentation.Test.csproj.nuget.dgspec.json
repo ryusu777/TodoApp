@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj": {}
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj": {}
   },
   "projects": {
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj",
         "projectName": "Library",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/Library/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -71,33 +59,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\MassTransitContracts.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/MassTransitContracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\MassTransitContracts.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/MassTransitContracts.csproj",
         "projectName": "MassTransitContracts",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\MassTransitContracts.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/MassTransitContracts.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -110,11 +91,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -163,6 +139,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.4, )"
             }
           },
           "imports": [
@@ -181,47 +161,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj",
         "projectName": "ProjectManagement.Application",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj"
               },
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\MassTransitContracts.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\MassTransitContracts\\MassTransitContracts.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/MassTransitContracts.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/MassTransitContracts/MassTransitContracts.csproj"
               },
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/ProjectManagement.Domain.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/ProjectManagement.Domain.csproj"
               }
             }
           }
@@ -230,11 +203,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -266,41 +234,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/ProjectManagement.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/ProjectManagement.Domain.csproj",
         "projectName": "ProjectManagement.Domain",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Domain\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/ProjectManagement.Domain.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Domain/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj"
               }
             }
           }
@@ -309,11 +270,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -335,44 +291,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj",
         "projectName": "ProjectManagement.Infrastructure",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\Library\\Library.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/Library/Library.csproj"
               },
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj"
               }
             }
           }
@@ -381,11 +330,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -422,6 +366,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.4, )"
             }
           },
           "imports": [
@@ -440,41 +388,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj",
         "projectName": "ProjectManagement.Presentation.Test",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj"
               }
             }
           }
@@ -483,11 +424,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -539,44 +475,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj": {
+    "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj",
+        "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj",
         "projectName": "ProjectManagement.Presentation",
-        "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj",
-        "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\obj\\",
+        "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Application/ProjectManagement.Application.csproj"
               },
-              "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj"
+              "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj": {
+                "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj"
               }
             }
           }
@@ -585,11 +514,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -636,7 +560,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
