@@ -2244,6 +2244,41 @@
           "lib/netstandard2.0/NJsonSchema.Yaml.dll": {}
         }
       },
+      "Npgsql/8.0.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Npgsql.EntityFrameworkCore.PostgreSQL/8.0.4": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.4",
+          "Microsoft.EntityFrameworkCore.Abstractions": "8.0.4",
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.4",
+          "Npgsql": "8.0.3"
+        },
+        "compile": {
+          "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "NSwag.Annotations/14.0.7": {
         "type": "package",
         "compile": {
@@ -4350,7 +4385,8 @@
           "Microsoft.Extensions.Configuration": "8.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "8.0.0",
           "Microsoft.Extensions.Configuration.Json": "8.0.0",
-          "Newtonsoft.Json": "13.0.3"
+          "Newtonsoft.Json": "13.0.3",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.4"
         },
         "compile": {
           "bin/placeholder/MassTransitContracts.dll": {}
@@ -4400,6 +4436,7 @@
           "Microsoft.EntityFrameworkCore.Design": "8.0.4",
           "Microsoft.EntityFrameworkCore.InMemory": "8.0.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.4",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "8.0.4",
           "ProjectManagement.Application": "1.0.0"
         },
         "compile": {
@@ -7592,6 +7629,44 @@
         "lib/netstandard2.0/NJsonSchema.Yaml.dll",
         "njsonschema.yaml.11.0.0.nupkg.sha512",
         "njsonschema.yaml.nuspec"
+      ]
+    },
+    "Npgsql/8.0.3": {
+      "sha512": "6WEmzsQJCZAlUG1pThKg/RmeF6V+I0DmBBBE/8YzpRtEzhyZzKcK7ulMANDm5CkxrALBEC8H+5plxHWtIL7xnA==",
+      "type": "package",
+      "path": "npgsql/8.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Npgsql.dll",
+        "lib/net6.0/Npgsql.xml",
+        "lib/net7.0/Npgsql.dll",
+        "lib/net7.0/Npgsql.xml",
+        "lib/net8.0/Npgsql.dll",
+        "lib/net8.0/Npgsql.xml",
+        "lib/netstandard2.0/Npgsql.dll",
+        "lib/netstandard2.0/Npgsql.xml",
+        "lib/netstandard2.1/Npgsql.dll",
+        "lib/netstandard2.1/Npgsql.xml",
+        "npgsql.8.0.3.nupkg.sha512",
+        "npgsql.nuspec",
+        "postgresql.png"
+      ]
+    },
+    "Npgsql.EntityFrameworkCore.PostgreSQL/8.0.4": {
+      "sha512": "/hHd9MqTRVDgIpsToCcxMDxZqla0HAQACiITkq1+L9J2hmHKV6lBAPlauF+dlNSfHpus7rrljWx4nAanKD6qAw==",
+      "type": "package",
+      "path": "npgsql.entityframeworkcore.postgresql/8.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll",
+        "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.xml",
+        "npgsql.entityframeworkcore.postgresql.8.0.4.nupkg.sha512",
+        "npgsql.entityframeworkcore.postgresql.nuspec",
+        "postgresql.png"
       ]
     },
     "NSwag.Annotations/14.0.7": {
@@ -12304,40 +12379,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\inter\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/runner/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj",
+      "projectUniqueName": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj",
       "projectName": "ProjectManagement.Presentation.Test",
-      "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\ProjectManagement.Presentation.Test.csproj",
-      "packagesPath": "C:\\Users\\inter\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation.Test\\obj\\",
+      "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/ProjectManagement.Presentation.Test.csproj",
+      "packagesPath": "/home/runner/.nuget/packages/",
+      "outputPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation.Test/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\inter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj": {
-              "projectPath": "C:\\Users\\inter\\Documents\\Projects\\TodoApp\\src\\ProjectManagement\\ProjectManagement.Presentation\\ProjectManagement.Presentation.csproj"
+            "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj": {
+              "projectPath": "/home/runner/work/TodoApp/TodoApp/src/ProjectManagement/ProjectManagement.Presentation/ProjectManagement.Presentation.csproj"
             }
           }
         }
@@ -12346,11 +12413,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -12402,7 +12464,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.118/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
