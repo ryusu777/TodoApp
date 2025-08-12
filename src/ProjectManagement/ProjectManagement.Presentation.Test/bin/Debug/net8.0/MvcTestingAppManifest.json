@@ -1,8 +1,0 @@
-{
-  "Library, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/Library",
-  "MassTransitContracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/MassTransitContracts",
-  "ProjectManagement.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/ProjectManagement\/ProjectManagement.Application",
-  "ProjectManagement.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/ProjectManagement\/ProjectManagement.Domain",
-  "ProjectManagement.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/ProjectManagement\/ProjectManagement.Infrastructure",
-  "ProjectManagement.Presentation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/home\/runner\/work\/TodoApp\/TodoApp\/src\/ProjectManagement\/ProjectManagement.Presentation"
-}
